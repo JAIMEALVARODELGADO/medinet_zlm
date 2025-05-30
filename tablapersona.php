@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 //Aqui evito la utilizacion de cache con fines de refrescar tablas
 header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
@@ -7,15 +8,20 @@ header("Expires: Sat, 1 Jul 2000 05:00:00 GMT"); // Fecha en el pasado
 require_once "clases/conexion.php";
 $obj=new conectar();
 $conexion=$obj->conexion();
-/*$sql="SELECT persona.id_persona, CONCAT(persona.pnom_per,' ',persona.snom_per,' ',persona.pape_per,' ',persona.sape_per) AS nombre,detalle_grupo.valor_det AS tipo_iden,persona.numero_iden_per,persona.fnac_per,persona.direccion_per,persona.telefono_per,persona.email_per
-FROM persona 
-INNER JOIN detalle_grupo ON detalle_grupo.codi_det=persona.tipo_iden_per
-INNER JOIN paciente ON paciente.id_persona=persona.id_persona";
-$result=mysqli_query($conexion,$sql)*/;
+
+$condicion="";
+$sql="SELECT estado FROM parametros_generales WHERE nombre_parametro ='filtrarpacientesxprofesional'";
+$result=mysqli_query($conexion,$sql);
+if(mysqli_num_rows($result)>0){
+	$row=mysqli_fetch_array($result);
+	if($row['estado'] == 'AC'){
+		$condicion=" WHERE persona.id_operador ='".$_SESSION['gusuario_log']."'";
+	}
+}
 
 $sql="SELECT persona.id_persona, CONCAT(persona.pnom_per,' ',persona.snom_per,' ',persona.pape_per,' ',persona.sape_per) AS nombre,detalle_grupo.valor_det AS tipo_iden,persona.numero_iden_per,persona.fnac_per,persona.direccion_per,persona.telefono_per,persona.email_per
 FROM persona 
-INNER JOIN detalle_grupo ON detalle_grupo.codi_det=persona.tipo_iden_per";
+INNER JOIN detalle_grupo ON detalle_grupo.codi_det=persona.tipo_iden_per".$condicion;
 //echo "<br>".$sql
 $result=mysqli_query($conexion,$sql)
 ?>

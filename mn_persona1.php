@@ -11,7 +11,7 @@ require("valida_sesion.php");
 <body>
     <?php
     require("encabezado.php");
-    require("menu.php");
+    require("menu.php");    
     ?>
     <div class="container">
         <div class="row">

@@ -16,41 +16,13 @@ require("valida_sesion.php");
     require("menu.php")
     ?>
     
-    <div class="card text">
-    <div class="card-header">
-			<ul class="nav nav-tabs card-header-tabs">
-				<li class="nav-item">
-					<a class="nav-link active" href="#">Entidad</a>
-				</li>				
-				<li class="nav-item">
-					<a class="nav-link" href="mn_parametros1.php">Parámetros Generales</a>
-				</li>
-				<!--<li class="nav-item">
-					<a class="nav-link" href="mn_consu12.php">--Formula</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="mn_consu13.php">--Ordenes</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="mn_consu16.php">--Adjuntos</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="mn_consu14.php">Finalizar Conulta</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="mn_consu1.php">Pacientes Agendados</a>
-				</li>-->
-			</ul>
-		</div>
-    </div>
-
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
                 <div class="card text-left">
                     <div class="card-header">
                         <h4>ENTIDAD</h4>
-                        
+                        <h6>Información de la Entidad</h6>
                     </div>
                     
                     <div class="card-body">

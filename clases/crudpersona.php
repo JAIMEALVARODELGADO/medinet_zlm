@@ -8,8 +8,8 @@ class crudpersona{
 		$obj=new conectar();
 		$conexion=$obj->conexion();
 
-		$sql="INSERT INTO persona (tipo_iden_per,numero_iden_per,pnom_per,snom_per,pape_per,sape_per,fnac_per,sexo_per,direccion_per,telefono_per,email_per)
-		VALUES ('$datos[0]','$datos[1]','$datos[2]','$datos[3]','$datos[4]','$datos[5]','$datos[6]','$datos[7]','$datos[8]','$datos[9]','$datos[10]')";
+		$sql="INSERT INTO persona (tipo_iden_per,numero_iden_per,pnom_per,snom_per,pape_per,sape_per,fnac_per,sexo_per,direccion_per,telefono_per,email_per,id_operador)
+		VALUES ('$datos[0]','$datos[1]','$datos[2]','$datos[3]','$datos[4]','$datos[5]','$datos[6]','$datos[7]','$datos[8]','$datos[9]','$datos[10]','$datos[11]')";
 		return mysqli_query($conexion,$sql);
 	}
 
@@ -17,8 +17,10 @@ class crudpersona{
 		$obj=new conectar();
 		$conexion=$obj->conexion();
 
-		$sql="SELECT persona.id_persona, persona.tipo_iden_per, persona.numero_iden_per, persona.pnom_per, persona.snom_per, persona.pape_per, persona.sape_per, persona.fnac_per,persona.sexo_per, persona.direccion_per,persona.telefono_per,persona.email_per FROM persona 
-			WHERE id_persona='$idpersona'";
+		$sql="SELECT persona.id_persona, persona.tipo_iden_per, persona.numero_iden_per, persona.pnom_per, persona.snom_per, persona.pape_per, persona.sape_per, persona.fnac_per,persona.sexo_per, persona.direccion_per,persona.telefono_per,persona.email_per 
+		FROM persona 
+		WHERE id_persona='$idpersona'";
+		echo "<br>".$sql;
 		$row=mysqli_query($conexion,$sql);
 		$ver=mysqli_fetch_row($row);
 		$datos=array(
@@ -99,7 +101,8 @@ class crudpersona{
 		//echo $consulta;
 		$consulta=mysqli_query($conexion,$consulta);
 		if(mysqli_num_rows($consulta)==0){
-			$sql="INSERT INTO paciente(id_persona,codigo_mun, zona, tipo_usuario, etnia, nivel_educ, id_ciuo, estado_civ) VALUES ('$datos[0]', '$datos[1]', '$datos[2]', '$datos[3]', '$datos[4]','$datos[5]', '$datos[6]', '$datos[7]')";
+			$sql="INSERT INTO paciente(id_persona,codigo_mun, zona, tipo_usuario, etnia, nivel_educ, id_ciuo, estado_civ) 
+			VALUES ('$datos[0]', '$datos[1]', '$datos[2]', '$datos[3]', '$datos[4]','$datos[5]', '$datos[6]', '$datos[7]')";			
 		}
 		else{
 			$sql="UPDATE paciente SET codigo_mun='$datos[1]', zona='$datos[2]', tipo_usuario='$datos[3]', etnia='$datos[4]', nivel_educ='$datos[5]', id_ciuo='$datos[6]', estado_civ='$datos[7]' WHERE id_persona='$datos[0]'";	
