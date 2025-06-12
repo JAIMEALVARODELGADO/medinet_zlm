@@ -11,7 +11,9 @@
         if($usarimgencab_ent=='N'){
             ?>
                 <div class="row">
-                    <div class="col-sm-12" align="center"><h4><?php echo $nombre_ent;?></h4></div>
+                    <!--<div class="col-sm-12" align="center"><h4><?php echo $nombre_ent;?></h4></div>-->
+                    <div class="col-sm-12" align="center"><h4><?php echo $_SESSION['gnombre_ent'];?></h4></div>
+                    
                 </div>
                 <div class="row">
                     <div class="col-sm-12" align="center"><h7><?php echo $identi_ent;?></h7></div>

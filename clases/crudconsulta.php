@@ -37,7 +37,8 @@ class crudconsulta{
 			    if(!empty($datos[33])){$dxrel2=$datos[33];}
 			    if(!empty($datos[34])){$dxrel3=$datos[34];}
 			    
-				$sql="INSERT INTO consulta (id_aten,motivo_con,enfermedad_con,revisionsist_con,id_cups,finalidad_con,causaext_con,analisis_con,dxprinc_con,dxrela1_con,dxrela2_con,dxrela3_con,tipodx_con,plan_con,observacion_con,control_con,subjetivo_con,objetivo_con,violencia_sexual_con) VALUES('$id_aten', '$datos[21]', '$datos[22]', '$datos[23]', '$datos[26]', '$datos[27]', '$datos[28]', '$datos[29]', '$datos[30]',$dxrel1, $dxrel2, $dxrel3, '$datos[31]', '$datos[35]', '$datos[36]','$datos[50]','$datos[51]','$datos[52]','$datos[53]')";				
+				$sql="INSERT INTO consulta (id_aten,motivo_con,enfermedad_con,revisionsist_con,id_cups,finalidad_con,causaext_con,analisis_con,dxprinc_con,dxrela1_con,dxrela2_con,dxrela3_con,tipodx_con,plan_con,observacion_con,control_con,subjetivo_con,objetivo_con,violencia_sexual_con) 
+				VALUES('$id_aten', '$datos[21]', '$datos[22]', '$datos[23]', '$datos[26]', '$datos[27]', '$datos[28]', '$datos[29]', '$datos[30]','$dxrel1', '$dxrel2', '$dxrel3', '$datos[31]', '$datos[35]', '$datos[36]','$datos[50]','$datos[51]','$datos[52]','$datos[53]')";
 				//echo "<br>".$sql;
 
 				$guardado=mysqli_query($conexion,$sql);

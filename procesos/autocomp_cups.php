@@ -7,7 +7,7 @@ $conexion=$obj->conexion();
 $q = strtoupper($_GET["q"]);
 if (!$q) RETURN;
 $sql = "SELECT DISTINCT id_cups,descripcion_cups AS nombre FROM vw_cups
-		WHERE estado_cups='A' AND descripcion_cups LIKE '%$q%' ORDER BY descripcion_cups";
+		WHERE estado_cups='A' AND descripcion_cups LIKE '%$q%' ORDER BY nombre";
 //echo $sql;
 $rsd=mysqli_query($conexion,$sql);
 if($rsd){

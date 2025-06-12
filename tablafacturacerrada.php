@@ -16,8 +16,7 @@ $result=mysqli_query($conexion,$sql);
 <div>
 	<table class="table table-hover table-sm table-bordered font13" id="tablafactura">
 		<thead style="background-color: #2574a9;color: white; font-weight: bold;">
-			<tr>
-				<td>Imprimir</td>
+			<tr>				
 				<td>Numero</td>
 				<td>Fecha</td>
 				<td>Fecha Cierre</td>
@@ -26,7 +25,7 @@ $result=mysqli_query($conexion,$sql);
 				<td>EPS</td>
 				<td>Convenio</td>
 				<td>Valor Neto</td>
-				<td>Anular</td>				
+				<td colspan="3">Opciones</td>				
 			</tr>
 		</thead>
 		
@@ -35,12 +34,6 @@ $result=mysqli_query($conexion,$sql);
 			while($row=mysqli_fetch_row($result)){
 				?>
 				<tr>
-					<td style="text-align: center;">
-						<span class="btn btn-success btn.sm" title="Imprimir" onclick="imprimir('<?php echo $row[0]?>')">
-							<i class="fas fa-print"></i></span>
-						</span>
-					</td>
-
 					<td><?php echo $row[1];?></td>
 					<td><?php echo $row[2];?></td>
 					<td><?php echo $row[3];?></td>
@@ -49,7 +42,17 @@ $result=mysqli_query($conexion,$sql);
 					<td><?php echo $row[6];?></td>
 					<td><?php echo $row[7];?></td>
 
-					<td align="right"><?php echo number_format($row[8],2,'.',',');?></td>					
+					<td align="right"><?php echo number_format($row[8],2,'.',',');?></td>
+					<td style="text-align: center;">
+						<span class="btn btn-success btn.sm" title="Imprimir" onclick="imprimir('<?php echo $row[0]?>')">
+							<i class="fas fa-print"></i></span>
+						</span>
+					</td>
+					<td style="text-align: center;">
+						<span class="btn btn-primary btn.sm" title="RIPS" onclick="activaRips('<?php echo $row[0]?>')">
+							<i class="fas fa-file-code"></i></span>
+						</span>
+					</td>
 					<td style="text-align: center;">
 						<?php
 							if($row[9]=='N'){
@@ -74,10 +77,27 @@ $result=mysqli_query($conexion,$sql);
 		</tbody>
 		
 	</table>
+	
+	<br>
+	<div id="tablaDataRips"></div>
+
 </div>
 
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('#tablafactura').DataTable();
 	} );
+
+	function activaRips(idfac){
+		//alert();
+		$("#tablaDataRips").load("tablaRipsUs.php");
+		/*$.ajax({
+			type:"POST",
+			data:"idfac="+idfac,
+			url:"vistas/rips.php",
+			success:function(r){
+				$('#tablaDataRips').html(r);
+			}
+		});*/
+	}
 </script>

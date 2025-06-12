@@ -1,6 +1,8 @@
 <?php
 session_start();
-//session_destroy();
+session_destroy();
+session_unset();
+
 $_SESSION['gusuario_log']='';
 $_SESSION['gnombreusu_log']='';
 ?>
