@@ -88,9 +88,9 @@ $result=mysqli_query($conexion,$sql);
 		$('#tablafactura').DataTable();
 	} );
 
-	function activaRips(idfac){
-		//alert();
-		$("#tablaDataRips").load("tablaRipsUs.php");
+	function activaRips(id_factura){
+		
+		$("#tablaDataRips").load("tablaRipsUs.php?id_factura="+id_factura);
 		/*$.ajax({
 			type:"POST",
 			data:"idfac="+idfac,

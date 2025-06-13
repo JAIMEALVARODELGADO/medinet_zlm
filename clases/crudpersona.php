@@ -20,7 +20,7 @@ class crudpersona{
 		$sql="SELECT persona.id_persona, persona.tipo_iden_per, persona.numero_iden_per, persona.pnom_per, persona.snom_per, persona.pape_per, persona.sape_per, persona.fnac_per,persona.sexo_per, persona.direccion_per,persona.telefono_per,persona.email_per 
 		FROM persona 
 		WHERE id_persona='$idpersona'";
-		echo "<br>".$sql;
+		//echo "<br>".$sql;
 		$row=mysqli_query($conexion,$sql);
 		$ver=mysqli_fetch_row($row);
 		$datos=array(

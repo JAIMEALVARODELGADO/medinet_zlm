@@ -80,7 +80,9 @@ $conexion=$obj->conexion();
                             $cont++;
 
                             $sql="CREATE OR REPLACE VIEW vw_tpusuario AS
-                            SELECT detalle_grupo.codi_det, detalle_grupo.descripcion_det, detalle_grupo.valor_det FROM detalle_grupo WHERE detalle_grupo.id_grupo=3";
+                            SELECT detalle_grupo.codi_det, detalle_grupo.descripcion_det, detalle_grupo.valor_det 
+                            FROM detalle_grupo 
+                            WHERE detalle_grupo.id_grupo=3 AND estado='AC'";
                             $res=mysqli_query($conexion,$sql);
                             if($res<>1){
                                 echo "<div class='col-sm-12'>vw_tpusuario NO CREADA</div>";

@@ -1,10 +1,44 @@
+<?php
+$id_factura = $_GET['id_factura'];
+
+?>
 <script>
+	id_factura = "<?php echo $id_factura; ?>";
     function cerrar(){		
 		$("#tablaDataRips").empty();
     }
     function ripsAc(){				
         $("#tablaDataRips").load("mn_RipsAc.php");
     }
+	$(document).ready(function() {		
+		crearRips();		
+	});
+
+	function crearRips() {
+		var url = "procesos/rips_procesos.php?id_factura=" + id_factura
+		+"&opcion=crearRips";
+		console.log(url);
+		fetch(url, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded'
+			}
+		})
+		.then(response => response.text())
+		.then(data => {
+			//document.getElementById('resultado').innerHTML = data;
+			cargarTablaRips(data);
+		})
+		.catch(error => {
+			console.error('Error:', error);
+		});
+	}
+
+	function cargarTablaRips(data) {
+		alert(data);
+		//document.getElementById('tablaDataRips').innerHTML = data;
+		// Aquí puedes agregar más lógica si es necesario
+	}
 </script>
 
     <div class="card text">
@@ -51,3 +85,5 @@
 	        </div>
 	    </div>		
 	</div>
+
+	
