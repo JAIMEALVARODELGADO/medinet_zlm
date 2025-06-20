@@ -9,6 +9,9 @@ switch($_GET['opcion']) {
     case 'traerUs':        
         echo traerUs($_GET['id_factura']);
         break;
+    case 'traerUsPorId':        
+        echo traerUsPorId($_GET['id_usuario']);
+        break;
     case 'rips':
         include 'procesos/rips_rips.php';
         break;
@@ -302,5 +305,29 @@ function actualizarUsuario($datos) {
     } else {
         echo "Error al actualizar usuario: " . mysqli_error($conexion);
     }
+}
+
+
+function traerUsPorId($id_usuario) {
+    $obj=new conectar();
+    $conexion=$obj->conexion();
+
+    $sql = "SELECT id_usuario, tipo_documento, numdocumento, tipousuario, fechanacimiento, codsexo, 
+        codpaisresidencia, codmunicipioresidencia, codzonaresidencia, incapacidad, codpaisorigen,nru.id_factura,
+        CONCAT (p.pnom_per, ' ', p.snom_per,' ',p.pape_per,' ',p.sape_per) as nombre_completo
+        FROM nrusuario nru
+        inner join factura_encabezado fe on fe.id_factura = nru.id_factura 
+        inner join persona p on p.id_persona = fe.id_persona 
+        WHERE nru.id_usuario = '$id_usuario'";
+    
+    //echo $sql;
+
+    $result = mysqli_query($conexion,$sql);
+    $data = array();
+    
+    $row = mysqli_fetch_assoc($result);
+    $data = $row;
+    
+    return(json_encode($data));
 }
 ?>
