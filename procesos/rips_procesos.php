@@ -1,8 +1,14 @@
 <?php
 require_once "../clases/conexion.php";
 
+$opcion = isset($_GET['opcion']) ? $_GET['opcion'] : $_POST['opcion'];
 
-switch($_GET['opcion']) {
+if(!isset($opcion)) {
+    echo "No se ha especificado una opción.";
+    exit;
+}   
+
+switch($opcion) {
     case 'crearRips':
         crearRips($_GET['id_factura']);
         break;
@@ -11,6 +17,15 @@ switch($_GET['opcion']) {
         break;
     case 'traerUsPorId':        
         echo traerUsPorId($_GET['id_usuario']);
+        break;
+    case 'traerDetalleGrupo':
+        echo traerDetalleGrupo($_GET['id_grupo']);
+        break;        
+    case 'traerMunicipios':
+        echo traerMunicipios();
+        break;
+    case 'guardarUsuario':
+        guardarUsuario($_POST);
         break;
     case 'rips':
         include 'procesos/rips_rips.php';
@@ -271,7 +286,7 @@ function traerUs($id_factura) {
     return(json_encode($data));
 }
 
-function actualizarUsuario($datos) {
+function guardarUsuario($datos) {
     $obj = new conectar();
     $conexion = $obj->conexion();
     
@@ -298,8 +313,8 @@ function actualizarUsuario($datos) {
             codzonaresidencia = '$codzonaresidencia',
             incapacidad = '$incapacidad',
             codpaisorigen = '$codpaisorigen'
-            WHERE id_usuario = '$id_usuario'";
-    
+            WHERE id_usuario = '$id_usuario'";    
+
     if(mysqli_query($conexion, $sql)) {
         echo "Usuario actualizado correctamente";
     } else {
@@ -327,6 +342,39 @@ function traerUsPorId($id_usuario) {
     
     $row = mysqli_fetch_assoc($result);
     $data = $row;
+    
+    return(json_encode($data));
+}
+
+function traerDetalleGrupo($id_grupo) {
+    $obj=new conectar();
+    $conexion=$obj->conexion();
+
+    $sql = "SELECT valor_det,descripcion_det 
+    FROM detalle_grupo WHERE id_grupo='$id_grupo' ORDER BY descripcion_det";
+    
+    $result = mysqli_query($conexion,$sql);
+    $data = array();
+    
+    while($row = mysqli_fetch_assoc($result)) {
+        $data[] = $row;
+    }
+    
+    return(json_encode($data));
+}
+
+function traerMunicipios() {
+    $obj=new conectar();
+    $conexion=$obj->conexion();
+
+    $sql = "SELECT codigo_mun, nombre_mun FROM municipio ORDER BY nombre_mun";
+    
+    $result = mysqli_query($conexion,$sql);
+    $data = array();
+    
+    while($row = mysqli_fetch_assoc($result)) {
+        $data[] = $row;
+    }
     
     return(json_encode($data));
 }

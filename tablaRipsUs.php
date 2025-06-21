@@ -5,7 +5,7 @@ $id_factura = $_GET['id_factura'];
 <script src="tablaRipsUs.js">	
 </script>
 <script>
-	id_factura = "<?php echo $id_factura; ?>";	
+	id_factura = "<?php echo $id_factura; ?>";    
 </script>
 
     <div class="card text">
@@ -57,8 +57,7 @@ $id_factura = $_GET['id_factura'];
 								</tbody>
 								
 							</table>
-
-	                        <!--<div id="tablaDatafactura"></div>-->
+                            	                        
 	                    </div>
 	                    
 	                </div>
@@ -78,27 +77,22 @@ $id_factura = $_GET['id_factura'];
                 </button>
             </div>
             <div class="modal-body">
-                <form id="formEditarUsuario">
-                    <input type="hidden" id="edit_id_usuario" name="id_usuario">
+                <form id="formUsuario">
+                    <input type="hidden" id="id_usuario" name="id_usuario">
                     
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="edit_tipo_documento">Tipo Documento:</label>
-                                <select class="form-control" id="edit_tipo_documento" name="tipo_documento" required>
-                                    <option value="">Seleccione...</option>
-                                    <option value="CC">Cédula de Ciudadanía</option>
-                                    <option value="TI">Tarjeta de Identidad</option>
-                                    <option value="RC">Registro Civil</option>
-                                    <option value="PA">Pasaporte</option>
-                                    <option value="CE">Cédula de Extranjería</option>
+                                <label for="tipo_documento">Tipo Documento:</label>
+                                <select class="form-control" id="tipo_documento" name="tipo_documento" required>
+                                    
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="edit_numdocumento">Número Documento:</label>
-                                <input type="text" class="form-control" id="edit_numdocumento" name="numdocumento" maxlength="20" required>
+                                <label for="numdocumento">Número de Documento:</label>
+                                <input type="text" class="form-control" id="numdocumento" name="numdocumento" maxlength="20" required>
                             </div>
                         </div>
                     </div>
@@ -106,21 +100,16 @@ $id_factura = $_GET['id_factura'];
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="edit_tipousuario">Tipo Usuario:</label>
-                                <select class="form-control" id="edit_tipousuario" name="tipousuario" required>
-                                    <option value="">Seleccione...</option>
-                                    <option value="01">Contributivo</option>
-                                    <option value="02">Subsidiado</option>
-                                    <option value="03">Vinculado</option>
-                                    <option value="04">Particular</option>
-                                    <option value="05">Otro</option>
+                                <label for="tipousuario">Tipo de Usuario:</label>
+                                <select class="form-control" id="tipousuario" name="tipousuario" required>
+                                    
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="edit_fechanacimiento">Fecha Nacimiento:</label>
-                                <input type="date" class="form-control" id="edit_fechanacimiento" name="fechanacimiento" required>
+                                <label for="fechanacimiento">Fecha Nacimiento:</label>
+                                <input type="date" class="form-control" id="fechanacimiento" name="fechanacimiento" required>
                             </div>
                         </div>
                     </div>
@@ -128,18 +117,16 @@ $id_factura = $_GET['id_factura'];
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="edit_codsexo">Sexo:</label>
-                                <select class="form-control" id="edit_codsexo" name="codsexo" required>
-                                    <option value="">Seleccione...</option>
-                                    <option value="M">Masculino</option>
-                                    <option value="F">Femenino</option>
+                                <label for="codsexo">Sexo:</label>
+                                <select class="form-control" id="codsexo" name="codsexo" required>
+
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="edit_codpaisresidencia">Código País Residencia:</label>
-                                <input type="text" class="form-control" id="edit_codpaisresidencia" name="codpaisresidencia" maxlength="3" value="170" required>
+                                <label for="codpaisresidencia">Código País de Residencia:</label>
+                                <input type="text" class="form-control" id="codpaisresidencia" name="codpaisresidencia" maxlength="3" value="170" required>
                             </div>
                         </div>
                     </div>
@@ -147,17 +134,17 @@ $id_factura = $_GET['id_factura'];
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="edit_codmunicipioresidencia">Código Municipio:</label>
-                                <input type="text" class="form-control" id="edit_codmunicipioresidencia" name="codmunicipioresidencia" maxlength="5" required>
+                                <label for="codmunicipioresidencia">Municipio de Residencia:</label>                                
+                                <select class="form-control" id="codmunicipioresidencia" name="codmunicipioresidencia" required>
+
+                                </select>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="edit_codzonaresidencia">Zona Residencia:</label>
-                                <select class="form-control" id="edit_codzonaresidencia" name="codzonaresidencia" required>
-                                    <option value="">Seleccione...</option>
-                                    <option value="01">Rural</option>
-                                    <option value="02">Urbana</option>
+                                <label for="codzonaresidencia">Zona Residencia:</label>
+                                <select class="form-control" id="codzonaresidencia" name="codzonaresidencia" required>
+                                    
                                 </select>
                             </div>
                         </div>
@@ -166,8 +153,8 @@ $id_factura = $_GET['id_factura'];
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="edit_incapacidad">Incapacidad:</label>
-                                <select class="form-control" id="edit_incapacidad" name="incapacidad" required>
+                                <label for="incapacidad">Incapacidad:</label>
+                                <select class="form-control" id="incapacidad" name="incapacidad" required>
                                     <option value="">Seleccione...</option>
                                     <option value="NO">No</option>
                                     <option value="SI">Sí</option>
@@ -176,8 +163,8 @@ $id_factura = $_GET['id_factura'];
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="edit_codpaisorigen">Código País Origen:</label>
-                                <input type="text" class="form-control" id="edit_codpaisorigen" name="codpaisorigen" maxlength="3" value="170" required>
+                                <label for="codpaisorigen">Código País Origen:</label>
+                                <input type="text" class="form-control" id="codpaisorigen" name="codpaisorigen" maxlength="3" value="170" required>
                             </div>
                         </div>
                     </div>
@@ -185,7 +172,7 @@ $id_factura = $_GET['id_factura'];
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary" onclick="guardarUsuario()">Guardar Cambios</button>
+                <button type="button" class="btn btn-primary" onclick="guardarUsuario()">Guardar<span class="fas fa-save"></span></button>
             </div>
         </div>
     </div>
