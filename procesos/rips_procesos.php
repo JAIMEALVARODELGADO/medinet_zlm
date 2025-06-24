@@ -27,7 +27,13 @@ switch($opcion) {
     case 'guardarUsuario':
         guardarUsuario($_POST);
         break;
-    case 'rips':
+    case 'traerConsultas':        
+        echo traerConsultas($_GET['id_factura']);
+        break;
+    case 'traerConsultaPorId':
+        echo traerConsultaPorId($_GET['id_consulta']);
+        break;
+    /*case 'rips':
         include 'procesos/rips_rips.php';
         break;
     case 'ripsAc':
@@ -38,7 +44,7 @@ switch($opcion) {
         break;
     case 'ripsOt':
         include 'procesos/rips_ripsOt.php';
-        break;
+        break;*/
     default:
         echo "Opción no válida.";
         break;
@@ -351,7 +357,7 @@ function traerDetalleGrupo($id_grupo) {
     $conexion=$obj->conexion();
 
     $sql = "SELECT valor_det,descripcion_det 
-    FROM detalle_grupo WHERE id_grupo='$id_grupo' ORDER BY descripcion_det";
+    FROM detalle_grupo WHERE estado='AC' AND id_grupo='$id_grupo' ORDER BY descripcion_det";
     
     $result = mysqli_query($conexion,$sql);
     $data = array();
@@ -376,6 +382,51 @@ function traerMunicipios() {
         $data[] = $row;
     }
     
+    return(json_encode($data));
+}
+
+function traerConsultas($id_factura) {
+    $obj=new conectar();
+    $conexion=$obj->conexion();
+
+    $sql = "SELECT id_consulta, fechainicioatencion, numautorizacion, codconsulta, 
+        modalidadgruposervicio, gruposervicio, codservicio, finalidadtecnologiasalud, 
+        causamotivoatencion, coddiagnosticoprincipal,
+        coddiagnosticorelacionado1, coddiagnosticorelacionado2, coddiagnosticorelacionado3,
+        tipodiagnosticoprincipal, vrservicio, conceptorecaudo, valorpagomoderador,
+        numfevpagomoderador, consecutivo,id_detalle
+        FROM nrconsulta WHERE id_factura = '$id_factura'";
+            
+    $result = mysqli_query($conexion,$sql);
+    $data = array();
+    
+    while($row = mysqli_fetch_assoc($result)) {
+        $data[] = $row;
+    }    
+    
+    return(json_encode($data));
+}
+
+function traerConsultaPorId($id_consulta) {
+    $obj=new conectar();
+    $conexion=$obj->conexion();
+
+    $sql = "SELECT id_consulta, fechainicioatencion, numautorizacion, codconsulta, 
+        modalidadgruposervicio, gruposervicio, codservicio, finalidadtecnologiasalud, 
+        causamotivoatencion, coddiagnosticoprincipal,
+        coddiagnosticorelacionado1, coddiagnosticorelacionado2, coddiagnosticorelacionado3,
+        tipodiagnosticoprincipal, vrservicio, conceptorecaudo, valorpagomoderador,
+        numfevpagomoderador, consecutivo,id_detalle
+        FROM nrconsulta WHERE id_consulta = '$id_consulta'";
+
+    //echo $sql;
+            
+    $result = mysqli_query($conexion,$sql);    
+    
+    $data = array();
+    $row = mysqli_fetch_assoc($result);
+    $data = $row;
+        
     return(json_encode($data));
 }
 ?>

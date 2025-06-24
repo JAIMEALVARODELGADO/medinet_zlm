@@ -7,42 +7,47 @@ function ripsUs(){
 }
 
 $(document).ready(function() {		
+    //alert("Aqui estoy");    
     cargarConsultas();
     cargarModalidadGrupo();
     cargarGrupoServicio();
-    cargarFinalidad();
-    cargarCausaMotivo();
-    cargarTipoDiagnostico();
-    cargarConceptoRecaudo();
+    cargarServicios();
+    cargarFinalidades();
+    cargarCausaExterna();
+    /*cargarTipoDiagnostico();
+    cargarConceptoRecaudo();*/
 });
 
-function cargarConsultas() {
-    var url = "procesos/rips_procesos.php?id_factura=" + id_factura
-    +"&opcion=traerConsultas";
+function cargarConsultas() {    
+    var url = "procesos/rips_procesos.php?id_factura=" + id_factura + "&opcion=traerConsultas";
     
-    fetchOptions={
-        method: 'GET',
-        headers: {				
-            'Content-Type': 'application/json' 
-        }
+    const fetchOptions = {
+        method: 'GET'        
     }
-    fetch(url, fetchOptions)		
-    .then(response => response.json())
-    .then(data => {			
-        mostrarConsultas(data);
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
+    
+    fetch(url, fetchOptions)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {            
+            mostrarConsultas(data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
 }
 
 function mostrarConsultas(consultas){
-    // Limpiar el tbody de la tabla
-    $('#tablaRipsUs tbody').empty();
+    // Limpiar el tbody de la tabla     
+    //console.log('Datos recibidos:', consultas);
+    $('#tablaRips tbody').empty();
     
     // Verificar si hay datos
     if (!consultas || consultas.length === 0) {
-        $('#tablaRipsUs tbody').append('<tr><td colspan="9" class="text-center">No hay consultas para mostrar</td></tr>');
+        $('#tablaRips tbody').append('<tr><td colspan="9" class="text-center">No hay consultas para mostrar</td></tr>');
         return;
     }
     
@@ -52,17 +57,17 @@ function mostrarConsultas(consultas){
             '<td>' + (consulta.fechainicioatencion || '') + '</td>' +
             '<td>' + (consulta.numautorizacion || '') + '</td>' +
             '<td>' + (consulta.codconsulta || '') + '</td>' +
-            '<td>' + (consulta.modalidadgruposervicio || '') + '</td>' +
-            '<td>' + (consulta.codservicio || '') + '</td>' +
             '<td>' + (consulta.finalidadtecnologiasalud || '') + '</td>' +
+            '<td>' + (consulta.coddiagnosticoprincipal || '') + '</td>' +
+            '<td>' + (consulta.vrservicio || '') + '</td>' +
             '<td>' +
-            '<span class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modalEditarConsulta" title="Editar" onclick="editarConsulta(' + consulta.id_consulta + ')">' +
+            '<span class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modalEditar" title="Editar" onclick="editarConsulta(' + consulta.id_consulta + ')">' +
                 '<span class="far fa-edit"></span>'+
             '</span>' +
             '</td>' +							                
             '</tr>';
         
-        $('#tablaRipsUs tbody').append(fila);
+        $('#tablaRips tbody').append(fila);
     });
 }
 
@@ -95,8 +100,8 @@ function editarConsulta(id_consulta) {
             throw new Error('Consulta no encontrada');
         }
         
-        // Rellenar el formulario de edición
-        rellenarFormularioEdicionConsulta(data);
+        // Rellenar el formulario de edición                
+        llenarFormularioConsulta(data);
         
     })
     .catch(error => {
@@ -106,9 +111,7 @@ function editarConsulta(id_consulta) {
 }
 
 // Función auxiliar para rellenar el formulario
-function rellenarFormularioEdicionConsulta(consulta) {
-    console.log('Consulta a editar:', consulta);    
-    
+function llenarFormularioConsulta(consulta) {    
     // Rellenar los campos del formulario con los datos del JSON
     $('#fechainicioatencion').val(consulta.fechainicioatencion || '');
     $('#numautorizacion').val(consulta.numautorizacion || '');
@@ -131,7 +134,7 @@ function rellenarFormularioEdicionConsulta(consulta) {
     // Guardar el ID para la actualización
     $('#id_consulta').val(consulta.id_consulta || '');
     
-    console.log('Formulario de consulta rellenado correctamente');
+    //console.log('Formulario de consulta rellenado correctamente');
 }
 
 function guardarConsulta() {
@@ -164,7 +167,7 @@ function guardarConsulta() {
     .then(response => response.text())
     .then(data => {        
         alertify.success(data);
-        $('#modalEditarConsulta').modal('hide');
+        $('#modalEditar').modal('hide');
         cargarConsultas(); // Recargar la tabla
     })
     .catch(error => {
@@ -176,7 +179,7 @@ function guardarConsulta() {
 function cargarModalidadGrupo(){
     // Cargar los datos de modalidad grupo servicio
     var url = "procesos/rips_procesos.php?"+
-        "id_grupo=4"+ 
+        "id_grupo=25"+ 
         "&opcion=traerDetalleGrupo";        
 
     fetch(url)
@@ -230,7 +233,7 @@ function llenarModalidadGrupo(data){
 function cargarGrupoServicio(){
     // Cargar los datos de grupo servicio
     var url = "procesos/rips_procesos.php?"+
-        "id_grupo=5"+ 
+        "id_grupo=26"+ 
         "&opcion=traerDetalleGrupo";        
 
     fetch(url)
@@ -281,10 +284,64 @@ function llenarGrupoServicio(data){
     }
 }
 
-function cargarFinalidad(){
+function cargarServicios(){
+    // Cargar los datos de servicios    
+    var url = "procesos/rips_procesos.php?"+
+        "id_grupo=27"+ 
+        "&opcion=traerDetalleGrupo";        
+
+    fetch(url)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Error en la respuesta del servidor: ' + response.status);
+        }
+        return response.json();
+    })
+    .then(data => {            
+        // Verificar si hay error en la respuesta del servidor
+        if (data.error) {
+            throw new Error(data.mensaje || 'Error desconocido del servidor');
+        }
+        
+        //Llenar select de grupo servicio        
+        llenarServicios(data);
+        
+    })
+    .catch(error => {
+        console.error('Error al cargar grupo servicio:', error);
+        alert('Error al cargar los datos de grupo servicio: ' + error.message);
+    });
+}
+
+function llenarServicios(data){    
+    // Verificar si el elemento existe
+    var select = document.getElementById('codservicio');
+    if (select) {
+        // Limpiar las opciones existentes
+        select.innerHTML = '';
+        
+        // Agregar una opción por defecto
+        var option = document.createElement('option');
+        option.value = '';
+        option.textContent = 'Seleccione el servicio';
+        select.appendChild(option);
+        
+        // Recorrer los datos y crear las opciones
+        data.forEach(function(item) {
+            var option = document.createElement('option');
+            option.value = item.valor_det;
+            option.textContent = item.descripcion_det;
+            select.appendChild(option);
+        });
+    } else {
+        console.error('El elemento select servicio no existe en el DOM');
+    }
+}
+
+function cargarFinalidades(){
     // Cargar los datos de finalidad
     var url = "procesos/rips_procesos.php?"+
-        "id_grupo=6"+ 
+        "id_grupo=11"+ 
         "&opcion=traerDetalleGrupo";        
 
     fetch(url)
@@ -301,7 +358,7 @@ function cargarFinalidad(){
         }
         
         //Llenar select de finalidad
-        llenarFinalidad(data);
+        llenarFinalidades(data);
         
     })
     .catch(error => {
@@ -310,7 +367,7 @@ function cargarFinalidad(){
     });
 }
 
-function llenarFinalidad(data){
+function llenarFinalidades(data){
     // Verificar si el elemento existe
     var select = document.getElementById('finalidadtecnologiasalud');
     if (select) {
@@ -335,10 +392,10 @@ function llenarFinalidad(data){
     }
 }
 
-function cargarCausaMotivo(){
+function cargarCausaExterna(){
     // Cargar los datos de causa motivo
     var url = "procesos/rips_procesos.php?"+
-        "id_grupo=7"+ 
+        "id_grupo=12"+ 
         "&opcion=traerDetalleGrupo";        
 
     fetch(url)
@@ -354,8 +411,8 @@ function cargarCausaMotivo(){
             throw new Error(data.mensaje || 'Error desconocido del servidor');
         }
         
-        //Llenar select de causa motivo
-        llenarCausaMotivo(data);
+        //Llenar select de causa motivo        
+        llenarCausaExterna(data);
         
     })
     .catch(error => {
@@ -364,7 +421,7 @@ function cargarCausaMotivo(){
     });
 }
 
-function llenarCausaMotivo(data){
+function llenarCausaExterna(data){
     // Verificar si el elemento existe
     var select = document.getElementById('causamotivoatencion');
     if (select) {
@@ -374,7 +431,7 @@ function llenarCausaMotivo(data){
         // Agregar una opción por defecto
         var option = document.createElement('option');
         option.value = '';
-        option.textContent = 'Seleccione causa/motivo';
+        option.textContent = 'Seleccione causa externa';
         select.appendChild(option);
         
         // Recorrer los datos y crear las opciones
