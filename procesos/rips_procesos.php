@@ -33,10 +33,10 @@ switch($opcion) {
     case 'traerConsultaPorId':
         echo traerConsultaPorId($_GET['id_consulta']);
         break;
-    /*case 'rips':
-        include 'procesos/rips_rips.php';
+    case 'guardarConsulta':
+        guardarConsulta($_POST);
         break;
-    case 'ripsAc':
+    /*case 'ripsAc':
         include 'procesos/rips_ripsAc.php';
         break;
     case 'ripsAp':
@@ -428,5 +428,56 @@ function traerConsultaPorId($id_consulta) {
     $data = $row;
         
     return(json_encode($data));
+}
+
+function guardarConsulta($datos) {
+    $obj = new conectar();
+    $conexion = $obj->conexion();
+
+    $id_consulta = mysqli_real_escape_string($conexion, $datos['id_consulta']);
+    $fechainicioatencion = mysqli_real_escape_string($conexion, $datos['fechainicioatencion']);
+    $numautorizacion = mysqli_real_escape_string($conexion, $datos['numautorizacion']);
+    $codconsulta = mysqli_real_escape_string($conexion, $datos['codconsulta']);
+    $modalidadgruposervicio = mysqli_real_escape_string($conexion, $datos['modalidadgruposervicio']);
+    $gruposervicio = mysqli_real_escape_string($conexion, $datos['gruposervicio']);
+    $codservicio = mysqli_real_escape_string($conexion, $datos['codservicio']);
+    $finalidadtecnologiasalud = mysqli_real_escape_string($conexion, $datos['finalidadtecnologiasalud']);
+    $causamotivoatencion = mysqli_real_escape_string($conexion, $datos['causamotivoatencion']);
+    $coddiagnosticoprincipal = mysqli_real_escape_string($conexion, $datos['coddiagnosticoprincipal']);
+    $coddiagnosticorelacionado1 = mysqli_real_escape_string($conexion, $datos['coddiagnosticorelacionado1']);
+    $coddiagnosticorelacionado2 = mysqli_real_escape_string($conexion, $datos['coddiagnosticorelacionado2']);
+    $coddiagnosticorelacionado3 = mysqli_real_escape_string($conexion, $datos['coddiagnosticorelacionado3']);
+    $tipodiagnosticoprincipal = mysqli_real_escape_string($conexion, $datos['tipodiagnosticoprincipal']);
+    $vrservicio = mysqli_real_escape_string($conexion, $datos['vrservicio']);
+    $conceptorecaudo = mysqli_real_escape_string($conexion, $datos['conceptorecaudo']);
+    $valorpagomoderador = mysqli_real_escape_string($conexion, $datos['valorpagomoderador']);
+    $numfevpagomoderador = mysqli_real_escape_string($conexion, $datos['numfevpagomoderador']);    
+    $id_detalle = mysqli_real_escape_string($conexion, $datos['id_detalle']);
+
+    $sql= "UPDATE nrconsulta SET 
+            fechainicioatencion = '$fechainicioatencion',
+            numautorizacion = '$numautorizacion',
+            codconsulta = '$codconsulta',
+            modalidadgruposervicio = '$modalidadgruposervicio',
+            gruposervicio = '$gruposervicio',
+            codservicio = '$codservicio',
+            finalidadtecnologiasalud = '$finalidadtecnologiasalud',
+            causamotivoatencion = '$causamotivoatencion',
+            coddiagnosticoprincipal = '$coddiagnosticoprincipal',
+            coddiagnosticorelacionado1 = '$coddiagnosticorelacionado1',
+            coddiagnosticorelacionado2 = '$coddiagnosticorelacionado2',
+            coddiagnosticorelacionado3 = '$coddiagnosticorelacionado3',
+            tipodiagnosticoprincipal = '$tipodiagnosticoprincipal',
+            vrservicio = '$vrservicio',
+            conceptorecaudo = '$conceptorecaudo',
+            valorpagomoderador = '$valorpagomoderador',
+            numfevpagomoderador = '$numfevpagomoderador'            
+        WHERE id_detalle='$id_detalle'";
+    
+    if(mysqli_query($conexion, $sql)) {
+        echo "Consulta actualizada correctamente";
+    } else {
+        echo "Error al actualizar la consulta: " . mysqli_error($conexion);
+    }
 }
 ?>

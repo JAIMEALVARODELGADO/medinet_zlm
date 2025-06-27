@@ -2,8 +2,12 @@ function cerrar(){
     $("#tablaDataRips").empty();
 }
 
-function ripsUs(){				
+function ripsUs(){    
     $("#tablaDataRips").load("tablaRipsUs.php?id_factura="+id_factura);
+}
+
+function ripsAp(){    
+    $("#tablaDataRips").load("tablaNRAP.php?id_factura="+id_factura);
 }
 
 $(document).ready(function() {		
@@ -14,11 +18,12 @@ $(document).ready(function() {
     cargarServicios();
     cargarFinalidades();
     cargarCausaExterna();
-    /*cargarTipoDiagnostico();
-    cargarConceptoRecaudo();*/
+    cargarTipoDiagnostico();
+    cargarConceptoRecaudo();
 });
 
 function cargarConsultas() {    
+    
     var url = "procesos/rips_procesos.php?id_factura=" + id_factura + "&opcion=traerConsultas";
     
     const fetchOptions = {
@@ -111,7 +116,7 @@ function editarConsulta(id_consulta) {
 }
 
 // Función auxiliar para rellenar el formulario
-function llenarFormularioConsulta(consulta) {    
+function llenarFormularioConsulta(consulta) {
     // Rellenar los campos del formulario con los datos del JSON
     $('#fechainicioatencion').val(consulta.fechainicioatencion || '');
     $('#numautorizacion').val(consulta.numautorizacion || '');
@@ -122,6 +127,7 @@ function llenarFormularioConsulta(consulta) {
     $('#finalidadtecnologiasalud').val(consulta.finalidadtecnologiasalud || '');
     $('#causamotivoatencion').val(consulta.causamotivoatencion || '');
     $('#coddiagnosticoprincipal').val(consulta.coddiagnosticoprincipal || '');
+    $('#dxprinc').val(consulta.coddiagnosticoprincipal || '');    
     $('#coddiagnosticorelacionado1').val(consulta.coddiagnosticorelacionado1 || '');
     $('#coddiagnosticorelacionado2').val(consulta.coddiagnosticorelacionado2 || '');
     $('#coddiagnosticorelacionado3').val(consulta.coddiagnosticorelacionado3 || '');
@@ -130,11 +136,29 @@ function llenarFormularioConsulta(consulta) {
     $('#conceptorecaudo').val(consulta.conceptorecaudo || '');
     $('#valorpagomoderador').val(consulta.valorpagomoderador || '');
     $('#numfevpagomoderador').val(consulta.numfevpagomoderador || '');
+    $('#id_detalle').val(consulta.id_detalle || '');
     
     // Guardar el ID para la actualización
     $('#id_consulta').val(consulta.id_consulta || '');
     
     //console.log('Formulario de consulta rellenado correctamente');
+
+    setTimeout(function() {        
+        inicializarAutocompleteDx();
+    }, 100);
+}
+
+function inicializarAutocompleteDx() {    
+    $("#dxprinc").autocomplete("procesos/autocomp_cie2.php", {
+        width: 500,
+        matchContains: false,
+        mustMatch: false,
+        selectFirst: false
+    });
+    
+    $("#dxprinc").result(function(event, data, formatted) {
+        $("#coddiagnosticoprincipal").val(data[1]);
+    });
 }
 
 function guardarConsulta() {
@@ -142,6 +166,7 @@ function guardarConsulta() {
     var formData = new FormData();
     formData.append('opcion', 'guardarConsulta');
     formData.append('id_consulta', $('#id_consulta').val());
+    formData.append('id_detalle', $('#id_detalle').val());
     formData.append('fechainicioatencion', $('#fechainicioatencion').val());
     formData.append('numautorizacion', $('#numautorizacion').val());
     formData.append('codconsulta', $('#codconsulta').val());
@@ -150,7 +175,7 @@ function guardarConsulta() {
     formData.append('codservicio', $('#codservicio').val());
     formData.append('finalidadtecnologiasalud', $('#finalidadtecnologiasalud').val());
     formData.append('causamotivoatencion', $('#causamotivoatencion').val());
-    formData.append('coddiagnosticoprincipal', $('#coddiagnosticoprincipal').val());
+    formData.append('coddiagnosticoprincipal', $('#coddiagnosticoprincipal').val());    
     formData.append('coddiagnosticorelacionado1', $('#coddiagnosticorelacionado1').val());
     formData.append('coddiagnosticorelacionado2', $('#coddiagnosticorelacionado2').val());
     formData.append('coddiagnosticorelacionado3', $('#coddiagnosticorelacionado3').val());
@@ -167,7 +192,7 @@ function guardarConsulta() {
     .then(response => response.text())
     .then(data => {        
         alertify.success(data);
-        $('#modalEditar').modal('hide');
+        //$('#modalEditar').modal('hide');
         cargarConsultas(); // Recargar la tabla
     })
     .catch(error => {
@@ -449,8 +474,8 @@ function llenarCausaExterna(data){
 function cargarTipoDiagnostico(){
     // Cargar los datos de tipo diagnostico
     var url = "procesos/rips_procesos.php?"+
-        "id_grupo=8"+ 
-        "&opcion=traerDetalleGrupo";        
+        "id_grupo=13"+ 
+        "&opcion=traerDetalleGrupo";
 
     fetch(url)
     .then(response => {
@@ -503,7 +528,7 @@ function llenarTipoDiagnostico(data){
 function cargarConceptoRecaudo(){
     // Cargar los datos de concepto recaudo
     var url = "procesos/rips_procesos.php?"+
-        "id_grupo=9"+ 
+        "id_grupo=28"+ 
         "&opcion=traerDetalleGrupo";        
 
     fetch(url)
@@ -553,3 +578,4 @@ function llenarConceptoRecaudo(data){
         console.error('El elemento select conceptorecaudo no existe en el DOM');
     }
 }
+

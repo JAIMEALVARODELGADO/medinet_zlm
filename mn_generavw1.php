@@ -376,7 +376,7 @@ $conexion=$obj->conexion();
                             $cont++;
                             
                             $sql="CREATE OR REPLACE VIEW vw_cie AS
-                            SELECT id_cie,CONCAT(codigo_cie,' ',descripcion_cie) AS descripcion FROM cie WHERE estado_cie='A'";
+                            SELECT id_cie,CONCAT(codigo_cie,' ',descripcion_cie) AS descripcion,codigo_cie FROM cie WHERE estado_cie='A'";
                             $res=mysqli_query($conexion,$sql);
                             if($res<>1){
                                 echo "<div class='col-sm-12'>vw_cie NO CREADA</div>";

@@ -1,24 +1,28 @@
 <?php
 $id_factura = $_GET['id_factura'];
 ?>
-<script src="tablaNRAC.js">	
-</script>
+
+<link rel="stylesheet" type="text/css" href="../librerias/css/jquery.autocomplete.css">
+<script type="text/javascript" src="../librerias/js/jquery.js"></script>
+<script type='text/javascript' src='../librerias/js/jquery.autocomplete.js'></script>
 <script>
 	id_factura = "<?php echo $id_factura; ?>";
 </script>
+<script src="tablaNRAC.js"></script>
+
 
     <div class="card text">
         <h6>RIPS</h6>
 		<div class="card-header">
 			<ul class="nav nav-tabs card-header-tabs">
 				<li class="nav-item">
-					<a class="nav-link" href="ripsUs()">Usuario</a>
+					<a class="nav-link" href="#" onclick="ripsUs()">Usuario</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link active" href="#" onclick="#">Consultas</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="mn_ripsAp.php">Procedimientos</a>
+					<a class="nav-link" href="#" onclick="ripsAp()"">Procedimientos</a>
 				</li>
                 <li class="nav-item">
 					<a class="nav-link" href="mn_ripsOt.php">Otros Servicios</a>
@@ -66,7 +70,7 @@ $id_factura = $_GET['id_factura'];
 	</div>
 
 <!-- Modal para Editar Consulta -->
-<div class="modal fade" id="modalEditar" tabindex="-1" role="dialog" aria-labelledby="modalEditarLabel" aria-hidden="true">
+<div class="modal fade" id="modalEditar" name="modalEditar" tabindex="-1" role="dialog" aria-labelledby="modalEditarLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -78,7 +82,7 @@ $id_factura = $_GET['id_factura'];
             <div class="modal-body">
                 <form id="formUsuario">
                     <input type="hidden" id="id_consulta" name="id_consulta">
-                    <input type="hidden" id="id_detalle" name="id_detalle">
+                    <input type="hidden" id="id_detalle" name="id_detalle">                    
                     
                     <div class="row">
                         <div class="col-md-6">
@@ -153,22 +157,82 @@ $id_factura = $_GET['id_factura'];
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="coddiagnosticoprincipal">Dx Principal:</label>
-                                <input type="text" class="form-control" id="coddiagnosticoprincipal" name="coddiagnosticoprincipal" required>
+                                <label for="dxprinc">Dx Principal:</label>                                
+                                <input type="text" class="form-control" id="dxprinc" name="dxprinc" maxlength='80' placeholder="Digite el código CIE10 o la descripción" required> 
+                                <input type="hidden" class="form-control" id="coddiagnosticoprincipal" name="coddiagnosticoprincipal" required> 
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="codpaisorigen">Código País Origen:</label>
-                                <input type="text" class="form-control" id="codpaisorigen" name="codpaisorigen" maxlength="3" value="170" required>
+                                <label for="tipodiagnosticoprincipal">Tipo de Dx Principal</label>
+                                <select class="form-control" id="tipodiagnosticoprincipal" name="tipodiagnosticoprincipal" required>
+                                    
+                                </select>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="coddiagnosticorelacionado1">Dx Relacionado 1:</label>
+                                <input type="text" class="form-control" id="coddiagnosticorelacionado1" name="coddiagnosticorelacionado1" required>
+                            </div>
+                        </div>                        
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="coddiagnosticorelacionado2">Dx Relacionado 2:</label>
+                                <input type="text" class="form-control" id="coddiagnosticorelacionado2" name="coddiagnosticorelacionado2" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="coddiagnosticorelacionado3">Dx Relacionado 3:</label>
+                                <input type="text" class="form-control" id="coddiagnosticorelacionado3" name="coddiagnosticorelacionado3" required>
+                            </div>
+                        </div>                        
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="vrservicio">Valor:</label>
+                                <input type="text" class="form-control" id="vrservicio" name="vrservicio" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="conceptorecaudo">Concepto de Recaudo:</label>
+                                <select class="form-control" id="conceptorecaudo" name="conceptorecaudo" required>
+                                    
+                                </select>
+                            </div>
+                        </div>                        
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="valorpagomoderador">Valor pago moderador:</label>
+                                <input type="text" class="form-control" id="valorpagomoderador" name="valorpagomoderador" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">                            
+                                <label for="numfevpagomoderador">Número FEV pago moderador:</label>
+                                <input type="text" class="form-control" id="numfevpagomoderador" name="numfevpagomoderador" required>
+                            </div>
+                        </div>                        
+                        
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary" onclick="guardarUsuario()">Guardar<span class="fas fa-save"></span></button>
+                <button type="button" class="btn btn-primary" onclick="guardarConsulta()">Guardar<span class="fas fa-save"></span></button>
             </div>
         </div>
     </div>
