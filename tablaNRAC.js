@@ -5,7 +5,6 @@ function cerrar(){
 function ripsUs(){    
     $("#tablaDataRips").load("tablaRipsUs.php?id_factura="+id_factura);
 }
-
 function ripsAp(){    
     $("#tablaDataRips").load("tablaNRAP.php?id_factura="+id_factura);
 }
@@ -129,8 +128,11 @@ function llenarFormularioConsulta(consulta) {
     $('#coddiagnosticoprincipal').val(consulta.coddiagnosticoprincipal || '');
     $('#dxprinc').val(consulta.coddiagnosticoprincipal || '');    
     $('#coddiagnosticorelacionado1').val(consulta.coddiagnosticorelacionado1 || '');
+    $('#dxrel1').val(consulta.coddiagnosticorelacionado1 || '');    
     $('#coddiagnosticorelacionado2').val(consulta.coddiagnosticorelacionado2 || '');
+    $('#dxrel2').val(consulta.coddiagnosticorelacionado2 || '');    
     $('#coddiagnosticorelacionado3').val(consulta.coddiagnosticorelacionado3 || '');
+    $('#dxrel3').val(consulta.coddiagnosticorelacionado3 || '');    
     $('#tipodiagnosticoprincipal').val(consulta.tipodiagnosticoprincipal || '');
     $('#vrservicio').val(consulta.vrservicio || '');
     $('#conceptorecaudo').val(consulta.conceptorecaudo || '');
@@ -158,6 +160,39 @@ function inicializarAutocompleteDx() {
     
     $("#dxprinc").result(function(event, data, formatted) {
         $("#coddiagnosticoprincipal").val(data[1]);
+    });
+
+    $("#dxrel1").autocomplete("procesos/autocomp_cie2.php", {
+        width: 500,
+        matchContains: false,
+        mustMatch: false,
+        selectFirst: false
+    });
+    
+    $("#dxrel1").result(function(event, data, formatted) {
+        $("#coddiagnosticorelacionado1").val(data[1]);
+    });
+
+    $("#dxrel2").autocomplete("procesos/autocomp_cie2.php", {
+        width: 500,
+        matchContains: false,
+        mustMatch: false,
+        selectFirst: false
+    });
+    
+    $("#dxrel2").result(function(event, data, formatted) {
+        $("#coddiagnosticorelacionado2").val(data[1]);
+    });
+
+    $("#dxrel3").autocomplete("procesos/autocomp_cie2.php", {
+        width: 500,
+        matchContains: false,
+        mustMatch: false,
+        selectFirst: false
+    });
+    
+    $("#dxrel3").result(function(event, data, formatted) {
+        $("#coddiagnosticorelacionado3").val(data[1]);
     });
 }
 
@@ -192,13 +227,24 @@ function guardarConsulta() {
     .then(response => response.text())
     .then(data => {        
         alertify.success(data);
-        //$('#modalEditar').modal('hide');
+        cerrarModal();
         cargarConsultas(); // Recargar la tabla
     })
     .catch(error => {
         console.error('Error:', error);
         alertify.error('Error al actualizar la consulta');
     });
+}
+
+function cerrarModal() {
+    $('#modalEditar').modal('hide');
+    
+    // Limpiar backdrop y restaurar body
+    setTimeout(function() {
+        $('.modal-backdrop').remove();
+        $('body').removeClass('modal-open');
+        $('body').css('padding-right', '');
+    }, 300);
 }
 
 function cargarModalidadGrupo(){

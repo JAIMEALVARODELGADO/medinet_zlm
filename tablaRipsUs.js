@@ -6,6 +6,9 @@ function cerrar(){
 function ripsAc(){				
     $("#tablaDataRips").load("tablaNRAC.php?id_factura="+id_factura);
 }
+function ripsAp(){				
+    $("#tablaDataRips").load("tablaNRAP.php?id_factura="+id_factura);
+}
 
 $(document).ready(function() {		
     crearRips();
@@ -169,13 +172,24 @@ function guardarUsuario() {
     .then(response => response.text())
     .then(data => {        
         alertify.success(data);
-        $('#modalEditar').modal('hide');
+        cerrarModal();
         cargarUs(); // Recargar la tabla
     })
     .catch(error => {
         console.error('Error:', error);
         alertify.error('Error al actualizar el usuario');
     });
+}
+
+function cerrarModal() {
+    $('#modalEditar').modal('hide');
+    
+    // Limpiar backdrop y restaurar body
+    setTimeout(function() {
+        $('.modal-backdrop').remove();
+        $('body').removeClass('modal-open');
+        $('body').css('padding-right', '');
+    }, 300);
 }
 
 function cargarTpDocumento(){

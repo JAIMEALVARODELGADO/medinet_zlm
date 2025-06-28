@@ -2,6 +2,11 @@
 $id_factura = $_GET['id_factura'];
 
 ?>
+<link rel="stylesheet" type="text/css" href="../librerias/css/jquery.autocomplete.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" src="../librerias/js/jquery.js"></script>
+<script type='text/javascript' src='../librerias/js/jquery.autocomplete.js'></script>
 <script src="tablaRipsUs.js">	
 </script>
 <script>
@@ -19,7 +24,7 @@ $id_factura = $_GET['id_factura'];
 					<a class="nav-link" href="#" onclick="ripsAc()">Consultas</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="mn_ripsAp.php">Procedimientos</a>
+					<a class="nav-link" href="#" onclick="ripsAp()">Procedimientos</a>
 				</li>
                 <li class="nav-item">
 					<a class="nav-link" href="mn_ripsOt.php">Otros Servicios</a>

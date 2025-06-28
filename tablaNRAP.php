@@ -10,7 +10,7 @@ $id_factura = $_GET['id_factura'];
 <script>
 	id_factura = "<?php echo $id_factura; ?>";
 </script>
-<script src="tablaNRAC.js"></script>
+<script src="tablaNRAP.js"></script>
 
 
     <div class="card text">
@@ -21,10 +21,10 @@ $id_factura = $_GET['id_factura'];
 					<a class="nav-link" href="#" onclick="ripsUs()">Usuario</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link active" href="#" onclick="#">Consultas</a>
+					<a class="nav-link" href="#" onclick="#">Consultas</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="#" onclick="ripsAp()">Procedimientos</a>
+					<a class="nav-link active" href="#" >Procedimientos</a>
 				</li>
                 <li class="nav-item">
 					<a class="nav-link" href="mn_ripsOt.php">Otros Servicios</a>
