@@ -2,7 +2,7 @@
 $id_factura = $_GET['id_factura'];
 ?>
 <link rel="stylesheet" type="text/css" href="../librerias/css/jquery.autocomplete.css">
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!--<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>--->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript" src="../librerias/js/jquery.js"></script>
 <script type='text/javascript' src='../librerias/js/jquery.autocomplete.js'></script>
@@ -104,8 +104,9 @@ $id_factura = $_GET['id_factura'];
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="codconsulta">Código de Consulta:</label>
-                                <input type="text" class="form-control" id="codconsulta" name="codconsulta" maxlength="6" required>
+                                <label for="codconsu">Código de Consulta:</label>
+                                <input type="text" class="form-control" id="codconsu" name="codconsu" maxlength='80' placeholder="Digite el código CUPS de la consulta" required> 
+                                <input type="hidden" class="form-control" id="codconsulta" name="codconsulta" maxlength="6" required>
                             </div>
                         </div>
                         <div class="col-md-6">

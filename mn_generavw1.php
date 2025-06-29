@@ -658,7 +658,7 @@ $conexion=$obj->conexion();
                             $cont++;
                             
                             $sql="CREATE OR REPLACE VIEW vw_cups AS
-                            SELECT cups.id_cups,CONCAT(cups.codigo_cups,' ',cups.descripcion_cups) AS descripcion_cups,cups.estado_cups FROM cups";
+                            SELECT cups.id_cups,CONCAT(cups.codigo_cups,' ',cups.descripcion_cups) AS descripcion_cups,cups.estado_cups,codigo_cups FROM cups";
                             $res=mysqli_query($conexion,$sql);
                             if($res<>1){
                                 echo "<div class='col-sm-12'>vw_cups NO CREADA</div>";

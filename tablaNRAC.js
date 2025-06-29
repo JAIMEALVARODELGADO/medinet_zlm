@@ -120,6 +120,7 @@ function llenarFormularioConsulta(consulta) {
     $('#fechainicioatencion').val(consulta.fechainicioatencion || '');
     $('#numautorizacion').val(consulta.numautorizacion || '');
     $('#codconsulta').val(consulta.codconsulta || '');
+    $('#codconsu').val(consulta.codconsulta || '');
     $('#modalidadgruposervicio').val(consulta.modalidadgruposervicio || '');
     $('#gruposervicio').val(consulta.gruposervicio || '');
     $('#codservicio').val(consulta.codservicio || '');
@@ -146,11 +147,11 @@ function llenarFormularioConsulta(consulta) {
     //console.log('Formulario de consulta rellenado correctamente');
 
     setTimeout(function() {        
-        inicializarAutocompleteDx();
+        inicializarAutocomplete();
     }, 100);
 }
 
-function inicializarAutocompleteDx() {    
+function inicializarAutocomplete() {    
     $("#dxprinc").autocomplete("procesos/autocomp_cie2.php", {
         width: 500,
         matchContains: false,
@@ -194,10 +195,33 @@ function inicializarAutocompleteDx() {
     $("#dxrel3").result(function(event, data, formatted) {
         $("#coddiagnosticorelacionado3").val(data[1]);
     });
+
+    $("#codconsu").autocomplete("procesos/autocomp_cups2.php", {
+        width: 500,
+        matchContains: false,
+        mustMatch: false,
+        selectFirst: false
+    });
+    
+    $("#codconsu").result(function(event, data, formatted) {
+        $("#codconsulta").val(data[1]);
+    });
 }
 
 function guardarConsulta() {
     // Recopilar los datos del formulario
+    if(document.getElementById("dxprinc").value == ""){
+        document.getElementById("coddiagnosticoprincipal").value = "";
+    }
+    if(document.getElementById("dxrel1").value == ""){
+        document.getElementById("coddiagnosticorelacionado1").value = "";
+    }
+    if(document.getElementById("dxrel2").value == ""){
+        document.getElementById("coddiagnosticorelacionado2").value = "";
+    }
+    if(document.getElementById("dxrel3").value == ""){
+        document.getElementById("coddiagnosticorelacionado3").value = "";
+    }
     var formData = new FormData();
     formData.append('opcion', 'guardarConsulta');
     formData.append('id_consulta', $('#id_consulta').val());
@@ -237,14 +261,7 @@ function guardarConsulta() {
 }
 
 function cerrarModal() {
-    $('#modalEditar').modal('hide');
-    
-    // Limpiar backdrop y restaurar body
-    setTimeout(function() {
-        $('.modal-backdrop').remove();
-        $('body').removeClass('modal-open');
-        $('body').css('padding-right', '');
-    }, 300);
+    document.querySelector('[data-dismiss="modal"]').click();    
 }
 
 function cargarModalidadGrupo(){

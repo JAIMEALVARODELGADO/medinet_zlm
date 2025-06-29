@@ -473,7 +473,7 @@ function guardarConsulta($datos) {
             valorpagomoderador = '$valorpagomoderador',
             numfevpagomoderador = '$numfevpagomoderador'            
         WHERE id_detalle='$id_detalle'";
-    
+    //echo $sql;
     if(mysqli_query($conexion, $sql)) {
         echo "Consulta actualizada correctamente";
     } else {
