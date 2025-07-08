@@ -27,7 +27,7 @@ switch($opcion) {
     case 'guardarUsuario':
         guardarUsuario($_POST);
         break;
-    case 'traerConsultas':        
+    case 'traerConsultas':
         echo traerConsultas($_GET['id_factura']);
         break;
     case 'traerConsultaPorId':
@@ -35,6 +35,9 @@ switch($opcion) {
         break;
     case 'guardarConsulta':
         guardarConsulta($_POST);
+        break;
+    case 'traerProcedimientos':
+        echo traerProcedimientos($_GET['id_factura']);
         break;
     /*case 'ripsAc':
         include 'procesos/rips_ripsAc.php';
@@ -479,5 +482,25 @@ function guardarConsulta($datos) {
     } else {
         echo "Error al actualizar la consulta: " . mysqli_error($conexion);
     }
+}
+
+function traerProcedimientos($id_factura) {
+    $obj=new conectar();
+    $conexion=$obj->conexion();
+
+    $sql = "SELECT id_procedimiento, fechainicioatencion, numautorizacion, 
+            codprocedimiento, finalidadtecnologiasalud, coddiagnosticoprincipal,
+            vrservicio 
+            FROM nrprocedimientos 
+            WHERE id_factura = '$id_factura'";
+    //echo $sql;   
+    $result = mysqli_query($conexion,$sql);
+    $data = array();
+    
+    while($row = mysqli_fetch_assoc($result)) {
+        $data[] = $row;
+    }    
+    
+    return(json_encode($data));
 }
 ?>

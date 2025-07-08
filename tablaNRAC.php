@@ -21,10 +21,10 @@ $id_factura = $_GET['id_factura'];
 					<a class="nav-link" href="#" onclick="ripsUs()">Usuario</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link active" href="#" onclick="#">Consultas</a>
+					<a class="nav-link active" href="#" onclick="ripsAc()">Consultas</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="#" onclick="ripsAp()">Procedimientos</a>
+					<a class="nav-link" href="#" onclick="#">Procedimientos</a>
 				</li>
                 <li class="nav-item">
 					<a class="nav-link" href="mn_ripsOt.php">Otros Servicios</a>
