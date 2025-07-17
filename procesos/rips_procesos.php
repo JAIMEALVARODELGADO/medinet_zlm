@@ -6,7 +6,7 @@ $opcion = isset($_GET['opcion']) ? $_GET['opcion'] : $_POST['opcion'];
 if(!isset($opcion)) {
     echo "No se ha especificado una opción.";
     exit;
-}   
+}
 
 switch($opcion) {
     case 'crearRips':
@@ -39,15 +39,24 @@ switch($opcion) {
     case 'traerProcedimientos':
         echo traerProcedimientos($_GET['id_factura']);
         break;
-    /*case 'ripsAc':
-        include 'procesos/rips_ripsAc.php';
+    case 'traerProcedimientoPorId':
+        echo traerProcedimientoPorId($_GET['id_procedimiento']);
         break;
-    case 'ripsAp':
-        include 'procesos/rips_ripsAp.php';
+    case 'guardarProcedimiento':
+        guardarProcedimiento($_POST);
         break;
-    case 'ripsOt':
-        include 'procesos/rips_ripsOt.php';
-        break;*/
+    case 'traerOtServicios':        
+        echo traerOtServicios($_GET['id_factura']);
+        break;
+    case 'traerOtServicioPorId':
+        echo traerOtServicioPorId($_GET['id_otroservicio']);
+        break;
+    case 'guardarOtServicio':
+        guardarOtServicio($_POST);
+        break;
+    case 'traerRipsJs':        
+        traerRipsJs($_GET['id_factura']);
+        break;
     default:
         echo "Opción no válida.";
         break;
@@ -488,7 +497,7 @@ function traerProcedimientos($id_factura) {
     $obj=new conectar();
     $conexion=$obj->conexion();
 
-    $sql = "SELECT id_procedimiento, fechainicioatencion, numautorizacion, 
+    $sql = "SELECT id_procedimiento, fechainicioatencion, numautorizacion,idmipres,
             codprocedimiento, finalidadtecnologiasalud, coddiagnosticoprincipal,
             vrservicio 
             FROM nrprocedimientos 
@@ -502,5 +511,226 @@ function traerProcedimientos($id_factura) {
     }    
     
     return(json_encode($data));
+}
+
+function traerProcedimientoPorId($id_procedimiento) {
+    $obj=new conectar();
+    $conexion=$obj->conexion();
+
+    $sql = "SELECT id_procedimiento,fechainicioatencion,idmipres,numautorizacion,
+        codprocedimiento,viaingresoserviciosalud,modalidadgruposerviciotecsal,
+        gruposervicios,codservicio,finalidadtecnologiasalud,tipodocumentoidentificacion,
+        numdocumentoidentificacion,coddiagnosticoprincipal,coddiagnosticorelacionado,
+        codcomplicacion,vrservicio,conceptorecaudo,valorpagomoderador,numfevpagomoderador,
+        consecutivo,id_factura,id_detfac
+        FROM nrprocedimientos 
+        WHERE id_procedimiento = '$id_procedimiento'";
+
+    //echo $sql;            
+    $result = mysqli_query($conexion,$sql);    
+    
+    $data = array();
+    $row = mysqli_fetch_assoc($result);
+    $data = $row;
+        
+    return(json_encode($data));
+}
+
+function guardarProcedimiento($datos){
+    $obj = new conectar();
+    $conexion = $obj->conexion();
+
+    $id_procedimiento = mysqli_real_escape_string($conexion, $datos['id_procedimiento']);
+    $fechainicioatencion = mysqli_real_escape_string($conexion, $datos['fechainicioatencion']);
+    $idmipres = mysqli_real_escape_string($conexion, $datos['idmipres']);
+    $numautorizacion = mysqli_real_escape_string($conexion, $datos['numautorizacion']);
+    $codprocedimiento = mysqli_real_escape_string($conexion, $datos['codprocedimiento']);
+    $viaingresoserviciosalud = mysqli_real_escape_string($conexion, $datos['viaingresoserviciosalud']);
+    $modalidadgruposerviciotecsal = mysqli_real_escape_string($conexion, $datos['modalidadgruposerviciotecsal']);
+    $gruposervicios = mysqli_real_escape_string($conexion, $datos['gruposervicios']);
+    $codservicio = mysqli_real_escape_string($conexion, $datos['codservicio']);
+    $finalidadtecnologiasalud = mysqli_real_escape_string($conexion, $datos['finalidadtecnologiasalud']);
+    //$tipodocumentoidentificacion = mysqli_real_escape_string($conexion, $datos['tipodocumentoidentificacion']);
+    //$numdocumentoidentificacion = mysqli_real_escape_string($conexion, $datos['numdocumentoidentificacion']);
+    $coddiagnosticoprincipal = mysqli_real_escape_string($conexion, $datos['coddiagnosticoprincipal']);
+    $coddiagnosticorelacionado = mysqli_real_escape_string($conexion, $datos['coddiagnosticorelacionado']);
+    $codcomplicacion = mysqli_real_escape_string($conexion, $datos['codcomplicacion']);
+    $vrservicio = mysqli_real_escape_string($conexion, $datos['vrservicio']);
+    $conceptorecaudo = mysqli_real_escape_string($conexion, $datos['conceptorecaudo']);
+    $valorpagomoderador = mysqli_real_escape_string($conexion, $datos['valorpagomoderador']);
+    $numfevpagomoderador = mysqli_real_escape_string($conexion, $datos['numfevpagomoderador']);    
+    $id_detfac = mysqli_real_escape_string($conexion, $datos['id_detfac']);
+    
+    $sql= "UPDATE nrprocedimientos SET 
+            fechainicioatencion = '$fechainicioatencion',
+            idmipres = '$idmipres',
+            numautorizacion = '$numautorizacion',
+            codprocedimiento = '$codprocedimiento',
+            viaingresoserviciosalud = '$viaingresoserviciosalud',
+            modalidadgruposerviciotecsal = '$modalidadgruposerviciotecsal',
+            gruposervicios = '$gruposervicios',
+            codservicio = '$codservicio',
+            finalidadtecnologiasalud = '$finalidadtecnologiasalud',            
+            coddiagnosticoprincipal = '$coddiagnosticoprincipal',
+            coddiagnosticorelacionado = '$coddiagnosticorelacionado',
+            codcomplicacion = '$codcomplicacion',
+            vrservicio = '$vrservicio',
+            conceptorecaudo = '$conceptorecaudo',
+            valorpagomoderador = '$valorpagomoderador',
+            numfevpagomoderador = '$numfevpagomoderador'
+        WHERE id_detfac='$id_detfac'";
+    //echo $sql;
+    if(mysqli_query($conexion, $sql)) {
+        echo "Procedimiento actualizado correctamente";
+    } else {
+        echo "Error al actualizar el procedimiento: " . mysqli_error($conexion);
+    }
+}
+
+function traerOtServicios($id_factura) {
+    $obj=new conectar();
+    $conexion=$obj->conexion();
+
+    $sql = "SELECT id_otroservicio,numautorizacion,idmipres,fechasuministrotecnologia,
+            tipoos,codtecnologia,nomtecnologia,cantidados,vrunitos,vrservicio,conceptorecaudo,
+            valorpagomoderador,numfevpagomoderador,consecutivo,id_factura,id_detalle
+            FROM nrotroservicios
+            WHERE id_factura = '$id_factura'";
+    //echo $sql;   
+    $result = mysqli_query($conexion,$sql);
+    $data = array();
+    
+    while($row = mysqli_fetch_assoc($result)) {
+        $data[] = $row;
+    }    
+    
+    return(json_encode($data));
+}
+
+function traerOtServicioPorId($id_otroservicio) {
+    $obj=new conectar();
+    $conexion=$obj->conexion();
+
+    $sql = "SELECT id_otroservicio,numautorizacion,idmipres,fechasuministrotecnologia,
+        tipoos,codtecnologia,nomtecnologia,cantidados,vrunitos,vrservicio,conceptorecaudo,
+        valorpagomoderador,numfevpagomoderador,consecutivo,id_factura,id_detalle
+        FROM nrotroservicios    
+        WHERE id_otroservicio = '$id_otroservicio'";
+
+    //echo $sql;            
+    $result = mysqli_query($conexion,$sql);    
+    
+    $data = array();
+    $row = mysqli_fetch_assoc($result);
+    $data = $row;
+        
+    return(json_encode($data));
+}
+
+function guardarOtServicio($datos){
+    $obj = new conectar();
+    $conexion = $obj->conexion();
+
+    $id_otroservicio = mysqli_real_escape_string($conexion, $datos['id_otroservicio']);
+    $numautorizacion = mysqli_real_escape_string($conexion, $datos['numautorizacion']);
+    $idmipres = mysqli_real_escape_string($conexion, $datos['idmipres']);
+    $fechasuministrotecnologia = mysqli_real_escape_string($conexion, $datos['fechasuministrotecnologia']);
+    $tipoos = mysqli_real_escape_string($conexion, $datos['tipoos']);
+    $codtecnologia = mysqli_real_escape_string($conexion, $datos['codtecnologia']);
+    $nomtecnologia = mysqli_real_escape_string($conexion, $datos['nomtecnologia']);
+    $cantidados = mysqli_real_escape_string($conexion, $datos['cantidados']);
+    $vrunitos = mysqli_real_escape_string($conexion, $datos['vrunitos']);
+    $vrservicio = $cantidados* $vrunitos; // Calcular el valor del servicio
+    $conceptorecaudo = mysqli_real_escape_string($conexion, $datos['conceptorecaudo']);
+    $valorpagomoderador = mysqli_real_escape_string($conexion, $datos['valorpagomoderador']);
+    if($valorpagomoderador=='' || $valorpagomoderador==null) {
+        $valorpagomoderador = 0; // Si no se proporciona, establecer en 0
+    }
+    $numfevpagomoderador = mysqli_real_escape_string($conexion, $datos['numfevpagomoderador']); 
+
+    $sql= "UPDATE nrotroservicios SET 
+            numautorizacion = '$numautorizacion',
+            idmipres = '$idmipres',
+            fechasuministrotecnologia = '$fechasuministrotecnologia',
+            tipoos = '$tipoos',
+            codtecnologia = '$codtecnologia',
+            nomtecnologia = '$nomtecnologia',
+            cantidados = '$cantidados',
+            vrunitos = '$vrunitos',
+            vrservicio = '$vrservicio',
+            conceptorecaudo = '$conceptorecaudo',
+            valorpagomoderador = '$valorpagomoderador',
+            numfevpagomoderador = '$numfevpagomoderador'
+        WHERE id_otroservicio='$id_otroservicio'";
+    
+    //echo $sql;
+    if(mysqli_query($conexion, $sql)) {
+        echo "Procedimiento actualizado correctamente";
+    } else {
+        echo "Error al actualizar el procedimiento: " . mysqli_error($conexion);
+    }
+}
+
+function traerRipsJs($id_factura) {
+    //echo $id_factura;
+    $obj=new conectar();
+    $conexion=$obj->conexion();
+
+    // Traer datos de la entidad
+    $sql = "select numeroiden_ent as numDocumentoldObligado 
+        from entidad e";
+    $result = mysqli_query($conexion,$sql);
+    
+    $data = array();
+    $row = mysqli_fetch_assoc($result);
+    $numDocumentoldObligado=$row['numDocumentoldObligado'];
+
+    // trae datos de la factura
+    $sql = "SELECT $numDocumentoldObligado as numDocumentoIdObligado, numero_fac as numFactura, null as tipoNota,null as numNota
+        FROM factura_encabezado fe
+        WHERE fe.id_factura = '$id_factura'";
+
+    //echo $sql;
+    $result = mysqli_query($conexion,$sql);
+    
+    $rips = array();
+    $row = mysqli_fetch_assoc($result);
+    $rips = $row;
+
+    // Traer datos del usuario
+    $ripsUs=traerRipsUs($id_factura);
+
+
+    echo "<br><br><pre>".json_encode($rips);
+    return(json_encode($rips));
+}
+
+function traerRipsUs($id_factura) {
+    $obj=new conectar();
+    $conexion=$obj->conexion();
+
+    $sql = "SELECT tipo_documento as tipoDocumentoIdentificacion, numdocumento as numDocumentoIdentificacion, 
+    tipousuario as tipoUsuario, fechanacimiento as fechaNacimiento, codsexo as codSexo, 
+    codpaisresidencia as codPaisResidencia, codmunicipioresidencia as codMunicipioResidencia,
+    codzonaresidencia as codZonaTerritorialResidencia, incapacidad, 
+    ROW_NUMBER() OVER (ORDER BY nru.id_usuario) AS consecutivo,
+    codpaisorigen
+        
+        FROM nrusuario nru
+        inner join factura_encabezado fe on fe.id_factura = nru.id_factura 
+        
+        WHERE nru.id_factura = '$id_factura'";
+    
+    echo $sql;
+
+    $ripsUs='';
+    /*$result = mysqli_query($conexion,$sql);
+    $data = array();
+    
+    while($row = mysqli_fetch_assoc($result)) {
+        $data[] = $row;
+    }
+    //echo json_encode($data);*/
+    return(json_encode($ripsUs));
 }
 ?>

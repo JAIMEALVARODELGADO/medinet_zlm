@@ -1,4 +1,4 @@
-function cerrar(){		
+function cerrar(){    
     $("#tablaDataRips").empty();
 }
 
@@ -8,8 +8,8 @@ function ripsUs(){
 function ripsAc(){    
     $("#tablaDataRips").load("tablaNRAC.php?id_factura="+id_factura);
 }
-function ripsAt(){    
-    $("#tablaDataRips").load("tablaNRAT.php?id_factura="+id_factura);
+function ripsAp(){    
+    $("#tablaDataRips").load("tablaNRAP.php?id_factura="+id_factura);
 }
 function ripsJs(){    
     $("#tablaDataRips").load("tablaNRJs.php?id_factura="+id_factura);
@@ -17,17 +17,13 @@ function ripsJs(){
 
 $(document).ready(function() {		
     //alert("Aqui estoy");    
-    cargarProcedimientos();
-    cargarVia();
-    cargarModalidadGrupoProced();
-    cargarGrupoServicioProced();
-    cargarServiciosProced();
-    cargarFinalidadesProced();    
-    cargarConceptoRecaudoProced();
+    cargarServicios();
+    cargarTipoOs();        
+    cargarConceptoRecaudoOtServicio();
 });
 
-function cargarProcedimientos() {    
-    var url = "procesos/rips_procesos.php?id_factura=" + id_factura + "&opcion=traerProcedimientos";
+function cargarServicios() {    
+    var url = "procesos/rips_procesos.php?id_factura=" + id_factura + "&opcion=traerOtServicios";
     const fetchOptions = {
         method: 'GET'        
     }
@@ -40,52 +36,54 @@ function cargarProcedimientos() {
             return response.json();
         })
         .then(data => {            
-            mostrarProcedimientos(data);
+            mostrarServicios(data);
         })
         .catch(error => {
             console.error('Error:', error);
         });
 }
 
-function mostrarProcedimientos(procedimientos){
+function mostrarServicios(otServicios){    
+    console.log(otServicios);
     // Limpiar el tbody de la tabla
     $('#tablaRips tbody').empty();
     
     // Verificar si hay datos
-    if (!procedimientos || procedimientos.length === 0) {
+    if (!otServicios || otServicios.length === 0) {
         $('#tablaRips tbody').append('<tr><td colspan="9" class="text-center">No hay consultas para mostrar</td></tr>');
         return;
-    }
+    }    
     
     // Recorrer las consultas y crear las filas
-    procedimientos.forEach(function(procedimiento) { 
+    otServicios.forEach(function(otServicios) { 
         var fila = '<tr>' +
-            '<td>' + (procedimiento.fechainicioatencion || '') + '</td>' +
-            '<td>' + (procedimiento.numautorizacion || '') + '</td>' +
-            '<td>' + (procedimiento.idmipres || '') + '</td>' +
-            '<td>' + (procedimiento.codprocedimiento || '') + '</td>' +
-            '<td>' + (procedimiento.finalidadtecnologiasalud || '') + '</td>' +
-            '<td>' + (procedimiento.coddiagnosticoprincipal || '') + '</td>' +
-            '<td>' + (procedimiento.vrservicio || '') + '</td>' +
+            '<td>' + (otServicios.fechasuministrotecnologia || '') + '</td>' +
+            '<td>' + (otServicios.numautorizacion || '') + '</td>' +
+            '<td>' + (otServicios.idmipres || '') + '</td>' +
+            '<td>' + (otServicios.codtecnologia || '') + '</td>' +
+            '<td>' + (otServicios.nomtecnologia || '') + '</td>' +
+            '<td>' + (otServicios.cantidados || '') + '</td>' +
+            '<td>' + (otServicios.vrunitos || '') + '</td>' +            
+            '<td>' + (otServicios.vrservicio || '') + '</td>' +
             '<td>' +
-            '<span class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modalEditar" title="Editar" onclick="editarProcedimiento(' + procedimiento.id_procedimiento + ')">' +
+            '<span class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modalEditar" title="Editar" onclick="editarServicio(' + otServicios.id_otroservicio + ')">' +
                 '<span class="far fa-edit"></span>'+
             '</span>' +
-            '</td>' +							                
+            '</td>' +	
             '</tr>';
         
         $('#tablaRips tbody').append(fila);
     });
 }
 
-function editarProcedimiento(id_procedimiento) {    
+function editarServicio(id_otroservicio) {
     // Validar el parámetro
-    if (!id_procedimiento) {
-        alert('ID del procedimiento no válido');
+    if (!id_otroservicio) {
+        alert('ID del servicio no válido');
         return;
     }
-    // Cargar los datos de la consulta específica        
-    var url = "procesos/rips_procesos.php?id_procedimiento=" + id_procedimiento + "&opcion=traerProcedimientoPorId";
+    // Cargar los datos del servicio a editar
+    var url = "procesos/rips_procesos.php?id_otroservicio=" + id_otroservicio + "&opcion=traerOtServicioPorId";
     
     fetch(url)
     .then(response => {
@@ -102,12 +100,12 @@ function editarProcedimiento(id_procedimiento) {
         }
         
         // Validación correcta para tu estructura JSON
-        if (!data.id_procedimiento) {
+        if (!data.id_otroservicio) {
             throw new Error('Procedimiento no encontrado');
         }
         
         // Rellenar el formulario de edición                
-        llenarFormularioProcedimiento(data);
+        llenarFormularioServicio(data);
         
     })
     .catch(error => {
@@ -153,7 +151,7 @@ function editarProcedimiento(id_procedimiento) {
     }, 100);
 }*/
 
-function inicializarAutocomplete() {    
+/*function inicializarAutocomplete() {    
     $("#dxprinc").autocomplete("procesos/autocomp_cie2.php", {
         width: 500,
         matchContains: false,
@@ -622,9 +620,9 @@ function llenarTipoDiagnostico(data){
     } else {
         console.error('El elemento select tipodiagnosticoprincipal no existe en el DOM');
     }
-}
+}*/
 
-function cargarConceptoRecaudo(){
+function cargarConceptoRecaudoOtServicio(){
     // Cargar los datos de concepto recaudo
     var url = "procesos/rips_procesos.php?"+
         "id_grupo=28"+ 
@@ -679,44 +677,32 @@ function llenarConceptoRecaudo(data){
 }
 
 // Función auxiliar para rellenar el formulario
-function llenarFormularioProcedimiento(procedimiento) {
-    //console.log(procedimiento)
+function llenarFormularioServicio(servicio) {
+    console.log(servicio)
     // Rellenar los campos del formulario con los datos del JSON
-    $('#fechainicioatencion').val(procedimiento.fechainicioatencion || '');
-    $('#idmipres').val(procedimiento.idmipres || '');
-    $('#numautorizacion').val(procedimiento.numautorizacion || '');
-    $('#codprocedimiento').val(procedimiento.codprocedimiento || '');
-    $('#codproced').val(procedimiento.codprocedimiento || '');
-    $('#viaingresoserviciosalud').val(procedimiento.viaingresoserviciosalud || '');
-    $('#modalidadgruposerviciotecsal').val(procedimiento.modalidadgruposerviciotecsal || '');
-    $('#gruposervicios').val(procedimiento.gruposervicios || '');
-    $('#codservicio').val(procedimiento.codservicio || '');
-    $('#finalidadtecnologiasalud').val(procedimiento.finalidadtecnologiasalud || '');    
-    $('#coddiagnosticoprincipal').val(procedimiento.coddiagnosticoprincipal || '');
-    $('#dxprinc').val(procedimiento.coddiagnosticoprincipal || '');    
-    $('#coddiagnosticorelacionado').val(procedimiento.coddiagnosticorelacionado || '');
-    $('#dxrel1').val(procedimiento.coddiagnosticorelacionado || '');    
-    $('#codcomplicacion').val(procedimiento.codcomplicacion || '');
-    $('#compli').val(procedimiento.codcomplicacion || '');    
-    $('#vrservicio').val(procedimiento.vrservicio || '');
-    $('#conceptorecaudo').val(procedimiento.conceptorecaudo || '');
-    $('#valorpagomoderador').val(procedimiento.valorpagomoderador || '');
-    $('#numfevpagomoderador').val(procedimiento.numfevpagomoderador || '');
-    $('#id_detfac').val(procedimiento.id_detfac || '');    
-    // Guardar el ID para la actualización
-    $('#id_procedimiento').val(procedimiento.id_procedimiento || '');
-    
-    //console.logs('Formulario de consulta rellenado correctamente');
+    $('#id_otroservicio').val(servicio.id_otroservicio || '');
+    $('#fechasuministrotecnologia').val(servicio.fechasuministrotecnologia || '');
+    $('#numautorizacion').val(servicio.numautorizacion || '');
+    $('#idmipres').val(servicio.idmipres || '');
+    $('#tipoos').val(servicio.tipoos || '');
+    $('#codtecnologia').val(servicio.codtecnologia || '');
+    $('#nomtecnologia').val(servicio.nomtecnologia || '');
+    $('#cantidados').val(servicio.cantidados || '');
+    $('#vrunitos').val(servicio.vrunitos || '');
+    $('#vrservicio').val(servicio.vrservicio || '');
+    $('#conceptorecaudo').val(servicio.conceptorecaudo || '');
+    $('#valorpagomoderador').val(servicio.valorpagomoderador || '');
+    $('#numfevpagomoderador').val(servicio.numfevpagomoderador || '');
 
     setTimeout(function() {        
         inicializarAutocomplete();
     }, 100);
 }
 
-function cargarVia(){
-    // Cargar los datos de las vias de ingresos
+function cargarTipoOs(){    
+    // Cargar los datos de los tipos de otro servicio
     var url = "procesos/rips_procesos.php?"+
-        "id_grupo=29"+ 
+        "id_grupo=30"+ 
         "&opcion=traerDetalleGrupo";        
 
     fetch(url)
@@ -733,7 +719,7 @@ function cargarVia(){
         }
         
         //Llenar select de modalidad grupo servicio
-        llenarVias(data);
+        llenarTiposOs(data);
         
     })
     .catch(error => {
@@ -742,9 +728,9 @@ function cargarVia(){
     });
 }
 
-function llenarVias(data){
+function llenarTiposOs(data){
     // Verificar si el elemento existe
-    var select = document.getElementById('viaingresoserviciosalud');
+    var select = document.getElementById('tipoos');
     if (select) {
         // Limpiar las opciones existentes
         select.innerHTML = '';
@@ -752,7 +738,7 @@ function llenarVias(data){
         // Agregar una opción por defecto
         var option = document.createElement('option');
         option.value = '';
-        option.textContent = 'Seleccione Vía de ingreso';
+        option.textContent = 'Seleccione el tipo';
         select.appendChild(option);
         
         // Recorrer los datos y crear las opciones
@@ -763,11 +749,11 @@ function llenarVias(data){
             select.appendChild(option);
         });
     } else {
-        console.error('El elemento select via de ingreso no existe en el DOM');
+        console.error('El elemento select tipo de otro servicio no existe en el DOM');
     }
 }
 
-function cargarModalidadGrupoProced(){
+/*function cargarModalidadGrupoProced(){
     // Cargar los datos de modalidad grupo servicio
     var url = "procesos/rips_procesos.php?"+
         "id_grupo=25"+ 
@@ -1035,39 +1021,25 @@ function llenarConceptoRecaudoProced(data){
     } else {
         console.error('El elemento select conceptorecaudo no existe en el DOM');
     }
-}
+}*/
 
-function guardarProcedimiento() {    
+function guardarServicio() {    
     // Recopilar los datos del formulario    
-    if(document.getElementById("dxprinc").value == ""){
-        document.getElementById("coddiagnosticoprincipal").value = "";
-    }
-    if(document.getElementById("dxrel").value == ""){
-        document.getElementById("coddiagnosticorelacionado").value = "";
-    }
-    if(document.getElementById("compli").value == ""){
-        document.getElementById("codcomplicacion").value = "";
-    }
     var formData = new FormData();
-    formData.append('opcion', 'guardarProcedimiento');
-    formData.append('id_procedimiento', $('#id_procedimiento').val());
-    formData.append('id_detfac', $('#id_detfac').val());
-    formData.append('fechainicioatencion', $('#fechainicioatencion').val());
+    formData.append('opcion', 'guardarOtServicio');
+    formData.append('id_otroservicio', $('#id_otroservicio').val());
+    formData.append('fechasuministrotecnologia', $('#fechasuministrotecnologia').val());
+    formData.append('numautorizacion', $('#numautorizacion').val());
     formData.append('idmipres', $('#idmipres').val());
-    formData.append('numautorizacion', $('#numautorizacion').val());    
-    formData.append('codprocedimiento', $('#codprocedimiento').val());    
-    formData.append('viaingresoserviciosalud', $('#viaingresoserviciosalud').val());
-    formData.append('modalidadgruposerviciotecsal', $('#modalidadgruposerviciotecsal').val());
-    formData.append('gruposervicios', $('#gruposervicios').val());
-    formData.append('codservicio', $('#codservicio').val());
-    formData.append('finalidadtecnologiasalud', $('#finalidadtecnologiasalud').val());
-    formData.append('coddiagnosticoprincipal', $('#coddiagnosticoprincipal').val());
-    formData.append('coddiagnosticorelacionado', $('#coddiagnosticorelacionado').val());
-    formData.append('codcomplicacion', $('#codcomplicacion').val());
+    formData.append('tipoos', $('#tipoos').val());
+    formData.append('codtecnologia', $('#codtecnologia').val());
+    formData.append('nomtecnologia', $('#nomtecnologia').val());
+    formData.append('cantidados', $('#cantidados').val());
+    formData.append('vrunitos', $('#vrunitos').val());
     formData.append('vrservicio', $('#vrservicio').val());
     formData.append('conceptorecaudo', $('#conceptorecaudo').val());
     formData.append('valorpagomoderador', $('#valorpagomoderador').val());
-    formData.append('numfevpagomoderador', $('#numfevpagomoderador').val());    
+    formData.append('numfevpagomoderador', $('#numfevpagomoderador').val());
     
     fetch('procesos/rips_procesos.php', {
         method: 'POST',
@@ -1077,10 +1049,10 @@ function guardarProcedimiento() {
     .then(data => {        
         alertify.success(data);
         cerrarModal();
-        cargarProcedimientos(); // Recargar la tabla
+        cargarServicios(); // Recargar la tabla
     })
     .catch(error => {
         console.error('Error:', error);
-        alertify.error('Error al actualizar la consulta');
+        alertify.error('Error al actualizar el servicio');
     });
 }

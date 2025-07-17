@@ -10,8 +10,7 @@ $id_factura = $_GET['id_factura'];
 <script>
 	id_factura = "<?php echo $id_factura; ?>";
 </script>
-<script src="tablaNRAC.js"></script>
-
+<script src="tablaNRAT.js"></script>
 
     <div class="card text">
         <h6>RIPS</h6>
@@ -21,13 +20,13 @@ $id_factura = $_GET['id_factura'];
 					<a class="nav-link" href="#" onclick="ripsUs()">Usuario</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link active" href="#">Consultas</a>
+					<a class="nav-link" href="#" onclick="ripsAc()">Consultas</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="#" onclick="ripsAp()">Procedimientos</a>
 				</li>
                 <li class="nav-item">
-					<a class="nav-link" href="#" onclick="ripsAt()">Otros Servicios</a>
+					<a class="nav-link active" href="#">Otros Servicios</a>
 				</li>
                 <li class="nav-item">
 					<a class="nav-link" href="#" onclick="ripsJs()">Generar Json</a>
@@ -48,11 +47,13 @@ $id_factura = $_GET['id_factura'];
 								<thead style="background-color: #2574a9;color: white; font-weight: bold;">
 									<tr>				
 										<td>Fecha</td>
-										<td>Autorización</td>
-										<td>Cód.Consulta</td>
-										<td>Finalidad</td>
-										<td>Dx Principal</td>
-										<td>Valor</td>
+                                        <td>Autorización</td>
+										<td>ID Mipres</td>                                        
+										<td>Código</td>
+										<td>Nombre</td>
+										<td>Cantidad</td>
+                                        <td>Vr.Unitario</td>
+										<td>Vr.Total</td>
 										<td colspan="3">Opciones</td>				
 									</tr>
 								</thead>
@@ -71,123 +72,79 @@ $id_factura = $_GET['id_factura'];
 	    </div>		
 	</div>
 
-<!-- Modal para Editar Consulta -->
+<!-- Modal para Editar Procedimiento -->
 <div class="modal fade" id="modalEditar" name="modalEditar" tabindex="-1" role="dialog" aria-labelledby="modalEditarLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalEditarLabel">Editar Consulta RIPS</h5>
+                <h5 class="modal-title" id="modalEditarLabel">Editar Otros Servicios RIPS</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <form id="formUsuario">
-                    <input type="hidden" id="id_consulta" name="id_consulta">
-                    <input type="hidden" id="id_detalle" name="id_detalle">                    
+                    <input type="text" id="id_otroservicio" name="id_otroservicio">
+                    <!--<input type="text" id="id_detfac" name="id_detfac">-->
                     
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="fechainicioatencion">Fecha:</label>
-                                <input type="date" class="form-control" id="fechainicioatencion" name="fechainicioatencion" required>
+                                <label for="fechasuministrotecnologia">Fecha:</label>
+                                <input type="date" class="form-control" id="fechasuministrotecnologia" name="fechasuministrotecnologia" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="numautorizacion">Número de Autorización:</label>
+                                <label for="idmipres">ID Mipres:</label>
+                                <input type="text" class="form-control" id="idmipres" name="idmipres" maxlength="15" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="numautorizacion">Autorización:</label>
                                 <input type="text" class="form-control" id="numautorizacion" name="numautorizacion" maxlength="30" required>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="codconsu">Código de Consulta:</label>
-                                <input type="text" class="form-control" id="codconsu" name="codconsu" maxlength='80' placeholder="Digite el código CUPS de la consulta" required> 
-                                <input type="hidden" class="form-control" id="codconsulta" name="codconsulta" maxlength="6" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="modalidadgruposervicio">Modalidad Grupo de Servicio:</label>
-                                <select class="form-control" id="modalidadgruposervicio" name="modalidadgruposervicio" required>
+                                <label for="tipoos">Tipo de servicio:</label>
+                                <select class="form-control" id="tipoos" name="tipoos" required>
 
                                 </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="gruposervicio">Grupo de Servicios:</label>
-                                <select class="form-control" id="gruposervicio" name="gruposervicio" required>
-
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="codservicio">Código del Servicio:</label>
-                                <select class="form-control" id="codservicio" name="codservicio" required>
-
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="finalidadtecnologiasalud">Finalidad:</label>                                
-                                <select class="form-control" id="finalidadtecnologiasalud" name="finalidadtecnologiasalud" required>
-
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="causamotivoatencion">Causa Externa</label>
-                                <select class="form-control" id="causamotivoatencion" name="causamotivoatencion" required>
-                                    
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="dxprinc">Dx Principal:</label>                                
-                                <input type="text" class="form-control" id="dxprinc" name="dxprinc" maxlength='80' placeholder="Digite el código CIE10 o la descripción" required> 
-                                <input type="hidden" class="form-control" id="coddiagnosticoprincipal" name="coddiagnosticoprincipal" required> 
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="tipodiagnosticoprincipal">Tipo de Dx Principal</label>
-                                <select class="form-control" id="tipodiagnosticoprincipal" name="tipodiagnosticoprincipal" required>
-                                    
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="dxrel1">Dx Relacionado 1:</label>
-                                <input type="text" class="form-control" id="dxrel1" name="dxrel1" maxlength='80' placeholder="Digite el código CIE10 o la descripción" required> 
-                                <input type="hidden" class="form-control" id="coddiagnosticorelacionado1" name="coddiagnosticorelacionado1" required>
                             </div>
                         </div>                        
+                    </div>
+
+                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="dxrel2">Dx Relacionado 2:</label>
-                                <input type="text" class="form-control" id="dxrel2" name="dxrel2" maxlength='80' placeholder="Digite el código CIE10 o la descripción" required> 
-                                <input type="hidden" class="form-control" id="coddiagnosticorelacionado2" name="coddiagnosticorelacionado2" required>
+                                <label for="codtecnologia">Código de la tecnología:</label>                                
+                                <input type="text" class="form-control" id="codtecnologia" name="codtecnologia" maxlength="20" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="nomtecnologia">Nombre de la tecnología:</label>                                
+                                <input type="text" class="form-control" id="nomtecnologia" name="nomtecnologia" maxlength="20" required>
+                            </div>
+                        </div>
+                    </div>                    
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="cantidados">Cantidad:</label>
+                                <input type="text" class="form-control" id="cantidados" name="cantidados" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="vrunitos">Valor unitario:</label>
+                                <input type="text" class="form-control" id="vrunitos" name="vrunitos" required>
                             </div>
                         </div>
                     </div>
@@ -195,19 +152,13 @@ $id_factura = $_GET['id_factura'];
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="dxrel3">Dx Relacionado 3:</label>
-                                <input type="text" class="form-control" id="dxrel3" name="dxrel3" maxlength='80' placeholder="Digite el código CIE10 o la descripción" required> 
-                                <input type="hidden" class="form-control" id="coddiagnosticorelacionado3" name="coddiagnosticorelacionado3" required>
-                            </div>
-                        </div>                        
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="vrservicio">Valor:</label>
+                                <label for="vrservicio">Valor total:</label>
                                 <input type="text" class="form-control" id="vrservicio" name="vrservicio" required>
                             </div>
-                        </div>
+                        </div>                        
                     </div>
 
+                    
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -238,7 +189,7 @@ $id_factura = $_GET['id_factura'];
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary" onclick="guardarConsulta()">Guardar<span class="fas fa-save"></span></button>
+                <button type="button" class="btn btn-primary" onclick="guardarServicio()">Guardar<span class="fas fa-save"></span></button>
             </div>
         </div>
     </div>

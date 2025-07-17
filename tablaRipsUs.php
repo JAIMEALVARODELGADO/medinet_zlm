@@ -27,10 +27,10 @@ $id_factura = $_GET['id_factura'];
 					<a class="nav-link" href="#" onclick="ripsAp()">Procedimientos</a>
 				</li>
                 <li class="nav-item">
-					<a class="nav-link" href="mn_ripsOt.php">Otros Servicios</a>
+					<a class="nav-link" href="#" onclick="ripsAt()">Otros Servicios</a>
 				</li>
                 <li class="nav-item">
-					<a class="nav-link" href="mn_ripsOt.php">Generar Json</a>
+					<a class="nav-link" href="#" onclick="ripsJs()">Generar Json</a>                    
 				</li>
                 <li class="nav-item">
 					<a class="nav-link" href="#" onclick="cerrar()">Cerrar</a>

@@ -6,8 +6,14 @@ function cerrar(){
 function ripsAc(){				
     $("#tablaDataRips").load("tablaNRAC.php?id_factura="+id_factura);
 }
-function ripsAp(){				
+function ripsAp(){
     $("#tablaDataRips").load("tablaNRAP.php?id_factura="+id_factura);
+}
+function ripsAt(){    
+    $("#tablaDataRips").load("tablaNRAT.php?id_factura="+id_factura);
+}
+function ripsJs(){      
+    $("#tablaDataRips").load("tablaNRJs.php?id_factura="+id_factura);
 }
 
 $(document).ready(function() {		
