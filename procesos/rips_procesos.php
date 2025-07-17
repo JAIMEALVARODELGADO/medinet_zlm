@@ -699,7 +699,7 @@ function traerRipsJs($id_factura) {
 
     // Traer datos del usuario
     $ripsUs=traerRipsUs($id_factura);
-
+    $rips['usuarios'] = $ripsUs;
 
     echo "<br><br><pre>".json_encode($rips);
     return(json_encode($rips));
@@ -721,16 +721,106 @@ function traerRipsUs($id_factura) {
         
         WHERE nru.id_factura = '$id_factura'";
     
-    echo $sql;
-
-    $ripsUs='';
-    /*$result = mysqli_query($conexion,$sql);
-    $data = array();
+    //echo $sql;
     
+    $result = mysqli_query($conexion,$sql);
+    $ripsUs = array();    
     while($row = mysqli_fetch_assoc($result)) {
-        $data[] = $row;
+        $row['consecutivo'] = (int)$row['consecutivo'];        
+
+        $servicios=traerServicios($id_factura,$row['tipoDocumentoIdentificacion'],$row['numDocumentoIdentificacion']);
+
+        if(!empty($servicios)) {
+            $row['servicios'] = $servicios;
+        }
+        $ripsUs[] = $row;
+    }    
+
+    //echo "Rips Us:... ".json_encode($ripsUs);
+    return($ripsUs);
+}
+
+function traerServicios($id_factura,$tipoDocumentoIdentificacion,$numDocumentoIdentificacion) {
+    
+    $servicios = array();
+
+    $obj=new conectar();
+    $conexion=$obj->conexion();    
+    $servicios = array();
+    // Traer datos de la entidad
+    $sql = "SELECT codigopres_ent
+        FROM entidad";
+    $result = mysqli_query($conexion,$sql);
+    $row = mysqli_fetch_assoc($result);
+    $codigopres_ent = $row['codigopres_ent'];
+    //tipoDocumentoIdentificacion    
+
+    // Traer consultas
+    $sql = "SELECT '$codigopres_ent' as codPrestador, fechainicioatencion as fechalnicioAtencion, 
+    numautorizacion as numAutorizacion, codconsulta as codConsulta, modalidadgruposervicio as modalidadGrupoServicioTecSal, 
+    gruposervicio as grupoServicios, codservicio as codServicio, finalidadtecnologiasalud as finalidadTecnologiaSalud, 
+    causamotivoatencion as causaMotivoAtencion, coddiagnosticoprincipal as codDiagnosticoPrincipal,
+    coddiagnosticorelacionado1 as codDiagnosticoRelacionado1, coddiagnosticorelacionado2 as codDiagnosticoRelacionado2,
+    coddiagnosticorelacionado3 as codDiagnosticoRelacionado3,tipodiagnosticoprincipal as tipoDiagnosticoPrincipal,
+    '$tipoDocumentoIdentificacion' as tipoDocumentoIdentificacion,
+    '$numDocumentoIdentificacion' as numDocumentoIdentificacion, vrservicio as vrServicio,
+    conceptorecaudo as conceptoRecaudo, valorpagomoderador as valorPagoModerador,
+    numfevpagomoderador as numFEVPagoModerador,consecutivo
+    FROM nrconsulta WHERE id_factura = '$id_factura'";
+    //echo "<pre>".$sql;
+    
+    $result = mysqli_query($conexion,$sql);
+    $ripsAc = array();
+    while($row = mysqli_fetch_assoc($result)) {
+        $row['codServicio'] = (int)$row['codServicio'];
+        if($row['codDiagnosticoRelacionado1'] == '') {$row['codDiagnosticoRelacionado1'] = null;} // Si no hay diagnóstico relacionado, establecer como null 
+        if($row['codDiagnosticoRelacionado2'] == '') {$row['codDiagnosticoRelacionado2'] = null;} // Si no hay diagnóstico relacionado, establecer como null
+        if($row['codDiagnosticoRelacionado3'] == '') {$row['codDiagnosticoRelacionado3'] = null;} // Si no hay diagnóstico relacionado, establecer como null
+        if($row['numFEVPagoModerador'] == '') {$row['numFEVPagoModerador'] = null;} // Si no hay diagnóstico relacionado, establecer como null
+        $row['vrServicio'] = (int)$row['vrServicio'];
+        $row['valorPagoModerador'] = (int)$row['valorPagoModerador'];
+        $row['consecutivo'] = (int)$row['consecutivo'];
+        $ripsAc[] = $row;
     }
-    //echo json_encode($data);*/
-    return(json_encode($ripsUs));
+
+    if($ripsAc<>''){
+        $servicios['consultas'] = $ripsAc;
+        //echo "<br>RIPS Servicios: ".json_encode($servicios);
+    }    
+    //echo "<br><br>RIPS AC: ".json_encode($ripsAc);
+
+    // Traer procedimientos
+    $sql = "SELECT '$codigopres_ent' as codPrestador, fechainicioatencion as fechalnicioAtencion,
+    idmipres as idMIPRES, numautorizacion as numAutorizacion, codprocedimiento as codProcedimiento,
+    viaingresoserviciosalud as viaIngresoServicioSalud, modalidadgruposerviciotecsal as modalidadGrupoServicioTecSal,
+    gruposervicios as grupoServicios, codservicio as codServicio, finalidadtecnologiasalud as finalidadTecnologiaSalud,
+    '$tipoDocumentoIdentificacion' as tipoDocumentoIdentificacion,
+    '$numDocumentoIdentificacion' as numDocumentoIdentificacion,
+    coddiagnosticoprincipal as codDiagnosticoPrincipal, coddiagnosticorelacionado as codDiagnosticoRelacionado,
+    codcomplicacion as codComplicacion, vrservicio as vrServicio, conceptorecaudo as conceptoRecaudo,
+    valorpagomoderador as valorPagoModerador, numfevpagomoderador as numFEVPagoModerador, consecutivo
+    FROM nrprocedimientos 
+    WHERE id_factura = '$id_factura'";
+    //echo "<br>".$sql;
+
+    $result = mysqli_query($conexion,$sql);
+    $ripsAp = array();
+
+    while($row = mysqli_fetch_assoc($result)) {
+        $row['codServicio'] = (int)$row['codServicio'];
+        if($row['codDiagnosticoRelacionado'] == '') {$row['codDiagnosticoRelacionado'] = null;} // Si no hay diagnóstico relacionado, establecer como null 
+        if($row['codComplicacion'] == '') {$row['codComplicacion'] = null;} // Si no hay complicación, establecer como null
+        if($row['numFEVPagoModerador'] == '') {$row['numFEVPagoModerador'] = null;} // Si no hay diagnóstico relacionado, establecer como null
+        $row['vrServicio'] = (int)$row['vrServicio'];
+        $row['valorPagoModerador'] = (int)$row['valorPagoModerador'];
+        $row['consecutivo'] = (int)$row['consecutivo'];
+        $ripsAp[] = $row;
+    }
+    if($ripsAp<>''){
+        $servicios['procedimientos'] = $ripsAp;
+        //echo "<br>RIPS Servicios: ".json_encode($servicios);
+    }
+    echo "<br><br>RIPS AP: ".json_encode($ripsAp);
+    return($servicios);
 }
 ?>
