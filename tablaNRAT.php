@@ -84,14 +84,14 @@ $id_factura = $_GET['id_factura'];
             </div>
             <div class="modal-body">
                 <form id="formUsuario">
-                    <input type="text" id="id_otroservicio" name="id_otroservicio">
+                    <input type="hidden" id="id_otroservicio" name="id_otroservicio">
                     <!--<input type="text" id="id_detfac" name="id_detfac">-->
                     
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="fechasuministrotecnologia">Fecha:</label>
-                                <input type="date" class="form-control" id="fechasuministrotecnologia" name="fechasuministrotecnologia" required>
+                                <input type="datetime-local" class="form-control" id="fechasuministrotecnologia" name="fechasuministrotecnologia" required>
                             </div>
                         </div>
                         <div class="col-md-6">

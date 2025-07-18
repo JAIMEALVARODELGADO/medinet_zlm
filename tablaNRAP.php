@@ -91,7 +91,7 @@ $id_factura = $_GET['id_factura'];
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="fechainicioatencion">Fecha:</label>
-                                <input type="date" class="form-control" id="fechainicioatencion" name="fechainicioatencion" required>
+                                <input type="datetime-local" class="form-control" id="fechainicioatencion" name="fechainicioatencion" required>
                             </div>
                         </div>
                         <div class="col-md-6">

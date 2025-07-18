@@ -714,7 +714,7 @@ function traerRipsUs($id_factura) {
     codpaisresidencia as codPaisResidencia, codmunicipioresidencia as codMunicipioResidencia,
     codzonaresidencia as codZonaTerritorialResidencia, incapacidad, 
     ROW_NUMBER() OVER (ORDER BY nru.id_usuario) AS consecutivo,
-    codpaisorigen
+    codpaisorigen as codPaisOrigen
         
         FROM nrusuario nru
         inner join factura_encabezado fe on fe.id_factura = nru.id_factura 
@@ -727,7 +727,7 @@ function traerRipsUs($id_factura) {
     $ripsUs = array();    
     while($row = mysqli_fetch_assoc($result)) {
         $row['consecutivo'] = (int)$row['consecutivo'];        
-
+        if($row['codMunicipioResidencia'] == '') {$row['codMunicipioResidencia'] = null;}
         $servicios=traerServicios($id_factura,$row['tipoDocumentoIdentificacion'],$row['numDocumentoIdentificacion']);
 
         if(!empty($servicios)) {
@@ -756,7 +756,7 @@ function traerServicios($id_factura,$tipoDocumentoIdentificacion,$numDocumentoId
     //tipoDocumentoIdentificacion    
 
     // Traer consultas
-    $sql = "SELECT '$codigopres_ent' as codPrestador, fechainicioatencion as fechalnicioAtencion, 
+    $sql = "SELECT '$codigopres_ent' as codPrestador, fechainicioatencion as fechaInicioAtencion, 
     numautorizacion as numAutorizacion, codconsulta as codConsulta, modalidadgruposervicio as modalidadGrupoServicioTecSal, 
     gruposervicio as grupoServicios, codservicio as codServicio, finalidadtecnologiasalud as finalidadTecnologiaSalud, 
     causamotivoatencion as causaMotivoAtencion, coddiagnosticoprincipal as codDiagnosticoPrincipal,
@@ -773,6 +773,8 @@ function traerServicios($id_factura,$tipoDocumentoIdentificacion,$numDocumentoId
     $ripsAc = array();
     while($row = mysqli_fetch_assoc($result)) {
         $row['codServicio'] = (int)$row['codServicio'];
+        $row['fechaInicioAtencion'] = str_replace("T", " ", $row['fechaInicioAtencion']);
+        if($row['numAutorizacion'] == '') {$row['numAutorizacion'] = null;} // Si no hay autorización, establecer como null
         if($row['codDiagnosticoRelacionado1'] == '') {$row['codDiagnosticoRelacionado1'] = null;} // Si no hay diagnóstico relacionado, establecer como null 
         if($row['codDiagnosticoRelacionado2'] == '') {$row['codDiagnosticoRelacionado2'] = null;} // Si no hay diagnóstico relacionado, establecer como null
         if($row['codDiagnosticoRelacionado3'] == '') {$row['codDiagnosticoRelacionado3'] = null;} // Si no hay diagnóstico relacionado, establecer como null
@@ -790,7 +792,7 @@ function traerServicios($id_factura,$tipoDocumentoIdentificacion,$numDocumentoId
     //echo "<br><br>RIPS AC: ".json_encode($ripsAc);
 
     // Traer procedimientos
-    $sql = "SELECT '$codigopres_ent' as codPrestador, fechainicioatencion as fechalnicioAtencion,
+    $sql = "SELECT '$codigopres_ent' as codPrestador, fechainicioatencion as fechaInicioAtencion,
     idmipres as idMIPRES, numautorizacion as numAutorizacion, codprocedimiento as codProcedimiento,
     viaingresoserviciosalud as viaIngresoServicioSalud, modalidadgruposerviciotecsal as modalidadGrupoServicioTecSal,
     gruposervicios as grupoServicios, codservicio as codServicio, finalidadtecnologiasalud as finalidadTecnologiaSalud,
@@ -808,6 +810,10 @@ function traerServicios($id_factura,$tipoDocumentoIdentificacion,$numDocumentoId
 
     while($row = mysqli_fetch_assoc($result)) {
         $row['codServicio'] = (int)$row['codServicio'];
+        $row['fechaInicioAtencion'] = str_replace("T", " ", $row['fechaInicioAtencion']);
+        $row['idMIPRES'] = (int)$row['idMIPRES'];
+        if($row['idMIPRES'] == 0) {$row['idMIPRES'] = null;} // Si no hay MIPRES, establecer como null
+        if($row['numAutorizacion'] == '') {$row['numAutorizacion'] = null;} // Si no hay autorización, establecer como null
         if($row['codDiagnosticoRelacionado'] == '') {$row['codDiagnosticoRelacionado'] = null;} // Si no hay diagnóstico relacionado, establecer como null 
         if($row['codComplicacion'] == '') {$row['codComplicacion'] = null;} // Si no hay complicación, establecer como null
         if($row['numFEVPagoModerador'] == '') {$row['numFEVPagoModerador'] = null;} // Si no hay diagnóstico relacionado, establecer como null
@@ -820,7 +826,40 @@ function traerServicios($id_factura,$tipoDocumentoIdentificacion,$numDocumentoId
         $servicios['procedimientos'] = $ripsAp;
         //echo "<br>RIPS Servicios: ".json_encode($servicios);
     }
-    echo "<br><br>RIPS AP: ".json_encode($ripsAp);
+    //echo "<br><br>RIPS AP: ".json_encode($ripsAp);
+
+    // Traer otros servicios
+    $sql = "SELECT '$codigopres_ent' as codPrestador, numautorizacion as numAutorizacion, idmipres as idMIPRES,
+    fechasuministrotecnologia as fechaSuministroTecnologia, tipoos as tipoOS, codtecnologia as codTecnologiaSalud,
+    nomtecnologia as nomTecnologiaSalud, cantidados as cantidadOS, 
+    '$tipoDocumentoIdentificacion' as tipoDocumentoIdentificacion,
+    '$numDocumentoIdentificacion' as numDocumentoIdentificacion,
+    vrunitos as vrUnitOS,vrservicio as vrServicio, conceptorecaudo as conceptoRecaudo,
+    valorpagomoderador as valorPagoModerador, numfevpagomoderador as numFEVPagoModerador, consecutivo
+    FROM nrotroservicios
+    WHERE id_factura = '$id_factura'";
+    //echo "<br>".$sql;
+
+    $result = mysqli_query($conexion,$sql);
+    $ripsAt = array();
+    while($row = mysqli_fetch_assoc($result)) {
+        $row['vrUnitOS'] = (int)$row['vrUnitOS'];
+        $row['vrServicio'] = (int)$row['vrServicio'];
+        $row['idMIPRES'] = (int)$row['idMIPRES'];
+        $row['fechaSuministroTecnologia'] = str_replace("T", " ", $row['fechaSuministroTecnologia']);
+        if($row['numAutorizacion'] == '') {$row['numAutorizacion'] = null;} // Si no hay autorización, establecer como null 
+        if($row['numFEVPagoModerador'] == 0) {$row['numFEVPagoModerador'] = null;} // Si no hay diagnóstico relacionado, establecer como null
+        if($row['idMIPRES'] == 0) {$row['idMIPRES'] = null;} // Si no hay MIPRES, establecer como null
+        if($row['numFEVPagoModerador']== '') {$row['numFEVPagoModerador'] = null;} // Si no hay diagnóstico relacionado, establecer como null
+        $row['cantidadOS'] = (int)$row['cantidadOS'];
+        $row['valorPagoModerador'] = (int)$row['valorPagoModerador'];        
+        $row['consecutivo'] = (int)$row['consecutivo'];
+        $ripsAt[] = $row;
+    }
+    if($ripsAt<>''){
+        $servicios['otrosServicios'] = $ripsAt;    
+    }
+    //echo "<br><br>RIPS AT: ".json_encode($ripsAt);
     return($servicios);
 }
 ?>
