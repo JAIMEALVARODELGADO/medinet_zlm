@@ -1,32 +1,32 @@
-function cerrar(){
-    alert("Cerrar ventana de Rips Js");
+function cerrar(){    
     $("#tablaDataRips").empty();
 }
 
 function ripsUs(){    
-    $("#tablaDataRips").load("tablaRipsUs.php?id_factura="+id_factura);
+    $("#tablaDataRips").load("tablaRipsUs.php?id_factura="+id_factura+"&numero_fac="+numero_fac);
 }
 function ripsAc(){    
-    $("#tablaDataRips").load("tablaNRAC.php?id_factura="+id_factura);
+    $("#tablaDataRips").load("tablaNRAC.php?id_factura="+id_factura+"&numero_fac="+numero_fac);
 }
 function ripsAp(){    
-    $("#tablaDataRips").load("tablaNRAP.php?id_factura="+id_factura);
+    $("#tablaDataRips").load("tablaNRAP.php?id_factura="+id_factura+"&numero_fac="+numero_fac);
 }
 function ripsAt(){    
-    $("#tablaDataRips").load("tablaNRAT.php?id_factura="+id_factura);
+    $("#tablaDataRips").load("tablaNRAT.php?id_factura="+id_factura+"&numero_fac="+numero_fac);
 }
 
-function traerRipsJs(id_factura){
+/*function traerRipsJs(id_factura){
     alert("Traer Rips Js"+id_factura);
-}
+}*/
 
 $(document).ready(function() {
-    generarRipsJson(id_factura);
+    ripsJs='';
+    //generarRipsJson(id_factura);
 });
 
 function generarRipsJson() {    
     var url = "procesos/rips_procesos.php?id_factura=" + id_factura + "&opcion=traerRipsJs";
-    alert(url);
+    //alert(url);
     const fetchOptions = {
         method: 'GET'        
     }
@@ -39,42 +39,40 @@ function generarRipsJson() {
             return response.json();
         })
         .then(data => {            
-            mostrarServicios(data);
+            //mostrarRipsJson(data);
+            alertify.success('RIPS Json generados correctamente');
+            ripsJs = JSON.stringify(data, null, 2);
         })
         .catch(error => {
             console.error('Error:', error);
         });
 }
 
-function mostrarRipsJson(ripsJs){
-    console.log(ripsJs);
-    // Limpiar el tbody de la tabla
-    /*$('#tablaRips tbody').empty();
-    
-    // Verificar si hay datos
-    if (!otServicios || otServicios.length === 0) {
-        $('#tablaRips tbody').append('<tr><td colspan="9" class="text-center">No hay consultas para mostrar</td></tr>');
+/*function mostrarRipsJson(data){
+    ripsJs = data;    
+}*/
+
+function descargarRipsJson(){    
+    if (ripsJs == '') {
+        alertify.error('No hay datos para descargar, primero debe Generar RIPS');
         return;
-    }    
+    }
     
-    // Recorrer las consultas y crear las filas
-    otServicios.forEach(function(otServicios) { 
-        var fila = '<tr>' +
-            '<td>' + (otServicios.fechasuministrotecnologia || '') + '</td>' +
-            '<td>' + (otServicios.numautorizacion || '') + '</td>' +
-            '<td>' + (otServicios.idmipres || '') + '</td>' +
-            '<td>' + (otServicios.codtecnologia || '') + '</td>' +
-            '<td>' + (otServicios.nomtecnologia || '') + '</td>' +
-            '<td>' + (otServicios.cantidados || '') + '</td>' +
-            '<td>' + (otServicios.vrunitos || '') + '</td>' +            
-            '<td>' + (otServicios.vrservicio || '') + '</td>' +
-            '<td>' +
-            '<span class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modalEditar" title="Editar" onclick="editarServicio(' + otServicios.id_otroservicio + ')">' +
-                '<span class="far fa-edit"></span>'+
-            '</span>' +
-            '</td>' +	
-            '</tr>';
-        
-        $('#tablaRips tbody').append(fila);
-    });*/
+    //console.log(ripsJs);
+    
+    // Crear un blob con el contenido de la variable
+    const blob = new Blob([ripsJs], { type: 'application/javascript' });
+    
+    // Crear un enlace temporal para la descarga
+    const enlace = document.createElement('a');
+    enlace.href = URL.createObjectURL(blob);
+    enlace.download = 'FEV'+numero_fac+'.json';
+    
+    // Agregar el enlace al DOM, hacer clic y eliminarlo
+    document.body.appendChild(enlace);
+    enlace.click();
+    document.body.removeChild(enlace);
+    
+    // Liberar la URL del objeto para optimizar memoria
+    URL.revokeObjectURL(enlace.href);
 }

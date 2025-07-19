@@ -1,5 +1,6 @@
 <?php
 $id_factura = $_GET['id_factura'];
+$numero_fac = $_GET['numero_fac'] ?? '';
 ?>
 <link rel="stylesheet" type="text/css" href="../librerias/css/jquery.autocomplete.css">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -7,12 +8,13 @@ $id_factura = $_GET['id_factura'];
 <script type='text/javascript' src='../librerias/js/jquery.autocomplete.js'></script>-->
 
 <script src="tablaNRJs.js">
-    var id_factura = "<?php echo $id_factura; ?>";	
+    id_factura = "<?php echo $id_factura; ?>";
+	numero_fac = "<?php echo $numero_fac; ?>";
 </script>
 
 
     <div class="card text">
-        <h6>RIPS</h6>
+		<h6>RIPS   <i class="text-danger">de la factura: <?php echo $numero_fac;?></i></h6>
 		<div class="card-header">
 			<ul class="nav nav-tabs card-header-tabs">
 				<li class="nav-item">
@@ -42,29 +44,12 @@ $id_factura = $_GET['id_factura'];
 	                <div class="card text-left">
 	                    
 	                    <div class="card-body">
-							<table class="table table-hover table-sm table-bordered font13" id="tablaRips">
-								<thead style="background-color: #2574a9;color: white; font-weight: bold;">
-									<!--<tr>				
-										<td>Fecha</td>
-                                        <td>Autorización</td>
-										<td>ID Mipres</td>                                        
-										<td>Código</td>
-										<td>Nombre</td>
-										<td>Cantidad</td>
-                                        <td>Vr.Unitario</td>
-										<td>Vr.Total</td>
-										<td colspan="3">Opciones</td>				
-									</tr>-->
-								</thead>
-								
-								<tbody style="background-color: white">
-									
-								</tbody>
-								
-							</table>
-                            	                        
-	                    </div>
-	                    
+
+							<div class="modal-footer">							
+								<button type="button" class="btn btn-success" onclick="generarRipsJson()">Generar RIPS  </i><span class="fa-light fa-file"></span></button>
+								<button type="button" class="btn btn-primary" onclick="descargarRipsJson()">Descargar RIPS  <span class="fas fa-save"></span></button>
+							</div>	                        
+	                    </div>	                    
 	                </div>
 	            </div>
 	        </div>

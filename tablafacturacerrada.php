@@ -49,7 +49,7 @@ $result=mysqli_query($conexion,$sql);
 						</span>
 					</td>
 					<td style="text-align: center;">
-						<span class="btn btn-primary btn.sm" title="RIPS" onclick="activaRips('<?php echo $row[0]?>')">
+						<span class="btn btn-primary btn.sm" title="RIPS" onclick="activaRips('<?php echo $row[0]?>','<?php echo $row[1]?>')">
 							<i class="fas fa-file-code"></i></span>
 						</span>
 					</td>
@@ -88,16 +88,9 @@ $result=mysqli_query($conexion,$sql);
 		$('#tablafactura').DataTable();
 	} );
 
-	function activaRips(id_factura){
-		
-		$("#tablaDataRips").load("tablaRipsUs.php?id_factura="+id_factura);
-		/*$.ajax({
-			type:"POST",
-			data:"idfac="+idfac,
-			url:"vistas/rips.php",
-			success:function(r){
-				$('#tablaDataRips').html(r);
-			}
-		});*/
+	function activaRips(id_factura,numero_fac){		
+		url="tablaRipsUs.php?id_factura="+id_factura+"&numero_fac="+numero_fac;
+		//alert(url);
+		$("#tablaDataRips").load(url);		
 	}
 </script>

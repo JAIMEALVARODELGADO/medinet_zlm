@@ -1,5 +1,6 @@
 <?php
 $id_factura = $_GET['id_factura'];
+$numero_fac = $_GET['numero_fac'] ?? '';
 ?>
 <link rel="stylesheet" type="text/css" href="../librerias/css/jquery.autocomplete.css">
 <!--<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>--->
@@ -9,11 +10,12 @@ $id_factura = $_GET['id_factura'];
 
 <script>
 	id_factura = "<?php echo $id_factura; ?>";
+    numero_fac = "<?php echo $numero_fac; ?>";
 </script>
 <script src="tablaNRAT.js"></script>
 
     <div class="card text">
-        <h6>RIPS</h6>
+        <h6>RIPS   <i class="text-danger">de la factura: <?php echo $numero_fac;?></i></h6>
 		<div class="card-header">
 			<ul class="nav nav-tabs card-header-tabs">
 				<li class="nav-item">

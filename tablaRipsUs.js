@@ -4,16 +4,16 @@ function cerrar(){
     $("#tablaDataRips").empty();
 }
 function ripsAc(){				
-    $("#tablaDataRips").load("tablaNRAC.php?id_factura="+id_factura);
+    $("#tablaDataRips").load("tablaNRAC.php?id_factura="+id_factura+"&numero_fac="+numero_fac);
 }
 function ripsAp(){
-    $("#tablaDataRips").load("tablaNRAP.php?id_factura="+id_factura);
+    $("#tablaDataRips").load("tablaNRAP.php?id_factura="+id_factura+"&numero_fac="+numero_fac);
 }
 function ripsAt(){    
-    $("#tablaDataRips").load("tablaNRAT.php?id_factura="+id_factura);
+    $("#tablaDataRips").load("tablaNRAT.php?id_factura="+id_factura+"&numero_fac="+numero_fac);
 }
 function ripsJs(){      
-    $("#tablaDataRips").load("tablaNRJs.php?id_factura="+id_factura);
+    $("#tablaDataRips").load("tablaNRJs.php?id_factura="+id_factura+"&numero_fac="+numero_fac);
 }
 
 $(document).ready(function() {		

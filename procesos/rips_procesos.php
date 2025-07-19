@@ -55,7 +55,7 @@ switch($opcion) {
         guardarOtServicio($_POST);
         break;
     case 'traerRipsJs':        
-        traerRipsJs($_GET['id_factura']);
+        echo traerRipsJs($_GET['id_factura']);        
         break;
     default:
         echo "Opción no válida.";
@@ -701,7 +701,7 @@ function traerRipsJs($id_factura) {
     $ripsUs=traerRipsUs($id_factura);
     $rips['usuarios'] = $ripsUs;
 
-    echo "<br><br><pre>".json_encode($rips);
+    //echo "<br><br><pre>".json_encode($rips);
     return(json_encode($rips));
 }
 
