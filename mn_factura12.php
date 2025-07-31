@@ -35,7 +35,10 @@ $hoy=date("Y-m-d");
 				</li>
 				<li class="nav-item">
 					<a class="nav-link active" href="#">Facturas Cerradas/Anuladas</a>
-				</li>				
+				</li>
+                <li class="nav-item">
+					<a class="nav-link" href="mn_factura13.php">Subir XML</a>
+				</li>					
 			</ul>
 
 		</div>       
