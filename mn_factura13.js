@@ -1,3 +1,9 @@
+window.onload = function() {
+    cargarConvenios();
+    let factura;
+};
+
+
 function procesarXML(){    
     const fileInput = document.getElementById('archivoXml');
     const file = fileInput.files[0];
@@ -188,6 +194,7 @@ function displayResults(data) {
     const resultsDiv = document.getElementById('results');
     const summaryDiv = document.getElementById('invoiceSummary');
     const jsonPreview = document.getElementById('jsonPreview');
+    const id_convenio = document.getElementById('id_convenio').value;    
 
     // Crear el array de detalles basado en las líneas de la factura
     const detalle = data.lines.map(line => ({
@@ -197,15 +204,15 @@ function displayResults(data) {
     }));
 
     //Aqui creo el objeto con los datos para la factura de medinet    
-    const factura = {
+    factura = {
         numero_factura: data.basicInfo.id,
         id_persona: 0, // Este campo se debe completar con el ID de la persona
-        id_convenio: 0, // Este campo se debe completar con el ID del convenio
+        id_convenio: id_convenio,
         fecha_fac: data.basicInfo.issueDate,
         valortot_fac: data.totals.payableAmount,
         detalle: detalle
     };
-    console.log(factura);
+    //console.log(factura);
 
     // Mostrar resumen
     summaryDiv.innerHTML = `
@@ -235,24 +242,46 @@ function displayResults(data) {
     `;
     
     // Mostrar JSON
-    jsonPreview.textContent = JSON.stringify(data, null, 2);
+    //jsonPreview.textContent = JSON.stringify(data, null, 2);
     
     // Habilitar botones
     document.getElementById('sendBtn').disabled = false;
-    document.getElementById('downloadBtn').disabled = false;
+    //document.getElementById('downloadBtn').disabled = false;
     
     resultsDiv.style.display = 'block';
 }
 
-function sendToPHP() {
+function crearFactura() {
+    //console.log(factura);
+    //alert();
     if (!processedData) {
         showStatus('No hay datos para enviar', 'error');
         return;
     }
     
-    showStatus('Enviando datos a PHP...', 'info');
+    showStatus('Guardando factura...', 'info');
+
+    var url = "procesos/factura_procesos.php?opcion=crearFacturaExterna"+
+    "&factura="+encodeURIComponent(JSON.stringify(factura));
+    //alert(url);
+    fetchOptions={
+        method: 'GET',
+        headers: {				
+            'Content-Type': 'application/json' 
+        }
+    }
+    fetch(url, fetchOptions)		
+    .then(response => response.text())
+    .then(data => {			
+        facturar(data);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+
+
     
-    fetch('process_invoice.php', {
+    /*fetch('process_invoice.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -269,26 +298,47 @@ function sendToPHP() {
     })
     .catch(error => {
         showStatus('Error al enviar datos: ' + error.message, 'error');
+    });*/
+}
+
+function cargarConvenios() {
+    var url = "procesos/factura_procesos.php?opcion=traerConvenios";
+    //alert(url);
+    fetchOptions={
+        method: 'GET',
+        headers: {				
+            'Content-Type': 'application/json' 
+        }
+    }
+    fetch(url, fetchOptions)		
+    .then(response => response.json())
+    .then(data => {			
+        cargarSeclectConvenios(data);
+    })
+    .catch(error => {
+        console.error('Error:', error);
     });
 }
 
-function downloadJSON() {
-    if (!processedData) {
-        showStatus('No hay datos para descargar', 'error');
-        return;
+function cargarSeclectConvenios(data) {    
+    var select = document.getElementById('id_convenio');
+    select.innerHTML = ''; // Limpiar opciones existentes
+
+    data.forEach(function(convenio) {
+        var option = document.createElement('option');
+        option.value = convenio.id_convenio;
+        option.textContent = convenio.convenio_eps;
+        select.appendChild(option);
+    });    
+}
+
+function facturar(data) {
+
+    if (data.success) {
+        showStatus('Factura creada exitosamente', 'success');
+        // Aquí puedes redirigir a otra página o mostrar un mensaje adicional
+        // window.location.href = 'factura_success.html';
+    } else {
+        showStatus('Error al crear la factura: ' + data.message, 'error');
     }
-    
-    const dataStr = JSON.stringify(processedData, null, 2);
-    const dataBlob = new Blob([dataStr], {type: 'application/json'});
-    const url = URL.createObjectURL(dataBlob);
-    
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `factura_${processedData.basicInfo.id}_${Date.now()}.json`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-    
-    showStatus('Archivo JSON descargado', 'success');
 }

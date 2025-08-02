@@ -1,5 +1,5 @@
 <?php
-require("valida_sesion.php");
+require(__DIR__ . '/../valida_sesion.php');
 require_once "clases/conexion.php";
 $obj=new conectar();
 $conexion=$obj->conexion();
@@ -173,37 +173,43 @@ $hoy=date("Y-m-d");
 	                    <div class="card-header">
 	                        <h4>Subir Factura XML</h4>
 	                    </div>
-	                    <div class="card-body">
-                            <div class="form-group row">
-                                <label for="archivo" class="col-sm-2 col-form-label"><p>Arrastra y suelta un archivo XML aquí o haz clic para seleccionar</p></label>
-                                <div class="col-sm-4">
-                                    <input type="file" class="form-control-file" id="archivoXml" name="archivoXm" accept=".xml" />
-                                </div>
-
-                                <div class="col-sm-2">
-                                    <button type="button" class="btn btn-primary" onclick="procesarXML()">Procesar XML</button>
-                                </div>                                
+                    </div>                    
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <div class="col-sm-6">                                
+                                <label for="archivo" class="col-form-label"><p>Arrastra y suelta un archivo XML aquí o haz clic para seleccionar</p></label>
+                                <input type="file" id="archivoXml" name="archivoXml" accept=".xml" class="form-control-file">
                             </div>
-                            <!-------------------------------------- -->
                             
-        
-                            <div id="status"></div>
-                            
-                            <div class="results" id="results" style="display: none;">
-                                <h3>Resumen de la Factura</h3>
-                                <div id="invoiceSummary"></div>
-                                
-                                <h3>Vista previa JSON</h3>
-                                <div class="json-preview" id="jsonPreview"></div>
-                                
-                                <button onclick="sendToPHP()" id="sendBtn" disabled>Enviar a PHP</button>
-                                <button onclick="downloadJSON()" id="downloadBtn" disabled>Descargar JSON</button>
+                            <div class="col-sm-6">
+                                <label for="id_eps" class="col-form-label">Convenio con la EPS</label>
+                                <select class="form-control form-control-sm" id="id_convenio" name="id_convenio">
+                                    
+                                </select>
                             </div>
-                            <!--------------------------------------- -->
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-12">
+                                <button type="button" class="btn btn-primary" onclick="procesarXML()">Procesar XML</button>
+                            </div>
+                        </div>
 
+                        <div id="status"></div>
                             
+                        <div class="results" id="results" style="display: none;">
+                            <h3>Resumen de la Factura</h3>
+                            <div id="invoiceSummary"></div>
+                            
+                            <h3>Vista previa JSON</h3>
+                            <div class="json-preview" id="jsonPreview"></div>
+                            
+                            <button onclick="crearFactura()" id="sendBtn" disabled>Crear Factura</button>
+                            <!--<button onclick="downloadJSON()" id="downloadBtn" disabled>Descargar JSON</button>-->
+                        </div>
+                    </div>
+                </div>
 
-	                    </div>
+                </div>
 	                    <div class="card-footer text-muted">
 	                        By Soluciones Thin & Thin
 	                    </div>
