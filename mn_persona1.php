@@ -147,9 +147,17 @@ require("valida_sesion.php");
                 <div class="modal-body">
                     <form id="frm_paciente">
                         <input type="hidden" id="idpersona_pac" name="idpersona_pac">
+                        
+                        <label>Pais de Origen</label>
+                        <select class="form-control" id="codigo_paisOrigenU" name="codigo_paisOrigenU">
+                        </select>
+
+                        <label>Pais de Residencia</label>
+                        <select class="form-control" id="codigo_paisU" name="codigo_paisU">                            
+                        </select>
+
                         <label>Municipio</label>
                         <select class="form-control" id="codigo_munU" name="codigo_munU">
-                            
                         </select>
 
                         <label>Zona</label>
@@ -316,6 +324,30 @@ require("valida_sesion.php");
 
         $.ajax({
             type:"POST",
+            url:'procesos/lista_pais.php',
+            data:{'peticion':'cargar_listas'}
+        })
+        .done(function(listas_rep){
+            $('#codigo_paisU').html(listas_rep)
+        })
+        .fail(function(){
+            alertify.error("Error al cargar listas");
+        })
+        
+        $.ajax({
+            type:"POST",
+            url:'procesos/lista_pais.php',
+            data:{'peticion':'cargar_listas'}
+        })
+        .done(function(listas_rep){
+            $('#codigo_paisOrigenU').html(listas_rep)
+        })
+        .fail(function(){
+            alertify.error("Error al cargar listas");
+        })
+
+        $.ajax({
+            type:"POST",
             url:'procesos/lista_tipousuario.php',
             data:{'peticion':'cargar_listas'}
         })
@@ -416,7 +448,9 @@ require("valida_sesion.php");
                 $('#etniaU').val(datos['etnia']);
                 $('#nivel_educU').val(datos['nivel_educ']);
                 $('#id_ciuoU').val(datos['id_ciuo']);
-                $('#estado_civU').val(datos['estado_civ']);                
+                $('#estado_civU').val(datos['estado_civ']);
+                $('#codigo_paisOrigenU').val(datos['codigo_paisOrigen']);
+                $('#codigo_paisU').val(datos['codigo_pais']);                
             }
         })
     }

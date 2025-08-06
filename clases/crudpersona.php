@@ -61,7 +61,7 @@ class crudpersona{
 		$obj=new conectar();
 		$conexion=$obj->conexion();
 
-		$sql="SELECT id_persona,codigo_mun,zona,tipo_usuario,etnia, nivel_educ, id_ciuo, estado_civ FROM paciente 
+		$sql="SELECT id_persona,codigo_mun,zona,tipo_usuario,etnia, nivel_educ, id_ciuo, estado_civ, codigo_paisOrigen, codigo_pais FROM paciente 
 			WHERE id_persona='$idpersona'";
 		//echo "<br>".$sql;	
 		$row=mysqli_query($conexion,$sql);
@@ -75,7 +75,10 @@ class crudpersona{
 			'etnia' => $ver[4], 
 			'nivel_educ' => $ver[5], 
 			'id_ciuo' => $ver[6], 
-			'estado_civ' => $ver[7]
+			'estado_civ' => $ver[7],
+			'codigo_paisOrigen' => $ver[8],
+			'codigo_pais' => $ver[9]
+
 			);			
 		}
 		else{
@@ -87,7 +90,9 @@ class crudpersona{
 			'etnia' => '', 
 			'nivel_educ' => '', 
 			'id_ciuo' => '', 
-			'estado_civ' => ''
+			'estado_civ' => '',
+			'codigo_paisOrigen' => '',
+			'codigo_pais' => ''
 			);
 		}		
 		return $datos;
@@ -101,11 +106,15 @@ class crudpersona{
 		//echo $consulta;
 		$consulta=mysqli_query($conexion,$consulta);
 		if(mysqli_num_rows($consulta)==0){
-			$sql="INSERT INTO paciente(id_persona,codigo_mun, zona, tipo_usuario, etnia, nivel_educ, id_ciuo, estado_civ) 
-			VALUES ('$datos[0]', '$datos[1]', '$datos[2]', '$datos[3]', '$datos[4]','$datos[5]', '$datos[6]', '$datos[7]')";			
+			$sql="INSERT INTO paciente(id_persona, codigo_mun, zona, tipo_usuario, etnia, nivel_educ, id_ciuo, estado_civ, codigo_paisOrigen, codigo_pais) 
+			VALUES ('$datos[0]', '$datos[1]', '$datos[2]', '$datos[3]', '$datos[4]','$datos[5]', '$datos[6]', '$datos[7]', '$datos[8]', '$datos[9]')";
 		}
 		else{
-			$sql="UPDATE paciente SET codigo_mun='$datos[1]', zona='$datos[2]', tipo_usuario='$datos[3]', etnia='$datos[4]', nivel_educ='$datos[5]', id_ciuo='$datos[6]', estado_civ='$datos[7]' WHERE id_persona='$datos[0]'";	
+			$sql="UPDATE paciente SET codigo_mun='$datos[1]', zona='$datos[2]', 
+			tipo_usuario='$datos[3]', etnia='$datos[4]', nivel_educ='$datos[5]', 
+			id_ciuo='$datos[6]', estado_civ='$datos[7]' , codigo_paisOrigen='$datos[8]',
+			codigo_pais='$datos[9]'
+			WHERE id_persona='$datos[0]'";	
 		}
 		//echo $sql;
 		return mysqli_query($conexion,$sql);

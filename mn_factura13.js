@@ -333,7 +333,7 @@ function cargarSeclectConvenios(data) {
 }
 
 function facturar(data) {
-
+    alert(data);
     if (data.success) {
         showStatus('Factura creada exitosamente', 'success');
         // Aquí puedes redirigir a otra página o mostrar un mensaje adicional

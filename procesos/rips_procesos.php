@@ -70,22 +70,24 @@ function crearRips($id_factura) {
     FROM nrusuario n
     WHERE n.id_factura ='$id_factura'";
 
+    //print_r($sql);
+
     $row=mysqli_query($conexion,$sql);
     $resultado=mysqli_fetch_array($row);
     if($resultado['cantidad'] == 0) {
-        // Insertar datos en la tabla nrusuario
+        // Insertar datos en la tabla nrusuario        
         $sql = "INSERT INTO nrusuario (
         tipo_documento,numdocumento,tipousuario,fechanacimiento,
         codsexo,codpaisresidencia,codmunicipioresidencia,codzonaresidencia,
         incapacidad,codpaisorigen,id_factura)
         SELECT dg.valor_det as tipo_documento,numero_iden_per,
-        tp.valor_det as tipo_usuario,fnac_per,sx.valor_det as sexo_per,170 as codpaisresidencia,codigo_mun,
+        tp.valor_det as tipo_usuario,fnac_per,sx.valor_det as sexo_per,pa.codigo_pais as codpaisresidencia,codigo_mun,
         CASE 
             WHEN zona = 'R' THEN '01'
             WHEN zona = 'U' THEN '02'
             ELSE NULL
         END AS zona,
-        'NO' as incapacidad,'170' as codpaisorigen,fe.id_factura
+        'NO' as incapacidad,pa.codigo_paisOrigen as codpaisorigen,fe.id_factura
         FROM factura_encabezado fe
         inner join persona p on p.id_persona = fe.id_persona 
         left join detalle_grupo dg on dg.codi_det = p.tipo_iden_per
@@ -93,8 +95,8 @@ function crearRips($id_factura) {
         left join detalle_grupo tp on tp.codi_det = pa.tipo_usuario
         left join detalle_grupo sx on sx.codi_det = p.sexo_per
         WHERE fe.id_factura ='$id_factura'";
-        //echo $sql;
-        mysqli_query($conexion,$sql);
+        print_r($sql);
+        /*mysqli_query($conexion,$sql);
 
         // Insertar datos en la tabla nrconsulta
         $sql= "SELECT fe.fechaini_fac,'' as numautorizacion,
@@ -278,7 +280,7 @@ function crearRips($id_factura) {
                 $consecutivo++;
                 mysqli_query($conexion,$sql);
             }
-        }
+        }*/
     }
 }
 

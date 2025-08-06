@@ -1,5 +1,5 @@
 <?php
-require(__DIR__ . '/../valida_sesion.php');
+require(__DIR__ . '../valida_sesion.php');
 require_once "clases/conexion.php";
 $obj=new conectar();
 $conexion=$obj->conexion();
@@ -200,11 +200,11 @@ $hoy=date("Y-m-d");
                             <h3>Resumen de la Factura</h3>
                             <div id="invoiceSummary"></div>
                             
-                            <h3>Vista previa JSON</h3>
-                            <div class="json-preview" id="jsonPreview"></div>
+                            <!--<h3>Vista previa JSON</h3>
+                            <div class="json-preview" id="jsonPreview"></div>-->
                             
                             <button onclick="crearFactura()" id="sendBtn" disabled>Crear Factura</button>
-                            <!--<button onclick="downloadJSON()" id="downloadBtn" disabled>Descargar JSON</button>-->
+                            
                         </div>
                     </div>
                 </div>
