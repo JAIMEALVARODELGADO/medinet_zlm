@@ -95,8 +95,8 @@ function crearRips($id_factura) {
         left join detalle_grupo tp on tp.codi_det = pa.tipo_usuario
         left join detalle_grupo sx on sx.codi_det = p.sexo_per
         WHERE fe.id_factura ='$id_factura'";
-        print_r($sql);
-        /*mysqli_query($conexion,$sql);
+        //print_r($sql);
+        mysqli_query($conexion,$sql);
 
         // Insertar datos en la tabla nrconsulta
         $sql= "SELECT fe.fechaini_fac,'' as numautorizacion,
@@ -110,6 +110,7 @@ function crearRips($id_factura) {
         INNER JOIN factura_encabezado fe on fe.id_factura = fd.id_factura 
         INNER JOIN convenio_detalle cd on cd.id_cdet = fd.id_cdet 
         WHERE cd.tipo_cdet='AC' AND fd.id_factura ='$id_factura'";
+        //print_r($sql);
         $row = mysqli_query($conexion,$sql);
         if(mysqli_num_rows($row) <> 0) {
             $consecutivo = 1;
@@ -280,7 +281,7 @@ function crearRips($id_factura) {
                 $consecutivo++;
                 mysqli_query($conexion,$sql);
             }
-        }*/
+        }
     }
 }
 

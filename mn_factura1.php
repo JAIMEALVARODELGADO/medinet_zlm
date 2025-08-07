@@ -79,6 +79,9 @@ $fin=date("Y-m-$diafin");
 				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="mn_factura12.php">Facturas Cerradas/Anuladas</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="mn_factura13.php">Subir XML</a>
 				</li>				
 			</ul>
 
