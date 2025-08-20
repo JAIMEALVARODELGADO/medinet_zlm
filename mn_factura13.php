@@ -12,7 +12,30 @@ $hoy=date("Y-m-d");
 	<?php 
 		require_once "scripts.php";
 	?>
+    <link rel="stylesheet" type="text/css" href="../librerias/css/jquery.autocomplete.css">
+	<script type="text/javascript" src="../librerias/js/jquery.js"></script>
+	<script type='text/javascript' src='../librerias/js/jquery.autocomplete.js'></script>
+
     <script src="mn_factura13.js"></script>
+    <script type="text/javascript">
+        //actualizar();
+        $(document).ready(function(){
+            //$("#tablaDataconsulta").load("tablaconsultasinfac.php");
+
+            $("#nombre_pac").autocomplete("procesos/autocomp_pac.php", {
+                width: 460,
+                matchContains: false,
+                mustMatch: false,
+                selectFirst: false
+            });
+            $("#nombre_pac").result(function(event, data, formatted) {
+                $("#id_persona").val(data[1]);
+            });
+
+
+        });        
+
+    </script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -186,6 +209,10 @@ $hoy=date("Y-m-d");
                                 <select class="form-control form-control-sm" id="id_convenio" name="id_convenio">
                                     
                                 </select>
+                                <br>                                
+                                <label for="id_persona" class="col-form-label">Paciente</label>
+                                <input type="text" class="form-control" id="nombre_pac" name="nombre_pac" size='80' placeholder="digite la identificación o el nombre" onblur="actualizar()">
+                                <input type='hidden' id='id_persona' name='id_persona'>
                             </div>
                         </div>
                         <div class="form-group row">

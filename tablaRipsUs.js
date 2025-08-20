@@ -1,31 +1,31 @@
-//id_factura = "<?php echo $id_factura; ?>";
+//let id_factura;
+//let numero_fac;
 
 function cerrar(){		
     $("#tablaDataRips").empty();
 }
-function ripsAc(){				
+function ripsAc(){
+    id_factura = document.getElementById('id_factura').value;
+    numero_fac = document.getElementById('numero_fac').value;
     $("#tablaDataRips").load("tablaNRAC.php?id_factura="+id_factura+"&numero_fac="+numero_fac);
 }
 function ripsAp(){
+    id_factura = document.getElementById('id_factura').value;
+    numero_fac = document.getElementById('numero_fac').value;    
     $("#tablaDataRips").load("tablaNRAP.php?id_factura="+id_factura+"&numero_fac="+numero_fac);
 }
-function ripsAt(){    
+function ripsAt(){
+    id_factura = document.getElementById('id_factura').value;
+    numero_fac = document.getElementById('numero_fac').value;    
     $("#tablaDataRips").load("tablaNRAT.php?id_factura="+id_factura+"&numero_fac="+numero_fac);
 }
-function ripsJs(){      
+function ripsJs(){
+    id_factura = document.getElementById('id_factura').value;
+    numero_fac = document.getElementById('numero_fac').value;
     $("#tablaDataRips").load("tablaNRJs.php?id_factura="+id_factura+"&numero_fac="+numero_fac);
 }
 
-$(document).ready(function() {		
-    crearRips();
-    cargarTpDocumento();
-    cargarTpUsuario();
-    cargarSexo();
-    cargarMunicipios();
-    cargarZona();
-});
-
-function crearRips() {
+function crearRips(id_factura) {    
     var url = "procesos/rips_procesos.php?id_factura=" + id_factura
     +"&opcion=crearRips";
     //console.log(url);
@@ -38,14 +38,14 @@ function crearRips() {
     fetch(url, fetchOptions)
     .then(response => response.text())
     .then(data => {			
-        cargarUs();
+        cargarUs(id_factura);
     })
     .catch(error => {
         console.error('Error:', error);
     });
 }
 
-function cargarUs() {
+function cargarUs(id_factura) {
     var url = "procesos/rips_procesos.php?id_factura=" + id_factura
     +"&opcion=traerUs";
     //alert(url);
@@ -136,7 +136,7 @@ function editarUs(id_usuario) {
 
 // Función auxiliar para rellenar el formulario
 function rellenarFormularioEdicion(usuario) {
-    console.log('Usuario a editar:', usuario);    
+    //console.log('Usuario a editar:', usuario);    
     // Rellenar los campos del formulario con los datos del JSON
     $('#tipo_documento').val(usuario.tipo_documento || '');
     $('#numdocumento').val(usuario.numdocumento || '');    
@@ -157,6 +157,7 @@ function rellenarFormularioEdicion(usuario) {
 
 function guardarUsuario() {
     // Recopilar los datos del formulario
+    var id_factura = document.getElementById('id_factura').value;
     var formData = new FormData();
     formData.append('opcion', 'guardarUsuario');
     formData.append('id_usuario', $('#id_usuario').val());
@@ -179,7 +180,7 @@ function guardarUsuario() {
     .then(data => {        
         alertify.success(data);
         cerrarModal();
-        cargarUs(); // Recargar la tabla
+        cargarUs(id_factura); // Recargar la tabla
     })
     .catch(error => {
         console.error('Error:', error);
@@ -460,6 +461,83 @@ function llenarZona(data){
             var option = document.createElement('option');
             option.value = item.valor_det;
             option.textContent = item.descripcion_det;
+            select.appendChild(option);
+        });
+    } else {
+        console.error('El elemento select no existe en el DOM');
+    }
+}
+
+function cargarPais(){
+    // Cargar los datos de paises
+    var url = "procesos/rips_procesos.php?"+        
+        "&opcion=traerPaises";    
+
+    fetch(url)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Error en la respuesta del servidor: ' + response.status);
+        }
+        return response.json();
+    })
+    .then(data => {            
+        // Verificar si hay error en la respuesta del servidor
+        if (data.error) {
+            throw new Error(data.mensaje || 'Error desconocido del servidor');
+        }
+        
+        //Llenar select de tipo de identificacion
+        llenarPaisResidencia(data);
+        llenarPaisOrigen(data);
+        
+    })
+    .catch(error => {
+        console.error('Error al cargar usuario:', error);
+        alert('Error al cargar los datos del usuario: ' + error.message);
+    });
+}
+
+function llenarPaisResidencia(data){        
+    var select = document.getElementById('codpaisresidencia');
+    if (select) {
+        // Limpiar las opciones existentes
+        select.innerHTML = '';
+        
+        // Agregar una opción por defecto
+        var option = document.createElement('option');
+        option.value = '';
+        option.textContent = 'Seleccione el País de residencia';
+        select.appendChild(option);
+        
+        // Recorrer los datos y crear las opciones
+        data.forEach(function(item) {
+            var option = document.createElement('option');
+            option.value = item.codigo;
+            option.textContent = item.nombre;
+            select.appendChild(option);
+        });
+    } else {
+        console.error('El elemento select no existe en el DOM');
+    }
+}
+
+function llenarPaisOrigen(data){        
+    var select = document.getElementById('codpaisorigen');
+    if (select) {
+        // Limpiar las opciones existentes
+        select.innerHTML = '';
+        
+        // Agregar una opción por defecto
+        var option = document.createElement('option');
+        option.value = '';
+        option.textContent = 'Seleccione el País de origen';
+        select.appendChild(option);
+        
+        // Recorrer los datos y crear las opciones
+        data.forEach(function(item) {
+            var option = document.createElement('option');
+            option.value = item.codigo;
+            option.textContent = item.nombre;
             select.appendChild(option);
         });
     } else {

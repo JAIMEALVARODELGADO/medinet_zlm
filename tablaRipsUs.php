@@ -10,9 +10,20 @@ $numero_fac = $_GET['numero_fac'] ?? '';
 <script type='text/javascript' src='../librerias/js/jquery.autocomplete.js'></script>
 <script src="tablaRipsUs.js">	
 </script>
+
 <script>
-	id_factura = "<?php echo $id_factura; ?>";
-    numero_fac = "<?php echo $numero_fac; ?>";
+    $(document).ready(function() {
+    let id_factura = "<?php echo $id_factura; ?>";
+    let numero_fac = "<?php echo $numero_fac; ?>";
+    //alert(numero_fac);
+    crearRips(id_factura);
+    cargarTpDocumento();
+    cargarTpUsuario();
+    cargarSexo();
+    cargarMunicipios();
+    cargarZona();
+    cargarPais();
+    });
 </script>
 
     <div class="card text">
@@ -86,6 +97,8 @@ $numero_fac = $_GET['numero_fac'] ?? '';
             <div class="modal-body">
                 <form id="formUsuario">
                     <input type="hidden" id="id_usuario" name="id_usuario">
+                    <input type="hidden" id="id_factura" name="id_factura" value='<?php echo $id_factura;?>'>
+                    <input type="hidden" id="numero_fac" name="numero_fac" value='<?php echo $numero_fac;?>'>
                     
                     <div class="row">
                         <div class="col-md-6">
@@ -133,7 +146,10 @@ $numero_fac = $_GET['numero_fac'] ?? '';
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="codpaisresidencia">Código País de Residencia:</label>
-                                <input type="text" class="form-control" id="codpaisresidencia" name="codpaisresidencia" maxlength="3" value="170" required>
+                                <select class="form-control" id="codpaisresidencia" name="codpaisresidencia" required>
+                                    
+                                </select>
+                                <!--<input type="text" class="form-control" id="codpaisresidencia" name="codpaisresidencia" maxlength="3" value="170" required>-->
                             </div>
                         </div>
                     </div>
@@ -171,7 +187,10 @@ $numero_fac = $_GET['numero_fac'] ?? '';
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="codpaisorigen">Código País Origen:</label>
-                                <input type="text" class="form-control" id="codpaisorigen" name="codpaisorigen" maxlength="3" value="170" required>
+                                <select class="form-control" id="codpaisorigen" name="codpaisorigen" required>
+                                    
+                                </select>
+                                <!--<input type="text" class="form-control" id="codpaisorigen" name="codpaisorigen" maxlength="3" value="170" required>-->
                             </div>
                         </div>
                     </div>

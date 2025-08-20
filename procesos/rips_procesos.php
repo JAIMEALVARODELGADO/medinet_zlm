@@ -9,7 +9,7 @@ if(!isset($opcion)) {
 }
 
 switch($opcion) {
-    case 'crearRips':
+    case 'crearRips':        
         crearRips($_GET['id_factura']);
         break;
     case 'traerUs':        
@@ -56,6 +56,9 @@ switch($opcion) {
         break;
     case 'traerRipsJs':        
         echo traerRipsJs($_GET['id_factura']);        
+        break;
+    case 'traerPaises':
+        echo traerPaises();
         break;
     default:
         echo "Opción no válida.";
@@ -864,5 +867,21 @@ function traerServicios($id_factura,$tipoDocumentoIdentificacion,$numDocumentoId
     }
     //echo "<br><br>RIPS AT: ".json_encode($ripsAt);
     return($servicios);
+}
+
+function traerPaises() {
+    $obj=new conectar();
+    $conexion=$obj->conexion();
+
+    $sql = "SELECT codigo, nombre FROM pais ORDER BY nombre";
+    
+    $result = mysqli_query($conexion,$sql);
+    $data = array();
+    
+    while($row = mysqli_fetch_assoc($result)) {
+        $data[] = $row;
+    }
+    
+    return(json_encode($data));
 }
 ?>

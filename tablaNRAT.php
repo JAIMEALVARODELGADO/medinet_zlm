@@ -74,7 +74,7 @@ $numero_fac = $_GET['numero_fac'] ?? '';
 	    </div>		
 	</div>
 
-<!-- Modal para Editar Procedimiento -->
+<!-- Modal para Editar Otros Servicios -->
 <div class="modal fade" id="modalEditar" name="modalEditar" tabindex="-1" role="dialog" aria-labelledby="modalEditarLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">

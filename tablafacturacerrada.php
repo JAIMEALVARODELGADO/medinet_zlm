@@ -91,6 +91,6 @@ $result=mysqli_query($conexion,$sql);
 	function activaRips(id_factura,numero_fac){		
 		url="tablaRipsUs.php?id_factura="+id_factura+"&numero_fac="+numero_fac;
 		//alert(url);
-		$("#tablaDataRips").load(url);		
+		$("#tablaDataRips").load(url);
 	}
 </script>

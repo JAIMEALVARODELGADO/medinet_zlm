@@ -17,6 +17,12 @@ function procesarXML(){
         showStatus('Por favor selecciona un archivo XML válido', 'error');
         return;
     }
+
+    if (document.getElementById("id_persona").value==="") {
+        showStatus('No hay paciente seleccionado', 'error');
+        alert("No hay paciente seleccionado");
+        return;
+    }
     
     showStatus('Procesando archivo XML...', 'info');
     
@@ -194,7 +200,8 @@ function displayResults(data) {
     const resultsDiv = document.getElementById('results');
     const summaryDiv = document.getElementById('invoiceSummary');
     const jsonPreview = document.getElementById('jsonPreview');
-    const id_convenio = document.getElementById('id_convenio').value;    
+    const id_convenio = document.getElementById('id_convenio').value;
+    const id_persona = document.getElementById('id_persona').value;
 
     // Crear el array de detalles basado en las líneas de la factura
     const detalle = data.lines.map(line => ({
@@ -206,7 +213,7 @@ function displayResults(data) {
     //Aqui creo el objeto con los datos para la factura de medinet    
     factura = {
         numero_factura: data.basicInfo.id,
-        id_persona: 0, // Este campo se debe completar con el ID de la persona
+        id_persona: id_persona,
         id_convenio: id_convenio,
         fecha_fac: data.basicInfo.issueDate,
         valortot_fac: data.totals.payableAmount,
@@ -257,7 +264,7 @@ function crearFactura() {
     if (!processedData) {
         showStatus('No hay datos para enviar', 'error');
         return;
-    }
+    }    
     
     showStatus('Guardando factura...', 'info');
 
@@ -277,28 +284,7 @@ function crearFactura() {
     })
     .catch(error => {
         console.error('Error:', error);
-    });
-
-
-    
-    /*fetch('process_invoice.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(processedData)
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            showStatus('Datos enviados y guardados exitosamente', 'success');
-        } else {
-            showStatus('Error al guardar datos: ' + data.message, 'error');
-        }
-    })
-    .catch(error => {
-        showStatus('Error al enviar datos: ' + error.message, 'error');
-    });*/
+    });    
 }
 
 function cargarConvenios() {

@@ -21,7 +21,7 @@ $(document).ready(function() {
     cargarConceptoRecaudoOtServicio();
 });
 
-function cargarServicios() {    
+function cargarServicios() {
     var url = "procesos/rips_procesos.php?id_factura=" + id_factura + "&opcion=traerOtServicios";
     const fetchOptions = {
         method: 'GET'        
@@ -43,7 +43,7 @@ function cargarServicios() {
 }
 
 function mostrarServicios(otServicios){    
-    console.log(otServicios);
+    //console.log(otServicios);
     // Limpiar el tbody de la tabla
     $('#tablaRips tbody').empty();
     
@@ -76,14 +76,14 @@ function mostrarServicios(otServicios){
 }
 
 function editarServicio(id_otroservicio) {
-    // Validar el parámetro
+    // Validar el parámetro    
     if (!id_otroservicio) {
         alert('ID del servicio no válido');
         return;
     }
     // Cargar los datos del servicio a editar
     var url = "procesos/rips_procesos.php?id_otroservicio=" + id_otroservicio + "&opcion=traerOtServicioPorId";
-    
+
     fetch(url)
     .then(response => {
         if (!response.ok) {
@@ -169,7 +169,7 @@ function llenarConceptoRecaudo(data){
 
 // Función auxiliar para rellenar el formulario
 function llenarFormularioServicio(servicio) {
-    console.log(servicio)
+    //console.log(servicio)
     // Rellenar los campos del formulario con los datos del JSON
     $('#id_otroservicio').val(servicio.id_otroservicio || '');
     $('#fechasuministrotecnologia').val(servicio.fechasuministrotecnologia || '');

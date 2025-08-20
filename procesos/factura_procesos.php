@@ -81,7 +81,7 @@ function crearFacturaExterna($datos) {
     }
 
     $gusuario_log = $_SESSION['gusuario_log'];
-    $id_persona=10;
+    
     // Insertar la factura en la base de datos
     $sql = "INSERT INTO factura_encabezado(numero_fac,id_persona,id_convenio,fecha_fac,
     fechaini_fac,fechafin_fac,fechacierre_fac,operador_fac,valortot_fac,
