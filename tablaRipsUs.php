@@ -3,11 +3,11 @@ $id_factura = $_GET['id_factura'];
 $numero_fac = $_GET['numero_fac'] ?? '';
 
 ?>
-<link rel="stylesheet" type="text/css" href="../librerias/css/jquery.autocomplete.css">
+<link rel="stylesheet" type="text/css" href="./librerias/css/jquery.autocomplete.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
-<script type="text/javascript" src="../librerias/js/jquery.js"></script>
-<script type='text/javascript' src='../librerias/js/jquery.autocomplete.js'></script>
+<script type="text/javascript" src="./librerias/js/jquery.js"></script>
+<script type='text/javascript' src='./librerias/js/jquery.autocomplete.js'></script>
 <script src="tablaRipsUs.js">	
 </script>
 

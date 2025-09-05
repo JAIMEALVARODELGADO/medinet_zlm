@@ -6,7 +6,8 @@ header("Expires: Sat, 1 Jul 2000 05:00:00 GMT"); // Fecha en el pasado
 require_once "clases/conexion.php";
 $obj=new conectar();
 $conexion=$obj->conexion();
-$sql="SELECT codi_det,descripcion_grupo,descripcion_det,valor_det FROM vw_conceptos ORDER BY descripcion_grupo,descripcion_det";
+$sql="SELECT codi_det,descripcion_grupo,descripcion_det,valor_det,estado FROM vw_conceptos ORDER BY descripcion_grupo,descripcion_det";
+//echo $sql;
 $result=mysqli_query($conexion,$sql)
 ?>
 
@@ -16,20 +17,32 @@ $result=mysqli_query($conexion,$sql)
 			<tr>
 				<td>Concepto</td>
 				<td>Detalle</td>
-				<td>Valor</td>				
+				<td>Valor</td>
+				<td>Estado</td>
 				<td>Editar</td>				
 			</tr>
 		</thead>
 
 		<tbody style="background-color: white">
 			<?php
-			while($row=mysqli_fetch_row($result)){				
+			while($row=mysqli_fetch_array($result)){				
 				?>
 				<tr>
-					<td><?php echo $row[1];?></td>
-					<td><?php echo $row[2];?></td>
-					<td><?php echo $row[3];?></td>					
+					<td><?php echo $row['descripcion_grupo'];?></td>
+					<td><?php echo $row['descripcion_det'];?></td>
+					<td><?php echo $row['valor_det'];?></td>
 					
+					<td style="text-align: center;">
+									
+                    <div class="form-check form-switch">						
+                    <input class="form-check-input" type="checkbox" 
+                        <?php echo ($row['estado'] == 'AC') ? 'checked' : ''; ?>
+                        onclick="cambiarEstado('<?php echo $row['codi_det']?>', '<?php echo $row['estado']?>')"
+                        id="estado_<?php echo $row['codi_det']?>">
+                    </div>
+						
+					</td>
+
 					<td style="text-align: center;">
 						<span class="btn btn-warning btn.sm" data-toggle="modal" data-target="#modaleditarconcep" title="Editar El Registro" onclick="FrmActualizar('<?php echo $row[0]?>')">
 							<span class="far fa-edit"></span>

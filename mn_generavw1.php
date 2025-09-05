@@ -48,7 +48,7 @@ $conexion=$obj->conexion();
 
 
                             $sql="CREATE OR REPLACE VIEW vw_conceptos AS
-                            SELECT detalle_grupo.codi_det,detalle_grupo.id_grupo,detalle_grupo.descripcion_det,detalle_grupo.valor_det,grupos.descripcion_grupo
+                            SELECT detalle_grupo.codi_det,detalle_grupo.id_grupo,detalle_grupo.descripcion_det,detalle_grupo.valor_det,grupos.descripcion_grupo,detalle_grupo.estado
                             FROM detalle_grupo
                             INNER JOIN grupos ON grupos.id_grupo=detalle_grupo.id_grupo";
                             $res=mysqli_query($conexion,$sql);

@@ -257,6 +257,8 @@ function crearRips($id_factura) {
         if(mysqli_num_rows($row) <> 0) {
             $consecutivo = 1;
             while($fila = mysqli_fetch_array($row)) {
+                $fechasuministrotecnologia= $fila['fechaini_fac'].' 08:00';
+                //echo $fechasuministrotecnologia;
                 // Preparar los datos para la inserción
                 $sql = "INSERT INTO nrotroservicios(
                         numautorizacion,idmipres,fechasuministrotecnologia,
@@ -266,7 +268,7 @@ function crearRips($id_factura) {
                         VALUES (
                         '{$fila['numautorizacion']}',
                         '{$fila['idmipres']}',
-                        '{$fila['fechaini_fac']}',
+                        '{$fechasuministrotecnologia}',                        
                         '{$fila['tipoos']}',
                         '{$fila['codigo_cdet']}',
                         '{$fila['nomtecnologia']}',

@@ -8,7 +8,8 @@ require_once "clases/conexion.php";
 $obj=new conectar();
 $conexion=$obj->conexion();
 
-$sql="SELECT id_factura, numero_fac, SUBSTR(fecha_fac,1,10),fechacierre_fac, numero_iden_per, nombre_pac,  nombre_eps,numero_conv,valorneto_fac,esta_fac FROM vw_factura WHERE ".$_SESSION['gcondicion']." ORDER BY fecha_fac";
+$sql="SELECT id_factura, numero_fac, SUBSTR(fecha_fac,1,10),fechacierre_fac, numero_iden_per, nombre_pac,  nombre_eps,numero_conv,valorneto_fac,esta_fac FROM vw_factura 
+WHERE ".$_SESSION['gcondicion']." ORDER BY fecha_fac";
 //echo "<br>".$sql;
 $result=mysqli_query($conexion,$sql);
 ?>

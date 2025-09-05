@@ -12,9 +12,9 @@ $hoy=date("Y-m-d");
 	<?php 
 		require_once "scripts.php";
 	?>
-	<!--<link rel="stylesheet" type="text/css" href="../librerias/css/jquery.autocomplete.css">
+	<link rel="stylesheet" type="text/css" href="../librerias/css/jquery.autocomplete.css">
 	<script type="text/javascript" src="../librerias/js/jquery.js"></script>
-	<script type='text/javascript' src='../librerias/js/jquery.autocomplete.js'></script>-->
+	<script type='text/javascript' src='../librerias/js/jquery.autocomplete.js'></script>
 </head>
 
 <body>
@@ -93,6 +93,14 @@ $hoy=date("Y-m-d");
                                     </select>
                                 </div>
                             </div>
+                            <div class="form-group row">
+                                <label for="factura" class="col-sm-2 col-form-label">Número de Factura:</label>
+                                <div class="col-sm-2">
+                                    <input type="text" class="form-control" id="factura" name="factura" onblur="actualizar()">
+                                </div>
+
+                                
+                            </div>
 
 
 	                        <hr>
@@ -142,6 +150,9 @@ $hoy=date("Y-m-d");
         }
         if($('#eps').val()!=""){
            condicion+=" AND id_eps='"+$('#eps').val()+"'";
+        }
+        if($('#factura').val()!=""){
+           condicion="esta_fac<>'A' AND numero_fac='"+$('#factura').val()+"'";
         }
 
         $('#condicion').val(condicion);

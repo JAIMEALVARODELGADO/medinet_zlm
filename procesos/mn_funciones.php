@@ -54,7 +54,8 @@ function cambiafechadmy($xfecha_)
 
 //Conexion con la base
 function conectarbd(){
-  $link =mysqli_connect("localhost", "root", "654321", "medinet_v2");
+  //$link =mysqli_connect("localhost", "roott", "654321", "medinet_v2");
+  //$link =mysqli_connect("https://www.bbcsolutions.co", "bbcsolut_root", "9@XtCu!XGN-b?_I}", "bbcsolut_medinetbbc");
   if (mysqli_connect_errno()) {
     printf("Connect failed: %s\n", mysqli_connect_error());
     //echo "<br>"."Connect failed: %s\n", mysqli_connect_error());
