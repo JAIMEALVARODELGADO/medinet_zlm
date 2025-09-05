@@ -12,9 +12,9 @@ $hoy=date("Y-m-d");
 	<?php 
 		require_once "scripts.php";
 	?>
-	<link rel="stylesheet" type="text/css" href="../librerias/css/jquery.autocomplete.css">
+	<!--<link rel="stylesheet" type="text/css" href="../librerias/css/jquery.autocomplete.css">
 	<script type="text/javascript" src="../librerias/js/jquery.js"></script>
-	<script type='text/javascript' src='../librerias/js/jquery.autocomplete.js'></script>
+	<script type='text/javascript' src='../librerias/js/jquery.autocomplete.js'></script>-->
 </head>
 
 <body>
