@@ -18,8 +18,8 @@ class crudconcepto{
 		$obj=new conectar();
 		$conexion=$obj->conexion();
 
-		$sql="SELECT codi_det,id_grupo,descripcion_det,valor_det FROM detalle_grupo WHERE codi_det='$idconcep'";
-		//echo $sql;
+		$sql="SELECT codi_det,id_grupo,descripcion_det,valor_det 
+		FROM detalle_grupo WHERE codi_det='$idconcep'";		
 		$row=mysqli_query($conexion,$sql);
 		$ver=mysqli_fetch_row($row);
 		$datos=array(
@@ -37,6 +37,20 @@ class crudconcepto{
 
 		$sql="UPDATE detalle_grupo SET id_grupo='$datos[1]', descripcion_det='$datos[2]',valor_det='$datos[3]' WHERE codi_det='$datos[0]'";
 		//echo $sql;
+		return mysqli_query($conexion,$sql);
+	}
+
+	public function cambiarEstado($datos){
+		$obj=new conectar();
+		$conexion=$obj->conexion();
+
+		if($datos[1]=='AC'){
+			$estado='AC';
+		}else{
+			$estado='IN';
+		}
+
+		$sql="UPDATE detalle_grupo SET estado='$estado' WHERE codi_det='$datos[0]'";		
 		return mysqli_query($conexion,$sql);
 	}
 }

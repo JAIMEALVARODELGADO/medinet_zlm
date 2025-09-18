@@ -131,7 +131,7 @@ $conexion=$obj->conexion();
                     if(r==1){
                         alertify.success("Registro guardado");
                         $('#frm_nuevo')[0].reset();
-                        $("#tablaDataconcep").load("tablaconcepto.php");                        
+                        $("#tablaDataconcep").load("tablaconcepto.php");
                     }
                     else{
                         alertify.error("Error: El registro no guardado");
@@ -188,6 +188,24 @@ $conexion=$obj->conexion();
                 $('#valor_detU').val(datos['valor_det']);
             }
         })
+    }
+
+    function cambiarEstado(codi_det, estadoActual){        
+        var nuevoEstado = estadoActual == "AC" ? "IN" : "AC";        
+        $.ajax({
+            type:"POST",
+            data:"codi_det="+codi_det+"&estado="+nuevoEstado,
+            url:"procesos/cambiarestadoconcepto.php",
+            success:function(r){
+                if(r==1){
+                    //$("#tablaDataconcep").load("tablaconcepto.php");
+                    //alertify.success("Estado actualizado correctamente");
+                }
+                else{
+                    //alertify.error("Error al cambiar el estado");
+                }
+            }
+        });
     }
 
 </script>
