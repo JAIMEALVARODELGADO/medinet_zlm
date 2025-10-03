@@ -694,7 +694,7 @@ function traerRipsJs($id_factura) {
     $numDocumentoldObligado=$row['numDocumentoldObligado'];
 
     // trae datos de la factura
-    $sql = "SELECT $numDocumentoldObligado as numDocumentoIdObligado, numero_fac as numFactura, null as tipoNota,null as numNota
+    $sql = "SELECT $numDocumentoldObligado as numDocumentoIdObligado, CONCAT(prefijo_fac,numero_fac) as numFactura, null as tipoNota,null as numNota
         FROM factura_encabezado fe
         WHERE fe.id_factura = '$id_factura'";
 
@@ -792,8 +792,8 @@ function traerServicios($id_factura,$tipoDocumentoIdentificacion,$numDocumentoId
         $row['consecutivo'] = (int)$row['consecutivo'];
         $ripsAc[] = $row;
     }
-
-    if($ripsAc<>''){
+    
+    if (!empty($ripsAc)){
         $servicios['consultas'] = $ripsAc;
         //echo "<br>RIPS Servicios: ".json_encode($servicios);
     }    
@@ -830,7 +830,7 @@ function traerServicios($id_factura,$tipoDocumentoIdentificacion,$numDocumentoId
         $row['consecutivo'] = (int)$row['consecutivo'];
         $ripsAp[] = $row;
     }
-    if($ripsAp<>''){
+    if(!empty($ripsAp)){
         $servicios['procedimientos'] = $ripsAp;
         //echo "<br>RIPS Servicios: ".json_encode($servicios);
     }
@@ -864,7 +864,7 @@ function traerServicios($id_factura,$tipoDocumentoIdentificacion,$numDocumentoId
         $row['consecutivo'] = (int)$row['consecutivo'];
         $ripsAt[] = $row;
     }
-    if($ripsAt<>''){
+    if(!empty($ripsAt)){
         $servicios['otrosServicios'] = $ripsAt;    
     }
     //echo "<br><br>RIPS AT: ".json_encode($ripsAt);
