@@ -73,13 +73,16 @@ function crearRips($id_factura) {
     FROM nrusuario n
     WHERE n.id_factura ='$id_factura'";
 
-    //print_r($sql);
+    //echo "<br><pre>".$sql;
 
     $row=mysqli_query($conexion,$sql);
     $resultado=mysqli_fetch_array($row);
     if($resultado['cantidad'] == 0) {
+
+        $tipousuarioDefecto = traerValorDefecto('tipousuariodef');
+
         // Insertar datos en la tabla nrusuario        
-        $sql = "INSERT INTO nrusuario (
+        /*$sql = "INSERT INTO nrusuario (
         tipo_documento,numdocumento,tipousuario,fechanacimiento,
         codsexo,codpaisresidencia,codmunicipioresidencia,codzonaresidencia,
         incapacidad,codpaisorigen,id_factura)
@@ -97,8 +100,31 @@ function crearRips($id_factura) {
         left join paciente pa on pa.id_persona = p.id_persona
         left join detalle_grupo tp on tp.codi_det = pa.tipo_usuario
         left join detalle_grupo sx on sx.codi_det = p.sexo_per
+        WHERE fe.id_factura ='$id_factura'";*/
+        $sql="INSERT INTO nrusuario (
+            tipo_documento,numdocumento,tipousuario,fechanacimiento,
+            codsexo,codpaisresidencia,codmunicipioresidencia,codzonaresidencia,
+            incapacidad,codpaisorigen,id_factura)
+        SELECT dg.valor_det as tipo_documento,numero_iden_per,        
+        CASE 
+            WHEN tp.valor_det IS NULL THEN '$tipousuarioDefecto' 
+            ELSE tp.valor_det
+        END
+        as tipo_usuario,fnac_per,sx.valor_det as sexo_per,pa.codigo_pais as codpaisresidencia,codigo_mun,
+        CASE 
+            WHEN zona = 'R' THEN '01'
+            WHEN zona = 'U' THEN '02'
+            ELSE NULL
+        END AS zona,
+        'NO' as incapacidad,pa.codigo_paisOrigen as codpaisorigen,fe.id_factura
+        FROM factura_encabezado fe
+        inner join persona p on p.id_persona = fe.id_persona 
+        left join detalle_grupo dg on dg.codi_det = p.tipo_iden_per
+        left join paciente pa on pa.id_persona = p.id_persona
+        left join detalle_grupo tp on tp.codi_det = pa.tipo_usuario
+        left join detalle_grupo sx on sx.codi_det = p.sexo_per
         WHERE fe.id_factura ='$id_factura'";
-        //print_r($sql);
+        //echo "<pre>".$sql;
         mysqli_query($conexion,$sql);
 
         // Insertar datos en la tabla nrconsulta
@@ -241,12 +267,15 @@ function crearRips($id_factura) {
             }
         }
 
-        // Insertar datos en la tabla nrotroservicios
+        $tipoOsDefecto = traerValorDefecto('tipoosdefecto');
+        $conceptorecaudodef = traerValorDefecto('conceptorecaudodef');
+        //echo $tipoOsDefecto;
+        // Insertar datos en la tabla nrotroservicios        
         $sql = "SELECT '' as numautorizacion,0 as idmipres,fe.fechaini_fac,
-        '' as tipoos,cd.codigo_cdet,cd.descripcion_cdet as nomtecnologia,
+        '$tipoOsDefecto' as tipoos,cd.codigo_cdet,cd.descripcion_cdet as nomtecnologia,
         fd.cantidad_detfac as cantidados, fd.valor_unit_detfac as vrunitos,
         fd.cantidad_detfac * fd.valor_unit_detfac as vrservicio,
-        '' as conceptorecaudo,'0' as valorpagomoderador,
+        '$conceptorecaudodef' as conceptorecaudo,'0' as valorpagomoderador,
         '' as numfevpagomoderador,fe.id_factura ,fd.id_detfac
         FROM factura_detalle fd 
         INNER JOIN factura_encabezado fe on fe.id_factura = fd.id_factura 
@@ -282,7 +311,7 @@ function crearRips($id_factura) {
                         '{$fila['id_factura']}',
                         '{$fila['id_detfac']}'
                         )";                        
-                //echo "<br>".$sql;
+                //echo "<br><pre>".$sql;
                 $consecutivo++;
                 mysqli_query($conexion,$sql);
             }
@@ -885,5 +914,21 @@ function traerPaises() {
     }
     
     return(json_encode($data));
+}
+        
+function traerValorDefecto($parametro) {
+    $obj=new conectar();
+    $conexion=$obj->conexion();
+    $sql = "SELECT codigo_parametro 
+    FROM parametros_generales 
+    WHERE nombre_parametro='$parametro'";
+    
+    $result = mysqli_query($conexion,$sql);
+    
+    if(mysqli_num_rows($result) == 0) {
+        return "";
+    }
+    $row = mysqli_fetch_assoc($result);
+    return $row['codigo_parametro'];
 }
 ?>
