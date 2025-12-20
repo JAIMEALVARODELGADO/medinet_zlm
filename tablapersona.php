@@ -45,6 +45,10 @@ if(isset($_GET['numero_iden_per_']) && isset($_GET['nombre_']) && $_GET['registr
 	}
 }
 
+if($condicion==""){
+	$condicion=" ORDER BY persona.id_persona DESC LIMIT 50";
+}
+
 $sql="SELECT persona.id_persona, CONCAT(persona.pnom_per,' ',persona.snom_per,' ',persona.pape_per,' ',persona.sape_per) AS nombre,detalle_grupo.valor_det AS tipo_iden,persona.numero_iden_per,persona.fnac_per,persona.direccion_per,persona.telefono_per,persona.email_per
 FROM persona 
 INNER JOIN detalle_grupo ON detalle_grupo.codi_det=persona.tipo_iden_per".$condicion;
