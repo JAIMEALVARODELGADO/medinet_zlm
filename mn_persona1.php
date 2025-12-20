@@ -20,6 +20,38 @@ require("valida_sesion.php");
                     <div class="card-header">
                         <h4>Registro de Pacientes</h4>
                     </div>
+
+                    <!--                  -->
+                    <div>
+                        <table class="table table-hover table-sm table-bordered font13" id="tablaparametros">
+                            <thead style="background-color: #62748E; color: white; font-weight: bold;">
+                                <tr>
+                                    <td align="center">Identificación</td>
+                                    <td align="center">Nombre</td>
+                                    <td align="center">Registros</td>
+                                    <!--<td align="center">IUM Niv 1</td>
+                                    <td align="center">IUM Niv 2</td>
+                                    <td align="center">IUM Niv 3</td>
+                                    <td align="center">Expediente</td>-->
+                                    <td></td>
+                                </tr>
+                            </thead>
+
+                            <tbody style="background-color: white">
+                                <tr>
+                                    <td align="center"><input id="numero_iden_per_" name="numero_iden_per_" type="text" size="20"></td>
+                                    <td align="center"><input id="nombre_" name="nombre_" type="text" size="40"></td>
+                                    <td align="center"><input id="registros_" name="registros_" type="number" size="5"></td>
+                                    <td align="center">
+                                        <span class="btn btn-primary" title="Filtrar" id="btn_filtrar" onclick="filtrar()"> <i class="fas fa-search"></i></span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            
+                        </table>
+                    </div>
+                    <!--                  -->
+
                     <div class="card-body">
                         <span class="btn btn-secondary openBtn" data-toggle="modal" data-target="#nuevopersona" title="Agrega Nueva Persona">
                             Nuevo <span class="fas fa-plus-circle"></span>
@@ -213,6 +245,7 @@ require("valida_sesion.php");
 
 <script type="text/javascript">
     $(document).ready(function(){
+        document.getElementById("registros_").value = "50";
         $("#btnNuevo").click(function(){
             datos=$('#frm_nuevo').serialize();
 
@@ -453,5 +486,17 @@ require("valida_sesion.php");
                 $('#codigo_paisU').val(datos['codigo_pais']);                
             }
         })
+    }
+
+    function filtrar(){
+        var numero_iden_per_ = document.getElementById("numero_iden_per_").value;
+        var nombre_ = document.getElementById("nombre_").value;
+        var registros_ = document.getElementById("registros_").value;
+        
+        var url="tablapersona.php?numero_iden_per_="+numero_iden_per_
+        +"&nombre_="+nombre_
+        +"&registros_="+registros_;
+
+        $("#tablaData").load(url);
     }
 </script>

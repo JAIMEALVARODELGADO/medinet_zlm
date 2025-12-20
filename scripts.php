@@ -3,8 +3,8 @@
 <meta http-equiv="X-UA-Compatible" content="ie=edge">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="../librerias/bootstrap_4/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="../librerias/datatable/bootstrap.css">
-<link rel="stylesheet" type="text/css" href="../librerias/datatable/dataTables.bootstrap4.min.css">
+<!--<link rel="stylesheet" type="text/css" href="../librerias/datatable/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="../librerias/datatable/dataTables.bootstrap4.min.css">-->
 <link rel="stylesheet" type="text/css" href="../librerias/alertify/css/alertify.css">
 <link rel="stylesheet" type="text/css" href="../librerias/alertify/css/themes/bootstrap.css">
 <link rel="stylesheet" type="text/css" href="../librerias/fontawesome/css/fontawesome.css">
@@ -16,8 +16,8 @@
 <script src="../librerias/jquery.min.js"></script>
 <script src="../librerias/bootstrap_4/popper.min.js"></script>
 <script src="../librerias/bootstrap_4/bootstrap.min.js"></script>
-<script src="../librerias/datatable/jquery.dataTables.min.js"></script>
-<script src="../librerias/datatable/dataTables.bootstrap4.min.js"></script>
+<!--<script src="../librerias/datatable/jquery.dataTables.min.js"></script>
+<script src="../librerias/datatable/dataTables.bootstrap4.min.js"></script>-->
 <script src="../librerias/alertify/alertify.js"></script>
 <script src="../librerias/fontawesome/js/all.js"></script>
 

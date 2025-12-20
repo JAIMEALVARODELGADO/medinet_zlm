@@ -19,10 +19,36 @@ if(mysqli_num_rows($result)>0){
 	}
 }
 
+$condicion="";
+if(isset($_GET['numero_iden_per_']) && isset($_GET['nombre_']) && $_GET['registros_']){
+	$numero_iden_per_=htmlspecialchars($_GET['numero_iden_per_']);
+	$nombre_=htmlspecialchars($_GET['nombre_']);
+	$registros_=htmlspecialchars($_GET['registros_']);
+	if($numero_iden_per_!=""){
+		if($condicion==""){
+			$condicion=" WHERE persona.numero_iden_per LIKE '%".$numero_iden_per_."%'";
+		}else{
+			$condicion=$condicion." AND persona.numero_iden_per LIKE '%".$numero_iden_per_."%'";
+		}
+	}
+	if($nombre_!=""){
+		if($condicion==""){
+			$condicion=" WHERE CONCAT(persona.pnom_per,' ',persona.snom_per,' ',persona.pape_per,' ',persona.sape_per) LIKE '%".$nombre_."%'";
+		}else{
+			$condicion=$condicion." AND CONCAT(persona.pnom_per,' ',persona.snom_per,' ',persona.pape_per,' ',persona.sape_per) LIKE '%".$nombre_."%'";
+		}
+	}
+
+	$condicion=$condicion." ORDER BY persona.id_persona DESC";
+	if($registros_!=""){
+		$condicion=$condicion." LIMIT ".$registros_;
+	}
+}
+
 $sql="SELECT persona.id_persona, CONCAT(persona.pnom_per,' ',persona.snom_per,' ',persona.pape_per,' ',persona.sape_per) AS nombre,detalle_grupo.valor_det AS tipo_iden,persona.numero_iden_per,persona.fnac_per,persona.direccion_per,persona.telefono_per,persona.email_per
 FROM persona 
 INNER JOIN detalle_grupo ON detalle_grupo.codi_det=persona.tipo_iden_per".$condicion;
-//echo "<br>".$sql
+//echo "<br>".$sql;
 $result=mysqli_query($conexion,$sql)
 ?>
 
