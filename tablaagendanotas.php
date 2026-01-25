@@ -13,9 +13,18 @@ $conexion=$obj->conexion();
 //$fechafin=cambiafecha(hoy()).' 23:59';
 $fechaini=$_SESSION['gfecha_cita'].' 00:00';
 $fechafin=$_SESSION['gfecha_cita'].' 23:59';
-$sql="SELECT vw_agenda_medico.id_agc,fecha_agh,numero_iden_per,nombre,estado_agc,nombre_profesional,id_aten,observacion_agc,nombre_profesional FROM vw_agenda_medico LEFT JOIN atencion ON atencion.id_agc=vw_agenda_medico.id_agc 
+/*$sql="SELECT vw_agenda_medico.id_agc,fecha_agh,numero_iden_per,nombre,estado_agc,nombre_profesional,id_aten,observacion_agc,nombre_profesional 
+FROM vw_agenda_medico 
+LEFT JOIN atencion ON atencion.id_agc=vw_agenda_medico.id_agc 
+WHERE fecha_agh BETWEEN '$fechaini' AND '$fechafin' ORDER BY fecha_agh";*/
+
+$sql="SELECT vw_agenda_medico.id_agc,fecha_agh,numero_iden_per,nombre,estado_agc,nombre_profesional,id_aten,observacion_agc,nombre_profesional 
+,(SELECT COUNT(*) FROM notasenfermeria notas WHERE notas.id_agc=vw_agenda_medico.id_agc) AS cantidad_notas 
+FROM vw_agenda_medico 
+LEFT JOIN atencion ON atencion.id_agc=vw_agenda_medico.id_agc 
+
 WHERE fecha_agh BETWEEN '$fechaini' AND '$fechafin' ORDER BY fecha_agh";
-echo "<br>".$sql;
+print_r($sql);
 $result=mysqli_query($conexion,$sql)
 ?>
 
@@ -121,13 +130,16 @@ $result=mysqli_query($conexion,$sql)
 								<?php
 							}*/
 						?>
+						<span class="badge rounded-pill bg-success" title="Notas Registradas">
+							<?php echo $row['cantidad_notas'];?>
+						</span>
                         <span class="btn btn-success btn.sm" title="Registrar Nueva Nota" 
-                        onclick="registrarNota('<?php echo $row['id_agc']; ?>','<?php echo $row['nombre']; ?>')"
+                        	onclick="registrarNota('<?php echo $row['id_agc']; ?>','<?php echo $row['nombre']; ?>')"
 >
-									<span class="fas fa-briefcase-medical"></span>
-								</span>
-						
+							<span class="fas fa-briefcase-medical"></span>
+						</span>
 					</td>
+					
 				</tr>
 				<?php
 			}

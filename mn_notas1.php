@@ -42,7 +42,7 @@ require("valida_sesion.php");
         </div>
     </div>    
     <form id="form1" name='form1' method="POST">
-        <input type="hidden" id="id_agc" name="id_agc">
+        <!--<input type="hidden" id="id_agc" name="id_agc">-->
         <!--<input type="hidden" id="id_aten" name="id_aten">-->
         <input type="hidden" id="fecha_cita" name="fecha_cita">
     </form>
@@ -67,6 +67,8 @@ require("valida_sesion.php");
                         
                         <!--<input type="text" class="form-control input-sm" id="fecha_ini_rep" name="fecha_ini_rep">-->
                         <!--<input type="text" class="form-control input-sm" id="fecha_fin_rep" name="fecha_fin_rep">-->
+                        <input type="text" id="id_agc" name="id_agc">
+                        <input type="text" id="opcion" name="opcion">
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -78,6 +80,41 @@ require("valida_sesion.php");
             </div>
         </div>
     </div>
+        
+    
+
+    <!-- Modal Lista de Notas -->
+    <div class="modal fade" id="modalListaNotas" tabindex="-1" role="dialog" aria-labelledby="modalListaNotas" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalListaNotas">Lista de Notas</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="frm_nuevo">
+                        <label>Paciente: </label>
+                        <br><input type="text" readonly="readonly" class="form-control input-sm" id="nombrePaciente" name="nombrePaciente">
+                        <br><label>Descripción</label>
+                        <br><textarea name="descripcion" id="descripcion" cols="65" rows="10"></textarea>
+                        
+                        <!--<input type="text" class="form-control input-sm" id="fecha_ini_rep" name="fecha_ini_rep">-->
+                        <!--<input type="text" class="form-control input-sm" id="fecha_fin_rep" name="fecha_fin_rep">-->
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar <span class="fas fa-angle-double-left"></span></button>
+                    <button type="button" id="btnNuevo" class="btn btn-primary" onclick="validar()">Guardar <span class="fas fa-save"></span>
+                    </button>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="text" id="id_agc" name="id_agc">
+    <input type="text" id="opcion" name="opcion">
 </body>
 
 </html>
@@ -86,7 +123,9 @@ require("valida_sesion.php");
     actualizar_citas();
 
     function registrarNota(id_agc,nombrePaciente){
-        $('#id_agc').val(id_agc);
+        document.getElementById("id_agc").value=id_agc;
+        document.getElementById("opcion").value="nuevo";
+        //$('#id_agc').val(id_agc);
         //alert(id_agc);
         //alert(nombrePaciente);
         $('#modalNuevaNota').modal('show');
@@ -171,22 +210,42 @@ require("valida_sesion.php");
     }
 
     function agregarNota(){
-        datos=$('#frm_nuevo').serialize();
-        $.ajax({
-            type:"POST",
-            data:datos,
-            url:"procesos/agregarnotanurse.php",
-            success:function(r){
-                if(r==1){
-                    $('#frm_nuevo')[0].reset();
-                    $('#modalNuevaNota').modal('hide');
-                    $("#tablaDatatable").load("tablaagendanotas.php");
-                    alertify.success("Nota agregada con éxito");
-                }else{
-                    alertify.error("Error al agregar la nota");
-                }
-            }
+        let id_agc = document.getElementById('id_agc').value;
+        let descripcion = document.getElementById('descripcion').value;
+        let opcion = document.getElementById('opcion').value;
+        
+        const formData = new FormData();
+        formData.append('id_agc', id_agc);
+        formData.append('descripcion', descripcion);
+        formData.append('opcion', opcion);
+
+        fetch('procesos/crudNotas.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            
+            respuesta(data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
         });
+        
+    }
+
+    function respuesta(data){
+        if(data.success){
+            alertify.success(data.mensaje);
+            $('#modalNuevaNota').modal('hide');
+            $("#tablaDatatable").load("tablaagendanotas.php");
+            document.getElementById('descripcion').value='';
+            document.getElementById('id_agc').value='';
+            document.getElementById('opcion').value='';
+        }else{ 
+            alertify.error(data.mensaje);
+        }
+    }
 </script>
 
 <!---Aqui desactivo la combinacion Ctrl-Click -->
