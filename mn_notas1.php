@@ -6,6 +6,7 @@ require("valida_sesion.php");
 <head>
     <title>Medinet V3</title>
     <?php require_once "scripts.php";?>
+    <script src="js/mn_notas1.js"></script>
 </head>
 
 <body>
@@ -42,9 +43,8 @@ require("valida_sesion.php");
         </div>
     </div>    
     <form id="form1" name='form1' method="POST">
-        <!--<input type="hidden" id="id_agc" name="id_agc">-->
-        <!--<input type="hidden" id="id_aten" name="id_aten">-->
         <input type="hidden" id="fecha_cita" name="fecha_cita">
+        <input type="hidden" id="id_aten" name="id_aten">
     </form>
 
 
@@ -64,11 +64,9 @@ require("valida_sesion.php");
                         <br><input type="text" readonly="readonly" class="form-control input-sm" id="nombrePaciente" name="nombrePaciente">
                         <br><label>Descripción</label>
                         <br><textarea name="descripcion" id="descripcion" cols="65" rows="10"></textarea>
-                        
-                        <!--<input type="text" class="form-control input-sm" id="fecha_ini_rep" name="fecha_ini_rep">-->
-                        <!--<input type="text" class="form-control input-sm" id="fecha_fin_rep" name="fecha_fin_rep">-->
-                        <input type="text" id="id_agc" name="id_agc">
-                        <input type="text" id="opcion" name="opcion">
+
+                        <input type="hidden" id="id_agc" name="id_agc">
+                        <input type="hidden" id="opcion" name="opcion">
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -80,8 +78,6 @@ require("valida_sesion.php");
             </div>
         </div>
     </div>
-        
-    
 
     <!-- Modal Lista de Notas -->
     <div class="modal fade" id="modalListaNotas" tabindex="-1" role="dialog" aria-labelledby="modalListaNotas" aria-hidden="true">
@@ -100,8 +96,6 @@ require("valida_sesion.php");
                         <br><label>Descripción</label>
                         <br><textarea name="descripcion" id="descripcion" cols="65" rows="10"></textarea>
                         
-                        <!--<input type="text" class="form-control input-sm" id="fecha_ini_rep" name="fecha_ini_rep">-->
-                        <!--<input type="text" class="form-control input-sm" id="fecha_fin_rep" name="fecha_fin_rep">-->
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -113,8 +107,79 @@ require("valida_sesion.php");
             </div>
         </div>
     </div>
-    <input type="text" id="id_agc" name="id_agc">
-    <input type="text" id="opcion" name="opcion">
+
+    <!-- Modal Notas por Paciente -->
+    <div class="modal fade" id="modalNotasPaciente" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Notas del Paciente</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Paciente: </label>
+                        <input type="text" readonly="readonly" class="form-control input-sm" id="nombrePacienteL" name="nombrePacienteL">
+                    </div>
+                    
+                    <!-- Tabla de notas -->
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped" id="tablaNotas">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th width="20%">Fecha</th>
+                                    <th width="60%">Descripción</th>
+                                    <th width="20%" class="text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Las filas se llenarán dinámicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        Cerrar <span class="fas fa-times"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- Modal Editar Nota (FUERA del modal padre) -->
+<div class="modal fade" id="modalEditarNota" tabindex="-1" role="dialog" aria-labelledby="ModalLabelEdit" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModalLabelEdit">Editar Nota</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="frm_editar">
+                    <div class="form-group">
+                        <label for="descripcion_edit">Descripción</label>
+                        <textarea class="form-control" name="descripcion_edit" id="descripcion_edit" rows="4" placeholder="Escriba la descripción de la nota..."></textarea>
+                    </div>
+                    <input type="hidden" id="id_ne_editar" name="id_ne_editar">
+                    
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" onclick="guardarEdicionNota()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <input type="hidden" id="id_agc" name="id_agc">
+    <input type="hidden" id="opcion" name="opcion">
 </body>
 
 </html>
@@ -125,15 +190,11 @@ require("valida_sesion.php");
     function registrarNota(id_agc,nombrePaciente){
         document.getElementById("id_agc").value=id_agc;
         document.getElementById("opcion").value="nuevo";
-        //$('#id_agc').val(id_agc);
-        //alert(id_agc);
-        //alert(nombrePaciente);
+
         $('#modalNuevaNota').modal('show');
-        //document.get_elementById("paciente").value=nombre;
+        
         $('#nombrePaciente').val(nombrePaciente);
-        /*document.form1.action='mn_consu11.php'
-        document.form1.target="";
-        document.form1.submit();*/
+        
     }
 
     function inasistencia(id_agc,nombre_){
@@ -246,6 +307,27 @@ require("valida_sesion.php");
             alertify.error(data.mensaje);
         }
     }
+
+    function mostrarNotas(id_agc, nombrePaciente) {
+        let opcion = "listarNotasPaciente";
+        const formData = new FormData();
+        formData.append('id_agc', id_agc);
+        formData.append('descripcion','');
+        formData.append('opcion', opcion);
+        
+        fetch('procesos/crudNotas.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            mostrarNotasPaciente(data, nombrePaciente, id_agc);
+        });
+        //.catch(error => {
+        //    console.error('Error:', error);
+        //});
+    }
+    
 </script>
 
 <!---Aqui desactivo la combinacion Ctrl-Click -->

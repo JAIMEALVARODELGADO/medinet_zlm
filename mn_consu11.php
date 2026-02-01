@@ -273,6 +273,9 @@ if(isset($_POST['id_agc'])){
 				<span class="btn btn-secondary" data-toggle="modal" data-target="#modal_adjuntos" title="Histórico de Adjuntos">Documentos Adjuntos
 					<i class="fas fa-file-download"></i>
 				</span>
+				<span class="btn btn-secondary" data-toggle="modal" data-target="#modal_notas" title="Notas de Enfermería">Notas de Enfermería
+					<i class="fas fa-bookmark"></i>
+				</span>
 			</ul> 
 		</nav>
 
@@ -820,6 +823,26 @@ if(isset($_POST['id_agc'])){
 			</div>
 		</div>
 
+		<!-- Modal Notas -->
+		<div class="modal fade" id="modal_notas" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-lg" role="document">
+			    <div class="modal-content">
+			        <div class="modal-header">
+			            <h5 class="modal-title" id="exampleModalLabel">Notas de Enfermería</h5>
+			            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			                <span aria-hidden="true">&times;</span>
+			            </button>
+			        </div>
+			        <div class="modal-body">
+			        	<div id="tablaDataNotas"></div>
+			        </div>
+			        <div class="modal-footer">
+			            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar <span class="fas fa-angle-double-left"></span></button>			            
+			        </div>
+			    </div>
+			</div>
+		</div>
+
 	</div>
 </body>
 
@@ -1056,6 +1079,10 @@ if(isset($_POST['id_agc'])){
     });
     $(document).ready(function(){
         $("#tablaDataadjunto").load("tabladocadjutos.php");
+    });
+
+	$(document).ready(function(){
+        $("#tablaDataNotas").load("tablaNotas.php");
     });
 </script>
 

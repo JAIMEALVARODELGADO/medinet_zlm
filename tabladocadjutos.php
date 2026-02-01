@@ -10,7 +10,7 @@ $conexion=$obj->conexion();
 $conhis="SELECT vw_consulta_adjuntos.id_persona,DATE(vw_consulta_adjuntos.fecha_aten),vw_consulta_adjuntos.descripcion_adj,vw_consulta_adjuntos.nombre_prof,vw_consulta_adjuntos.archivo_adj
 FROM vw_consulta_adjuntos
 WHERE id_persona='$_SESSION[id_persona]' ORDER BY fecha_aten DESC";
-echo $conhis;
+//echo $conhis;
 $result=mysqli_query($conexion,$conhis);
 ?>
 <div>
