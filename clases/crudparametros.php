@@ -7,9 +7,13 @@ class crudparametros{
         
         $sql="UPDATE parametros_generales SET 
               codigo_parametro='$datos[1]',
-              titulo='$datos[2]' 
+              titulo='$datos[2]',
+              descripcion='$datos[3]'
               WHERE id_parametro='$datos[0]'";
-        
+
+        //echo $sql;
+
+
         $result=mysqli_query($conexion,$sql);
         if($result){
             return 1;

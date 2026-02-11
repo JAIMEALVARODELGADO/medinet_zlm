@@ -75,8 +75,8 @@ require("valida_sesion.php");
                         </div>-->
                         
                         <div class="form-group">
-                            <label>Descripción (Solo lectura)</label>
-                            <textarea class="form-control input-sm" id="descripcionU" name="descripcionU" rows="3" readonly></textarea>
+                            <label>Descripción</label>
+                            <textarea class="form-control input-sm" id="descripcionU" name="descripcionU" rows="3"></textarea>
                         </div>
                     </form>
                 </div>

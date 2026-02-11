@@ -6,7 +6,8 @@ $obj=new crudparametros();
 $datos=array(
     $_POST['id_parametro'],
     $_POST['codigo_parametroU'],
-    $_POST['tituloU']
+    $_POST['tituloU'],
+    $_POST['descripcionU']
 );
 echo $obj->actualizar($datos);
 ?>

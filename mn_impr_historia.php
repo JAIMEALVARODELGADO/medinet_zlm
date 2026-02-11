@@ -6,6 +6,21 @@ require_once "procesos/mn_funciones.php";
 $obj=new conectar();
 $conexion=$obj->conexion();
 
+//Aqui se consultan las recomendaciones
+$conparam="SELECT descripcion,titulo FROM parametros_generales pg 
+WHERE pg.nombre_parametro ='autocuidado' AND pg.estado='AC'";
+$conparam=mysqli_query($conexion,$conparam);
+if(mysqli_num_rows($conparam)<>0){
+    $row=mysqli_fetch_array($conparam);
+    $autocuidado = $row['descripcion'];
+    $tituloAutocuidado = $row['titulo'];
+}
+else{
+    $autocuidado = '';
+    $tituloAutocuidado = '';
+}
+
+
 $conhis="SELECT fecha_aten,tipoiden,numeroiden_dp,nombre_dp,direccion_dp,telefono_dp,edad,sexo,estado_civil, descripcion_ciu,motivo_con,enfermedad_con,revisionsist_con,analisis_con,CONCAT(dxprinc_cod,' ',dxprinc) AS dxprinc,tipodx,CONCAT(cierel1.codigo_cie,' ',cierel1.descripcion_cie) AS dxrel1, CONCAT(cierel2.codigo_cie,' ',cierel2.descripcion_cie) AS dxrel2,CONCAT(cierel3.codigo_cie,' ',cierel3.descripcion_cie) AS dxrel3, observacion_con,id_profesional,id_con,plan_con,subjetivo_con,objetivo_con,control_con,violencia_sexual_con, nombre_eps FROM vw_consulta LEFT JOIN cie AS cierel1 on cierel1.id_cie=vw_consulta.dxrela1_con LEFT JOIN cie AS cierel2 on cierel2.id_cie=vw_consulta.dxrela2_con LEFT JOIN cie AS cierel3 on cierel3.id_cie=vw_consulta.dxrela3_con WHERE id_aten='$_POST[id_aten]'";
 //echo $conhis;
 $conhis=mysqli_query($conexion,$conhis);
@@ -327,17 +342,7 @@ $registro=$rowprof[3];
                 ?>
                 </div>
                 <?php
-                /*$id_sv=$rowsv[0];
-                $tensionart_sv=$rowsv[1];
-                $frecresp_sv=$rowsv[2];
-                $freccard_sv=$rowsv[3];
-                $temperat_sv=$rowsv[4];
-                $perimetrocef_sv=$rowsv[5];
-                $peso_sv=$rowsv[6];
-                $talla_sv=$rowsv[7];
-                $indicemc_sv=$rowsv[8];
-                $indicecc_sv=$rowsv[9];
-                $observacion_sv=$rowsv[10];*/
+                
             }
 
         ?>
@@ -372,6 +377,23 @@ $registro=$rowprof[3];
                 <div class="col-sm-12">Observación: <?php echo $observacion_con;?></div>
             </div>
         </div>
+
+        <?php
+        if($autocuidado <> ''){
+            ?>
+            <div class="card text-center">
+                <div class="card-header">
+                    <h7><b><?php echo $tituloAutocuidado;?></b></h7>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-12"><?php echo nl2br($autocuidado);?></div>
+                </div>
+            </div>
+            <?php
+        }
+        ?>
 
         <div class="card border-light" style="width: 15rem;">
             <?php
