@@ -236,6 +236,9 @@ if(isset($_POST['id_agc'])){
 					<a class="nav-link" href="mn_consu15.php">Procedimientos</a>
 				</li>
 				<li class="nav-item">
+					<a class="nav-link" href="mn_consu17.php">Procedim. Menores</a>
+				</li>
+				<li class="nav-item">
 					<a class="nav-link" href="mn_consu12.php">Formula</a>
 				</li>
 				<li class="nav-item">
