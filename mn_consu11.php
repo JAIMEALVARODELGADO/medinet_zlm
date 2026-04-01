@@ -567,13 +567,13 @@ if(isset($_POST['id_agc'])){
 						</div>
 						<div class="form-group row">
 							<label class="col-sm-12 col-form-label">Personales
-								<textarea rows="3" class="form-control" id="personales_ante" name="personales_ante" maxlength='250' placeholder="Antecedentes patológicos, quirurgicos, traumaticos, toxicoalérgicos, etc" required><?php echo $personales_ante;?></textarea>
+								<textarea rows="3" class="form-control" id="personales_ante" name="personales_ante" placeholder="Antecedentes patológicos, quirurgicos, traumaticos, toxicoalérgicos, etc" required><?php echo $personales_ante;?></textarea>
 							</label>
 						</div>
 
 						<div class="form-group row">
 							<label class="col-sm-12 col-form-label">Familiares
-								<textarea rows="3" class="form-control" id="familiares_ante" name="familiares_ante" maxlength='250' placeholder="Antecedentes familiares" required><?php echo $familiares_ante;?></textarea>
+								<textarea rows="3" class="form-control" id="familiares_ante" name="familiares_ante" placeholder="Antecedentes familiares" required><?php echo $familiares_ante;?></textarea>
 							</label>
 						</div>
 					</div>
@@ -638,7 +638,7 @@ if(isset($_POST['id_agc'])){
 						<div class="form-group row">
 							<label class="col-sm-1 col-form-label">Dx Principal</label>
 							<div class="col-sm-7">
-								<input type="text" class="form-control" id="c" name="dxprinc" maxlength='80' placeholder="Digite el código CIE10 o la descripción" required> 
+								<input type="text" class="form-control" id="dxprinc" name="dxprinc" maxlength='80' placeholder="Digite el código CIE10 o la descripción" required> 
 								<input type="hidden" class="form-control" id="dxprinc_con" name="dxprinc_con" required> 
 							</div>
 							<label class="col-sm-2 col-form-label">Tipo de Dx Principal</label>
@@ -683,13 +683,13 @@ if(isset($_POST['id_agc'])){
 						<div class="form-group row">
 							<label class="col-sm-2 col-form-label">Análisis</label>
 							<div class="col-sm-10">
-								<textarea rows="3" class="form-control" id="analisis_con" name="analisis_con" maxlength='250' placeholder="Análisis" required><?php echo $analisis_con;?></textarea>
+								<textarea rows="3" class="form-control" id="analisis_con" name="analisis_con" placeholder="Análisis" required><?php echo $analisis_con;?></textarea>
 							</div>
 						</div>	
 						<div class="form-group row">
 							<label class="col-sm-2 col-form-label">Plan de Manejo</label>
 							<div class="col-sm-10">
-								<textarea rows="3" class="form-control" id="plan_con" name="plan_con" maxlength='500' placeholder="Plan de Manejo" required><?php echo $plan_con;?></textarea>
+								<textarea rows="3" class="form-control" id="plan_con" name="plan_con" placeholder="Plan de Manejo" required><?php echo $plan_con;?></textarea>
 							</div>                                    
 						</div>
 						<div class="form-group row">

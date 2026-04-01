@@ -231,15 +231,20 @@ else{
 <script type="text/javascript">
     $(document).ready(function(){
         $("#btnNuevo").click(function(){
-            datos=$('#frm_nuevo').serialize();
-			datos.append("id_aten=<?php echo $id_aten; ?>");
-			datos.append("operador_proc=<?php echo $_SESSION['gusuario_log']; ?>");
-			datos.append("opcion=nuevo");
-
+            var datos=$('#frm_nuevo').serialize();
+			//datos += '&id_aten=<?php echo $id_aten; ?>';
+			//let id_aten=<?php echo $id_aten; ?>;
+			//alert(id_aten);
+			//datos.append("id_aten=<?php echo $id_aten; ?>");
+			//datos.append("operador_proc=<?php echo $_SESSION['gusuario_log']; ?>");
+			datos+= '&operador_proc=<?php echo $_SESSION['gusuario_log']; ?>';
+			datos+= '&opcion=nuevo';
+			//console.log(datos);
+			//alert();
             $.ajax({
                 type:"POST",
                 data:datos,
-                url:"procesos/crudProcedimientosMenores.php",
+                url:"procesos/crudProcedMenores.php",
                 success:function(r){
                     if(r==1){
                         alertify.success("Registro guardado");

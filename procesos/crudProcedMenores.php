@@ -25,7 +25,9 @@ if(isset(($_POST['datos']))){
     $data = '';
 }
 $opcion = $_POST['opcion'];
-$plantilla = $_POST['plantilla'];
+if(isset($_POST['plantilla'])){
+    $plantilla = $_POST['plantilla'];
+}
 
 switch ($opcion) {
     case 'traerPlantilla':
@@ -50,8 +52,8 @@ switch ($opcion) {
         
         break;
     case 'nuevo':
-        $query = "INSERT INTO consulta_proced_menores (id_aten, descripcion, operador_proc) 
-        VALUES ('$data[id_agc]', '$data[descripcion]', '$usuario_log')";
+        $query = "INSERT INTO consulta_proced_menores (id_aten, descripcion, operador_proc)
+        VALUES ('$data[id_aten]'";//, '$data[descripcion]', '$usuario_log')";
         echo $query;
         /*$res=mysqli_query($conexion, $query);
 
