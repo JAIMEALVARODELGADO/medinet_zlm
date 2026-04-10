@@ -28,6 +28,7 @@ $opcion = $_POST['opcion'];
 if(isset($_POST['plantilla'])){
     $plantilla = $_POST['plantilla'];
 }
+echo "Siiiii";
 
 switch ($opcion) {
     case 'traerPlantilla':
