@@ -61,7 +61,8 @@ class crudconsulta{
 			$consultadp="SELECT id_con_dp FROM consulta_dpersonales WHERE id_aten='$id_aten'";	
 			$consultadp=mysqli_query($conexion,$consultadp);
 			if(mysqli_num_rows($consultadp)==0){
-				$sql="INSERT INTO consulta_dpersonales(id_aten, tipoiden_dp, numeroiden_dp, nombre_dp, fechanac_dp, genero_dp, direccion_dp, telefono_dp, etnia_dp, ocupacion_dp, niveleduc_dp, estadociv_dp, tipovin_dp, tipoafil_dp, grupopob_dp, zonares_dp) VALUES('$id_aten', '$datos[0]', '$datos[1]', '$datos[2]', '$datos[5]', '$datos[6]', '$datos[3]', '$datos[4]', '$datos[7]', '$datos[8]', '$datos[9]', '$datos[10]', '$datos[11]', '$datos[12]', '$datos[13]', '$datos[14]')";
+				$sql="INSERT INTO consulta_dpersonales(id_aten, tipoiden_dp, numeroiden_dp, nombre_dp, fechanac_dp, genero_dp, direccion_dp, telefono_dp, etnia_dp, ocupacion_dp, niveleduc_dp, estadociv_dp, tipovin_dp, tipoafil_dp, grupopob_dp, zonares_dp) 
+				VALUES('$id_aten', '$datos[0]', '$datos[1]', '$datos[2]', '$datos[5]', '$datos[6]', '$datos[3]', '$datos[4]', '$datos[7]', '$datos[8]', '$datos[9]', '$datos[10]', '$datos[11]', '$datos[12]', '$datos[13]', '$datos[14]')";
 				//echo "<br>".$sql;
 				mysqli_query($conexion,$sql);
 			}

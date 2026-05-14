@@ -62,13 +62,13 @@ else{
 				</li>
 			</ul>
 		</div>
-		<nav class="navbar navbar-expand-sm bg-light">			
+		<!--<nav class="navbar navbar-expand-sm bg-light">			
 			<ul class="navbar-nav">
 				<span class="btn btn-secondary" data-toggle="modal" data-target="#modal_historial" title="Histórico de Procedimientos Menores">Procedimientos
 					<i class="fas fa-procedures"></i>
 				</span>
 			</ul> 
-		</nav>
+		</nav>-->
 
 		<br><h5>Procedimientos Menores</h5> 
 		<div class="container-fluid">       
@@ -77,7 +77,7 @@ else{
 					Nuevo <span class="fas fa-plus-circle"></span>
 				</span>
                 <hr>
-                <div id="tablaDataprocedimiento"></div>				
+                <div id="tablaDataprocedimientoMen"></div>				
 			</div>
 		</div>
 		<!-- Modal Nuevo -->
@@ -92,6 +92,7 @@ else{
 			        </div>
 			        <div class="modal-body">
 			            <form id="frm_nuevo">
+							<input type="hidden" name="id_aten" id="id_aten" value="<?php echo $id_aten; ?>">
 			                <label>Tipo de Procedimiento</label>
 			                <select class="form-control" id="tipo_proc" name="tipo_proc" onchange="traePlantilla()">
                             	<option value=''></option>
@@ -122,69 +123,10 @@ else{
 			        </div>
 			        <div class="modal-body">
 			            <form id="frm_editar">
-			            	<label>Procedimiento</label>
-			            	<input type="hidden" id="id_procedimiento" name="id_procedimiento">
-			                <select class="form-control" id="id_cupsU" name="id_cupsU">
-                            	<option value=''></option>                            	
-                            	<?php                            		
-									$sql="SELECT id_cups,descripcion_cups FROM vw_cups_profesional WHERE estado_cprof='A' AND clase_cprof='P' AND id_persona='$_SESSION[gusuario_log]' ORDER BY descripcion_cups";
-									$result=mysqli_query($conexion,$sql);
-									while($row=mysqli_fetch_row($result)){
-										echo "<option value='$row[0]'>$row[1]</option>";
-									}
-                            	?>
-                        	</select>
-
-                        	<label>Ambito</label>
-			                <select class="form-control" id="ambito_procU" name="ambito_procU">
-                            	<option value=''></option>                            	
-                            	<?php                            		
-									$sql="SELECT codi_det, descripcion_det FROM vw_ambito ORDER BY descripcion_det";
-									$result=mysqli_query($conexion,$sql);
-									while($row=mysqli_fetch_row($result)){
-										echo "<option value='$row[0]'>$row[1]</option>";
-									}
-                            	?>
-                        	</select>
-
-                        	<label>Finalidad</label>
-			                <select class="form-control" id="finalidad_procU" name="finalidad_procU">
-                            	<option value=''></option>                            	
-                            	<?php                            		
-									$sql="SELECT codi_det, descripcion_det FROM vw_finalidad_proc ORDER BY descripcion_det";
-									$result=mysqli_query($conexion,$sql);
-									while($row=mysqli_fetch_row($result)){
-										echo "<option value='$row[0]'>$row[1]</option>";
-									}
-                            	?>
-                        	</select>
-
-							<label>Dx Principal</label>
-			                <input type="text" maxlength="80" class="form-control input-sm" id="dxprincU" name="dxprincU">
-			                <input type="hidden" id="dxprinc_procU" name="dxprinc_procU">
-
-			                <label>Dx Relacionado</label>
-			                <input type="text" maxlength="80" class="form-control input-sm" id="dxrelacU" name="dxrelacU">
-			                <input type="hidden" id="dxrelac_procU" name="dxrelac_procU">
-
-			                <label>Complicación</label>
-			                <input type="text" maxlength="80" class="form-control input-sm" id="complicU" name="complicU">
-			                <input type="hidden" id="complic_procU" name="complic_procU">
-
-			                <label>Forma de Realización</label>
-			                <select class="form-control" id="forma_procU" name="forma_procU">
-                            	<option value=''></option>                            	
-                            	<?php                            		
-									$sql="SELECT codi_det, descripcion_det FROM vw_forma_qx ORDER BY descripcion_det";
-									$result=mysqli_query($conexion,$sql);
-									while($row=mysqli_fetch_row($result)){
-										echo "<option value='$row[0]'>$row[1]</option>";
-									}
-                            	?>
-                        	</select>			                
-			                
-			                <label>Observación</label>
-			                <textarea rows="6" class="form-control" id="observacion_procU" name="observacion_procU" placeholder="Observacion"></textarea>
+							<label>Descripción</label>
+			                <textarea rows="20" cols="120" class="form-control" id="descripcion_ed" name="descripcion_ed" placeholder="Descripción" style="font-size: 10px;"></textarea>
+							<input type="hidden" name="id_procedimiento_ed" id="id_procedimiento_ed">
+			
 			            </form>
 			        </div>
 			        <div class="modal-footer">
@@ -196,7 +138,7 @@ else{
 		</div>
 
 		<!-- Modal Historial de procedimientos -->
-		<div class="modal fade" id="modal_historial" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<!--<div class="modal fade" id="modal_historial" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 			<div class="modal-dialog modal-lg" role="document">
 			    <div class="modal-content">
 			        <div class="modal-header">
@@ -213,7 +155,7 @@ else{
 			        </div>
 			    </div>
 			</div>
-		</div>
+		</div>-->
 
 	</div>
 </body>
@@ -222,7 +164,7 @@ else{
 
 <script type="text/javascript">
     $(document).ready(function(){
-        $("#tablaDataprocedimiento").load("tablaprocedimiento.php");
+        $("#tablaDataprocedimientoMen").load("tablaprocedimientomen.php");
     });
 </script>
 
@@ -232,43 +174,40 @@ else{
     $(document).ready(function(){
         $("#btnNuevo").click(function(){
             var datos=$('#frm_nuevo').serialize();
-			//datos += '&id_aten=<?php echo $id_aten; ?>';
-			//let id_aten=<?php echo $id_aten; ?>;
-			//alert(id_aten);
-			//datos.append("id_aten=<?php echo $id_aten; ?>");
-			//datos.append("operador_proc=<?php echo $_SESSION['gusuario_log']; ?>");
-			datos+= '&operador_proc=<?php echo $_SESSION['gusuario_log']; ?>';
+			//datos+= '&operador_proc=<?php echo $_SESSION['gusuario_log']; ?>';
 			datos+= '&opcion=nuevo';
-			//console.log(datos);
-			//alert();
+			
             $.ajax({
                 type:"POST",
                 data:datos,
                 url:"procesos/crudProcedMenores.php",
                 success:function(r){
-                    if(r==1){
-                        alertify.success("Registro guardado");
-                        $('#frm_nuevo')[0].reset();
-                        $("#tablaDataprocedimiento").load("tablaprocedimiento.php");
-                        
-                    }
-                    else{
-                        alertify.error("Error: El registro no guardado");
-                    }
+					//console.log(r)
+                    const data = JSON.parse(r);
+
+					if (data.success) {
+						alertify.success(data.mensaje);
+						$('#frm_nuevo')[0].reset();
+						$("#tablaDataprocedimientoMen").load("tablaprocedimientomen.php");
+					} else {
+						alertify.error("Error: El registro no fue guardado");
+					}
                 }
             });
         });
 
         $('#btnActualizar').click(function(){
-            datos=$('#frm_editar').serialize();
-
+            var datos=$('#frm_editar').serialize();
+			datos+= '&opcion=editar';
+			console.log(datos);
             $.ajax({
                 type:"POST",
                 data:datos,
-                url:"procesos/actualizarprocedimiento.php",
+                url:"procesos/crudProcedMenores.php",
                 success:function(r){
-                    if(r==1){
-                        $("#tablaDataprocedimiento").load("tablaprocedimiento.php");
+                    if (data.success) {
+                        $("#tablaDataprocedimientoMen").load("tablaprocedimientomen.php");
+						$('#frm_editar')[0].reset();
                         alertify.success("Registro guardado");
                     }
                     else{
@@ -285,24 +224,22 @@ else{
 	
 
 	function FrmActualizar(idproc){
+		
         $.ajax({
             type:"POST",
-            data:"idproc="+idproc,
-            url:"procesos/obtenDatosprocedimiento.php",
+            data: {
+				id_procmenor: idproc,
+				opcion: "consultar_Id"
+			},
+            url:"procesos/crudProcedMenores.php",
             success:function(r){
 	 			var datos = JSON.parse(r);
-	            $('#id_procedimiento').val(datos['id_procedimiento']);
-	            $('#id_cupsU').val(datos['id_cups']);
-	            $('#ambito_procU').val(datos['ambito_proc']);
-	            $('#finalidad_procU').val(datos['finalidad_proc']);
-	            $('#dxprincU').val(datos['dxprinc']);
-	            $('#dxprinc_procU').val(datos['dxprinc_proc']);
-	            $('#dxrelacU').val(datos['dxrelac']);
-	            $('#dxrelac_procU').val(datos['dxrelac_proc']);
-				$('#complicU').val(datos['complic']);
-				$('#complic_procU').val(datos['complic_proc']);
-				$('#forma_procU').val(datos['forma_proc']);
-				$('#observacion_procU').val(datos['observacion_proc']);
+				 if (datos.success) {
+					$('#descripcion_ed').val(datos.data.descripcion);
+					$('#id_procedimiento_ed').val(datos.data.id_procmenor);
+				} else {
+					alertify.error(datos.mensaje);
+				}
             }
         })
     }
@@ -316,7 +253,7 @@ else{
                     url:"procesos/eliminarprocedimiento.php",
                     success:function(r){
                         if(r==1){
-                            $("#tablaDataprocedimiento").load("tablaprocedimiento.php");
+                            $("#tablaDataprocedimientoMen").load("tablaprocedimientomen.php");
                             alertify.success("Registro Eliminado!");
                         }else{
                             alertify.error("Registro NO Eliminado!");

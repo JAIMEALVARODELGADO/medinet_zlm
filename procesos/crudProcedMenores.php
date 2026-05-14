@@ -14,21 +14,33 @@ if(isset($_POST['id_agc'])){
 } else {
     $opcion = 'Salir';
 }
-if(isset(($_POST['id_ne']))){
+/*if(isset(($_POST['id_ne']))){
     $id_ne = $_POST['id_ne'];
 } else {
     $id_ne = '';
-}
-if(isset(($_POST['datos']))){
-    $data = $_POST['datos'];
-} else {
-    $data = '';
-}
+}*/
+
 $opcion = $_POST['opcion'];
 if(isset($_POST['plantilla'])){
     $plantilla = $_POST['plantilla'];
 }
-echo "Siiiii";
+if(isset(($_POST['id_aten']))){
+    $id_aten= $_POST['id_aten'];
+}
+if(isset(($_POST['descripcion']))){
+    $descripcion = $_POST['descripcion'];
+}
+if(isset(($_POST['id_procedimiento_ed']))){
+    $id_procedimiento_ed = $_POST['id_procedimiento_ed'];
+}
+//echo "<br>Descripcion ed: ".$_POST['$descripcion_ed'];
+if(isset(($_POST['descripcion_ed']))){
+    $descripcion = $_POST['descripcion_ed'];
+}
+
+if(isset(($_POST['id_procmenor']))){
+    $id_procmenor = $_POST['id_procmenor'];
+}
 
 switch ($opcion) {
     case 'traerPlantilla':
@@ -54,27 +66,41 @@ switch ($opcion) {
         break;
     case 'nuevo':
         $query = "INSERT INTO consulta_proced_menores (id_aten, descripcion, operador_proc)
-        VALUES ('$data[id_aten]'";//, '$data[descripcion]', '$usuario_log')";
-        echo $query;
-        /*$res=mysqli_query($conexion, $query);
+        VALUES ('$id_aten', '$descripcion', '$usuario_log')";
+        //echo $query;
+        $res=mysqli_query($conexion, $query);
 
-        echo json_encode(['success' => true, 'mensaje' => 'Nota agregada exitosamente']);*/
+        echo json_encode(['success' => true, 'mensaje' => 'Nota agregada exitosamente']);
         break;
 
-    case 'listarNotasPaciente':
+    /*case 'listarNotasPaciente':
         echo json_encode(ListarNotasPaciente($id_agc));
-        break;
+        break;*/
 
     case 'editar':
-        $query = "UPDATE notasenfermeria SET descripcion='$descripcion' 
-        WHERE id_ne='$id_ne'";
-        //printf($query);
+        $query = "UPDATE consulta_proced_menores SET descripcion='$descripcion' 
+        WHERE id_procmenor='$id_procedimiento_ed'";
+        //echo $query;
         $res=mysqli_query($conexion, $query);
         if(!$res){
-            echo json_encode(['success' => false, 'mensaje' => 'Error al actualizar la nota']);
+            echo json_encode(['success' => false, 'mensaje' => 'Error al actualizar el procedimiento']);
             exit;
         }
-        echo json_encode(['success' => true, 'mensaje' => 'Nota actualizada exitosamente']);
+        echo json_encode(['success' => true, 'mensaje' => 'Procedimiento actualizada exitosamente']);
+        break;
+    
+    case 'consultar_Id':
+        $query = "SELECT id_procmenor, id_aten,fecha_proc, descripcion,operador_proc 
+        FROM consulta_proced_menores 
+        WHERE id_procmenor='$id_procmenor'";
+        
+        $result = mysqli_query($conexion, $query);
+        $data = mysqli_fetch_assoc($result);
+        if (!$data) {
+            echo json_encode(['success' => false, 'mensaje' => 'Nota no encontrada']);
+            break;
+        }
+        echo json_encode(['success' => true, 'data' => $data]);
         break;
 
     default:
@@ -82,7 +108,7 @@ switch ($opcion) {
         break;
 }
 
-function ListarNotasPaciente($id_agc) {
+/*function ListarNotasPaciente($id_agc) {
     global $conexion;
     $query = "SELECT id_ne, id_agc, fecha_ne, descripcion 
     FROM notasenfermeria 
@@ -93,6 +119,6 @@ function ListarNotasPaciente($id_agc) {
         $notas[] = $row;
     }
     return $notas;
-}
+}*/
 
 ?>
