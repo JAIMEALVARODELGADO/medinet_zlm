@@ -186,9 +186,15 @@ else{
                     const data = JSON.parse(r);
 
 					if (data.success) {
-						alertify.success(data.mensaje);
-						$('#frm_nuevo')[0].reset();
 						$("#tablaDataprocedimientoMen").load("tablaprocedimientomen.php");
+                		$('#frm_editar')[0].reset();
+                		alertify.success(data.mensaje);
+
+						// 🔴 Cerrar la ventana modal
+                		//$('#modaleditarprocedimiento').modal('hide');
+						var modal = document.getElementById('modaleditarprocedimiento');
+						var modalInstance = bootstrap.Modal.getOrCreateInstance(modal); // crea si no existe
+						modalInstance.hide();
 					} else {
 						alertify.error("Error: El registro no fue guardado");
 					}
@@ -199,19 +205,26 @@ else{
         $('#btnActualizar').click(function(){
             var datos=$('#frm_editar').serialize();
 			datos+= '&opcion=editar';
-			console.log(datos);
+			//console.log(datos);
             $.ajax({
                 type:"POST",
                 data:datos,
                 url:"procesos/crudProcedMenores.php",
                 success:function(r){
+					const data = JSON.parse(r);
                     if (data.success) {
                         $("#tablaDataprocedimientoMen").load("tablaprocedimientomen.php");
 						$('#frm_editar')[0].reset();
                         alertify.success("Registro guardado");
+
+						// 🔴 Cerrar la ventana modal
+                		//$('#modaleditarprocedimiento').modal('hide');
+						var modal = document.getElementById('modaleditarprocedimiento');
+						var modalInstance = bootstrap.Modal.getOrCreateInstance(modal); // crea si no existe
+						modalInstance.hide();
                     }
                     else{
-                        alertify.error("Error: El registro no guardado");
+                        alertify.error("Error: Registro no guardado");
                     }
                 }
             });
@@ -244,29 +257,37 @@ else{
         })
     }
 
-    function eliminarDatos(idproc,nombremed){
-        alertify.confirm('Eliminar Procedimiento', 'Desea eliminar el procedimiento: '+nombremed,
-            function(){ 
-                $.ajax({
-                    type:"POST",
-                    data:"idproc="+idproc,
-                    url:"procesos/eliminarprocedimiento.php",
-                    success:function(r){
-                        if(r==1){
-                            $("#tablaDataprocedimientoMen").load("tablaprocedimientomen.php");
-                            alertify.success("Registro Eliminado!");
-                        }else{
-                            alertify.error("Registro NO Eliminado!");
-                        }
-                    }
-                })
+	function eliminarDatos(idproc){
+		
+		alertify.confirm(
+			'Eliminar Procedimiento',
+			'Desea eliminar el procedimiento ?' ,
+			function(){ 
+				$.ajax({
+					type:"POST",
+					//data:"idproc=" + idproc,
+					data: {
+						id_procmenor: idproc,
+						opcion: "eliminar_Id"
+					},
+					url:"procesos/crudProcedMenores.php",
+					dataType: "json",
+					success:function(data){
+						if(data.success){
+							$("#tablaDataprocedimientoMen").load("tablaprocedimientomen.php");
+							alertify.success("Registro Eliminado!");
+						} else {
+							alertify.error("Error: "+data.mensaje);
+						}
+					}
 
-            }
-            ,function(){
-
-            });
-    }
-
+				});
+			},
+			function(){
+				alertify.error("Acción cancelada");
+			}
+		);
+	}
 </script>
 
 <script type="text/javascript">

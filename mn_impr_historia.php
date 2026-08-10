@@ -21,7 +21,12 @@ else{
 }
 
 
-$conhis="SELECT fecha_aten,tipoiden,numeroiden_dp,nombre_dp,direccion_dp,telefono_dp,edad,sexo,estado_civil, descripcion_ciu,motivo_con,enfermedad_con,revisionsist_con,analisis_con,CONCAT(dxprinc_cod,' ',dxprinc) AS dxprinc,tipodx,CONCAT(cierel1.codigo_cie,' ',cierel1.descripcion_cie) AS dxrel1, CONCAT(cierel2.codigo_cie,' ',cierel2.descripcion_cie) AS dxrel2,CONCAT(cierel3.codigo_cie,' ',cierel3.descripcion_cie) AS dxrel3, observacion_con,id_profesional,id_con,plan_con,subjetivo_con,objetivo_con,control_con,violencia_sexual_con, nombre_eps FROM vw_consulta LEFT JOIN cie AS cierel1 on cierel1.id_cie=vw_consulta.dxrela1_con LEFT JOIN cie AS cierel2 on cierel2.id_cie=vw_consulta.dxrela2_con LEFT JOIN cie AS cierel3 on cierel3.id_cie=vw_consulta.dxrela3_con WHERE id_aten='$_POST[id_aten]'";
+$conhis="SELECT fecha_aten,tipoiden,numeroiden_dp,nombre_dp,direccion_dp,telefono_dp,edad,sexo,estado_civil, descripcion_ciu,motivo_con,enfermedad_con,revisionsist_con,analisis_con,CONCAT(dxprinc_cod,' ',dxprinc) AS dxprinc,tipodx,CONCAT(cierel1.codigo_cie,' ',cierel1.descripcion_cie) AS dxrel1, CONCAT(cierel2.codigo_cie,' ',cierel2.descripcion_cie) AS dxrel2,CONCAT(cierel3.codigo_cie,' ',cierel3.descripcion_cie) AS dxrel3, observacion_con,id_profesional,id_con,plan_con,subjetivo_con,objetivo_con,control_con,violencia_sexual_con, nombre_eps 
+FROM vw_consulta 
+LEFT JOIN cie AS cierel1 on cierel1.id_cie=vw_consulta.dxrela1_con 
+LEFT JOIN cie AS cierel2 on cierel2.id_cie=vw_consulta.dxrela2_con 
+LEFT JOIN cie AS cierel3 on cierel3.id_cie=vw_consulta.dxrela3_con 
+WHERE id_aten='$_POST[id_aten]'";
 //echo $conhis;
 $conhis=mysqli_query($conexion,$conhis);
 $rowhis=mysqli_fetch_row($conhis);
@@ -379,6 +384,33 @@ $registro=$rowprof[3];
         </div>
 
         <?php
+
+        //Aqui se consulta los procedimientos menores
+        $conmenores="SELECT id_procmenor,descripcion
+            FROM consulta_proced_menores 
+            WHERE id_aten='$_POST[id_aten]'";
+        $conmenores=mysqli_query($conexion,$conmenores);
+        if(mysqli_num_rows($conmenores)<>0){
+            ?>
+            <div class="card text-center">
+                <div class="card-header">
+                    <h7><b>PROCEDIMIENTOS MENORES</b></h7>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <?php
+                        while($rowmenores=mysqli_fetch_array($conmenores)){
+                            echo $rowmenores['descripcion'].'<br>';
+                        }
+                        ?>
+                    </div>
+                </div>
+            </div>            
+            <?php
+        }
+
         if($autocuidado <> ''){
             ?>
             <div class="card text-center">

@@ -50,7 +50,7 @@ if($id_aten!=0){
 						</span>
 					</td>
 					<td style="text-align: center;">
-						<span class="btn btn-danger btn.sm" title="Borrar el Registro" onclick="eliminarDatos('<?php echo $row[0]?>','<?php echo $row[1]?>')">
+						<span class="btn btn-danger btn.sm" title="Borrar el Registro" onclick="eliminarDatos('<?php echo $row[0]?>')">
 							<span class="fas fa-trash"></span>
 						</span>
 					</td>

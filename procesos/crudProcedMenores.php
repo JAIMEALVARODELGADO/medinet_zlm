@@ -103,6 +103,17 @@ switch ($opcion) {
         echo json_encode(['success' => true, 'data' => $data]);
         break;
 
+    case 'eliminar_Id':
+        $query = "DELETE FROM consulta_proced_menores WHERE id_procmenor='$id_procmenor'";
+        $res=mysqli_query($conexion, $query);
+        if(!$res){
+            echo json_encode(['success' => false, 'mensaje' => 'Error al eliminar el procedimiento']);
+            exit;
+        }
+
+        echo json_encode(['success' => true, 'mensaje' => '1']);
+        break;
+
     default:
         echo json_encode(['success' => false, 'mensaje' => 'Operación no válida']);
         break;

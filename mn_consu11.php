@@ -227,6 +227,9 @@ if(isset($_POST['id_agc'])){
 
 	
 	<div class="card text">
+		<?php
+		//require("mn_menuconsulta.php");
+		?>
 		<div class="card-header">
 			<ul class="nav nav-tabs card-header-tabs">
 				<li class="nav-item">
